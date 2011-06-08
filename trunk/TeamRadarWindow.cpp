@@ -4,6 +4,7 @@
 #include <QtGui/QTextEdit>
 #include <QtGui/QVBoxLayout>
 #include <QProcess>
+#include <QFileDialog>
 
 using namespace TeamRadar;
 
@@ -18,6 +19,8 @@ TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
 	if(userName.isEmpty())
 		userName = guessUserName();
 	ui.leUserName->setText(userName);
+
+    connect(ui.btImage, SIGNAL(clicked()), this, SLOT(onSetImage()));
 }
 
 void TeamRadar::TeamRadarWindow::accept()
@@ -54,6 +57,15 @@ QString TeamRadar::TeamRadarWindow::guessUserName() const
 	return result;
 }
 
+void TeamRadarWindow::onSetImage()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Choose Image"), ".",
+                                                    "Images (*.png *.jpg *.bmp *.ico)");
+    if(fileName.isEmpty())
+        return;
+    ui.labelImage->setPixmap(QPixmap(fileName));
+}
+
 /////////////////////////////////////// UserSetting ////////////////////////////////
 TeamRadar::UserSetting::UserSetting(const QString& fileName) : MySetting<UserSetting>(fileName)
 {
@@ -66,6 +78,7 @@ void TeamRadar::UserSetting::loadDefaults()
 	setServerAddress("0.0.0.0");
 	setServerPort(12345);
 	setUserName("Unknown");
+    setValue("Image", "");
 }
 
 QString TeamRadar::UserSetting::getServerAddress() const {

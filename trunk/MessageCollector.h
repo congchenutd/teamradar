@@ -4,7 +4,7 @@
 #include <QObject>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
-#include <coreplugin/basemode.h>
+//#include <coreplugin/basemode.h>
 #include <coreplugin/coreconstants.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/imode.h>

@@ -13,6 +13,7 @@ public:
 	Core::NavigationView createWidget(); 
 	QString displayName() const;
 	QString id() const;
+	virtual int priority() const { return 600; }
 }; 
 
 class TeamRadarView : public QWidget
