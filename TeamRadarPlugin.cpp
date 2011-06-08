@@ -6,8 +6,8 @@
 
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
-#include <coreplugin/basemode.h>
 #include <coreplugin/coreconstants.h>
+#include <coreplugin/icontext.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/imode.h>
 #include <coreplugin/modemanager.h>
@@ -35,7 +35,8 @@ bool TeamRadarPlugin::initialize(const QStringList &arguments, QString *error_me
 
     // Create a unique context id for our own view, that will be used for the
     // menu entry later.
-    QList<int> context = QList<int>() << Core::Constants::C_GLOBAL_ID;
+    //QList<int> context = QList<int>() << Core::Constants::C_GLOBAL_ID;
+	const Core::Context globalContext(Core::Constants::C_GLOBAL);
 
     // Create an action to be triggered by a menu entry
     QAction *actionTeamRadar = new QAction(tr("TeamRadar"), this);
@@ -45,7 +46,7 @@ bool TeamRadarPlugin::initialize(const QStringList &arguments, QString *error_me
     Core::ActionManager *actionManager = core->actionManager();
     Core::Command *command =
             actionManager->registerAction(
-                    actionTeamRadar, "TeamRadar.TeamRadarOption", context);
+                    actionTeamRadar, "TeamRadar.TeamRadarOption", globalContext);
 
     // Request the Tools menu and add the menu to it
     Core::ActionContainer *toolsMenu =

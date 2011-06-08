@@ -15,7 +15,10 @@ class TeamRadarWindow : public QDialog
 
 public:
     TeamRadarWindow(QWidget *parent = 0);
-	void accept();
+    void accept();
+
+private slots:
+    void onSetImage();
 
 private:
 	QString guessUserName() const;
