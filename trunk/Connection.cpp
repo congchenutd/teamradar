@@ -1,5 +1,6 @@
 #include "Connection.h"
 #include <QHostAddress>
+#include <QFile>
 
 Connection::Connection(QObject* parent) : QTcpSocket(parent)
 {
@@ -17,15 +18,11 @@ Connection::Connection(QObject* parent) : QTcpSocket(parent)
 	connect(&pingTimer, SIGNAL(timeout()), this, SLOT(sendPing()));
 }
 
-Connection::~Connection()
-{
-}
-
 void Connection::onReadyRead()
 {
 	if(state == WaitingForGreeting)
 	{
-		if(!readHeader())
+		if(!readHeader())   // read header and guess data type
 			return;
 		if(dataType != Greeting)
 		{
@@ -37,10 +34,10 @@ void Connection::onReadyRead()
 
 	if(state == ReadingGreeting)
 	{
-		if(!hasEnoughData())
+		if(!hasEnoughData())        // get data length and make sure there is data
 			return;
 
-		buffer = read(numBytes);
+		buffer = read(numBytes);    // read greeting
 		if(buffer.size() != numBytes)
 		{
 			abort();
@@ -51,7 +48,7 @@ void Connection::onReadyRead()
 		numBytes = 0;
 		buffer.clear();
 
-		if(!isValid())
+		if(!isValid())   // why do we need this??
 		{
 			abort();
 			return;
@@ -60,22 +57,23 @@ void Connection::onReadyRead()
 		if(!isGreetingSent)
 			sendGreeting();
 
-		pingTimer.start();
-		pongTime.start();
+		pingTimer.start();     // start heart beat
+		pongTime.start();      // wait for peer's pong
 		state = ReadyForUse;
 		emit readyForUse();
 	}
 
 	do
 	{
-		if(dataType == Undefined && !readHeader())
+		if(dataType == Undefined && !readHeader())   // read header
 			return;
-		if(!hasEnoughData())
+		if(!hasEnoughData())                         // read data
 			return;
-		processData();
-	} while(bytesAvailable() > 0);
+		processData();                               // process
+	} while(bytesAvailable() > 0);                   // more bytes on the stream
 }
 
+// get the data type and length
 bool Connection::readHeader()
 {
 	// new timerid
@@ -92,7 +90,7 @@ bool Connection::readHeader()
 		return false;
 	}
 
-	dataType = guessDataType(buffer);
+	dataType = guessDataType(buffer);  // guess payload type from header
 	if(dataType == Undefined)
 	{
 //		abort();
@@ -104,6 +102,7 @@ bool Connection::readHeader()
 	return true;
 }
 
+// read all available data to buffer
 int Connection::readDataIntoBuffer(int maxSize)
 {
 	if (maxSize > MaxBufferSize)
@@ -127,12 +126,14 @@ int Connection::readDataIntoBuffer(int maxSize)
 	return buffer.size() - numBytesBeforeRead;
 }
 
+// read length info
 int Connection::getDataLength()
 {
+	// check if there are bytes, then read, and finally check ending
 	if (bytesAvailable() <= 0 || readDataIntoBuffer() <= 0 || !buffer.endsWith('#'))
 		return 0;
 
-	buffer.chop(1);    // chop separator
+	buffer.chop(1);    // chop last char, the separator
 	int number = buffer.toInt();
 	buffer.clear();
 	return number;
@@ -157,6 +158,7 @@ void Connection::sendGreeting()
 		isGreetingSent = true;
 }
 
+// read data length and wait for it
 bool Connection::hasEnoughData()
 {
 	// new timerid
@@ -230,3 +232,24 @@ Connection* Connection::getInstance(QObject* parent)
 }
 
 Connection* Connection::instance = 0;
+
+void Connection::timerEvent(QTimerEvent* timerEvent)
+{
+	if(timerEvent->timerId() == timerId) {
+		abort();
+		killTimer(timerId);
+		timerId = 0;
+	}
+}
+
+void Connection::registerPhoto(const QString& photoPath)
+{
+	if(state != ReadyForUse)
+		return;
+	QFile file(photoPath);
+	if(!file.open(QFile::ReadOnly))
+		return;
+
+	QByteArray data = file.readAll();
+	write("PHOTO#" + QByteArray::number(data.size()) + "#" + data);
+}

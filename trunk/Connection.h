@@ -27,10 +27,15 @@ public:
 
 public:
 	static Connection* getInstance(QObject* parent = 0);
+
 	Connection(QObject* parent = 0);
-	~Connection();
+	~Connection() {}
 	void setUserName(const QString& name) { userName = name; }
 	ConnectionState getState() const { return state; }
+	void registerPhoto(const QString& photoPath);
+
+protected:
+	void timerEvent(QTimerEvent* timerEvent);
 
 signals:
 	void readyForUse();
@@ -57,6 +62,7 @@ public:
 
 private:
 	static Connection* instance;
+
 	QTimer          pingTimer;
 	QTime           pongTime;
 	ConnectionState state;
