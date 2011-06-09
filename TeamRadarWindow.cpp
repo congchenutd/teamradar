@@ -1,4 +1,5 @@
 #include "TeamRadarWindow.h"
+#include "Connection.h"
 
 #include <QHostAddress>
 #include <QtGui/QTextEdit>
@@ -10,6 +11,7 @@ using namespace TeamRadar;
 
 TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
 {
+	imageChanged = false;
     ui.setupUi(this);
 
 	setting = MySetting<UserSetting>::getInstance();
@@ -34,8 +36,10 @@ void TeamRadar::TeamRadarWindow::accept()
 QString TeamRadar::TeamRadarWindow::guessUserName() const
 {
 	QString result;
+
+	// search environmental variables for user name
 	QStringList envVariables;
-	envVariables << "USERNAME.*" << "USER.*" << " USERDOMAIN.*"
+	envVariables << "USERNAME.*" << "USER.*" << "USERDOMAIN.*"
 				 << "HOSTNAME.*" << "DOMAINNAME.*";
 	QStringList environment = QProcess::systemEnvironment();
 	foreach(QString string, envVariables)
@@ -63,8 +67,17 @@ void TeamRadarWindow::onSetImage()
                                                     "Images (*.png *.jpg *.bmp *.ico)");
     if(fileName.isEmpty())
         return;
-    ui.labelImage->setPixmap(QPixmap(fileName));
+
+	// save photo file
+	QPixmap pixmap = QPixmap(fileName).scaled(128, 128);
+    ui.labelImage->setPixmap(pixmap);
+	imageChanged = true;
+	pixmap.save("Photo.png");
+
+	// register the photo on server
+	Connection::getInstance()->registerPhoto("Photo.png");
 }
+
 
 /////////////////////////////////////// UserSetting ////////////////////////////////
 TeamRadar::UserSetting::UserSetting(const QString& fileName) : MySetting<UserSetting>(fileName)

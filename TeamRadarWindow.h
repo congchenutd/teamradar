@@ -26,6 +26,7 @@ private:
 private:
 	Ui::TeamRadarDlgClass ui;
 	UserSetting* setting;
+	bool imageChanged;
 };
 
 
