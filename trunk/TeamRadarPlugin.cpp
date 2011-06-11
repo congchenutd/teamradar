@@ -53,11 +53,14 @@ bool TeamRadarPlugin::initialize(const QStringList &arguments, QString *error_me
             actionManager->actionContainer(Core::Constants::M_TOOLS);
 	toolsMenu->addAction(command);
 
+	// My stuff
 	MessageCollector::getInstance();
 	setting = MySetting<UserSetting>::getInstance();
 	Connection* connection = Connection::getInstance(this);
 	connection->setUserName(setting->getUserName());
 	connection->connectToHost(setting->getServerAddress(), setting->getServerPort());
+
+	// End my stuff
 
 	addAutoReleasedObject(new TeamRadarNavigationWidgetFactory); 
 

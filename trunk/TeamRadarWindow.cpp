@@ -90,8 +90,6 @@ void TeamRadar::UserSetting::loadDefaults()
 {
 	setServerAddress("0.0.0.0");
 	setServerPort(12345);
-	setUserName("Unknown");
-    setValue("Image", "");
 }
 
 QString TeamRadar::UserSetting::getServerAddress() const {
