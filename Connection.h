@@ -22,6 +22,8 @@ public:
 		Greeting,
 		Ping,
 		Pong,
+		RegisterResponse,
+		PhotoResponse,
 		Event,
 	} DataType;
 
@@ -32,7 +34,10 @@ public:
 	~Connection() {}
 	void setUserName(const QString& name) { userName = name; }
 	ConnectionState getState() const { return state; }
+
+	void registerUser();
 	void registerPhoto(const QString& photoPath);
+	void requestPhotos();
 
 protected:
 	void timerEvent(QTimerEvent* timerEvent);

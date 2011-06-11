@@ -1,6 +1,7 @@
 #include "Connection.h"
 #include <QHostAddress>
 #include <QFile>
+#include <QMessageBox>
 
 Connection::Connection(QObject* parent) : QTcpSocket(parent)
 {
@@ -156,6 +157,7 @@ void Connection::sendGreeting()
 	QByteArray data = "GREETING#" + QByteArray::number(greeting.size()) + '#' + greeting;
 	if(write(data) == data.size())
 		isGreetingSent = true;
+	QMessageBox::information(0, "", QString(data));
 }
 
 // read data length and wait for it
@@ -221,6 +223,10 @@ Connection::DataType Connection::guessDataType(const QByteArray& header)
 		return Pong;
 	if(header.startsWith("EVENT"))
 		return Event;
+	if(header.startsWith("REGISTER"))
+		return RegisterResponse;
+	if(header.startsWith("PHOTO"))
+		return PhotoResponse;
 	return Undefined;
 }
 
@@ -242,6 +248,13 @@ void Connection::timerEvent(QTimerEvent* timerEvent)
 	}
 }
 
+void Connection::registerUser()
+{
+	if(state != ReadyForUse)
+		return;
+	write("REQUEST_USER#" + userName.length() + "#" + userName.toUtf8());
+}
+
 void Connection::registerPhoto(const QString& photoPath)
 {
 	if(state != ReadyForUse)
@@ -251,5 +264,12 @@ void Connection::registerPhoto(const QString& photoPath)
 		return;
 
 	QByteArray data = file.readAll();
-	write("PHOTO#" + QByteArray::number(data.size()) + "#" + data);
+	write("REGISTER_PHOTO#" + QByteArray::number(data.size()) + "#" + data);
+}
+
+void Connection::requestPhotos()
+{
+	if(state != ReadyForUse)
+		return;
+	write("REQUEST_PHOTO#" + QString::number(1) + "#" + "R");
 }
