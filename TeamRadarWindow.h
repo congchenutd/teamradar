@@ -26,10 +26,12 @@ private:
 private:
 	Ui::TeamRadarDlgClass ui;
 	UserSetting* setting;
+	QString userName;
 	bool imageChanged;
 };
 
 
+//////////////////////////////////////////////////////////////////////////
 class UserSetting : public MySetting<UserSetting>
 {
 public:

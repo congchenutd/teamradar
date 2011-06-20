@@ -17,10 +17,13 @@ TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
 	setting = MySetting<UserSetting>::getInstance();
 	ui.leServerAddress->setText(setting->getServerAddress());
 	ui.sbPort->setValue(setting->getServerPort());
-	QString userName = setting->getUserName();
+	userName = setting->getUserName();
 	if(userName.isEmpty())
 		userName = guessUserName();
 	ui.leUserName->setText(userName);
+
+	QPixmap pixmap = QPixmap(userName + ".png").scaled(128, 128);
+	ui.labelImage->setPixmap(pixmap);
 
     connect(ui.btImage, SIGNAL(clicked()), this, SLOT(onSetImage()));
 }
@@ -30,6 +33,10 @@ void TeamRadar::TeamRadarWindow::accept()
 	setting->setServerAddress(ui.leServerAddress->text());
 	setting->setServerPort(ui.sbPort->value());
 	setting->setUserName(ui.leUserName->text());
+
+	// register the photo on server
+	if(imageChanged)
+		Connection::getInstance()->registerPhoto(userName + ".png");
 	QDialog::accept();
 }
 
@@ -72,10 +79,7 @@ void TeamRadarWindow::onSetImage()
 	QPixmap pixmap = QPixmap(fileName).scaled(128, 128);
     ui.labelImage->setPixmap(pixmap);
 	imageChanged = true;
-	pixmap.save("Photo.png");
-
-	// register the photo on server
-	Connection::getInstance()->registerPhoto("Photo.png");
+	pixmap.save(userName + ".png");
 }
 
 
