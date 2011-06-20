@@ -35,16 +35,16 @@ public:
 	void setUserName(const QString& name) { userName = name; }
 	ConnectionState getState() const { return state; }
 
-	void registerUser();
 	void registerPhoto(const QString& photoPath);
-	void requestPhotos();
+	void requestPhoto (const QString& user);
 
 protected:
 	void timerEvent(QTimerEvent* timerEvent);
 
 signals:
 	void readyForUse();
-	void newMessage(const QString &message);
+	void newMessage(const QString& message);
+	void connectionFailed(const QString& message);
 
 private slots:
 	void onReadyRead();

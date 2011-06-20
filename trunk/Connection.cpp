@@ -1,7 +1,7 @@
 #include "Connection.h"
 #include <QHostAddress>
 #include <QFile>
-#include <QMessageBox>
+#include <QFileInfo>
 
 Connection::Connection(QObject* parent) : QTcpSocket(parent)
 {
@@ -44,6 +44,14 @@ void Connection::onReadyRead()
 			abort();
 			return;
 		}
+		qDebug() << buffer;
+
+		if(buffer == "WRONG_USER")
+		{
+			abort();
+			emit connectionFailed(buffer);
+			return;
+		}
 
 		dataType = Undefined;
 		numBytes = 0;
@@ -54,9 +62,6 @@ void Connection::onReadyRead()
 			abort();
 			return;
 		}
-
-		if(!isGreetingSent)
-			sendGreeting();
 
 		pingTimer.start();     // start heart beat
 		pongTime.start();      // wait for peer's pong
@@ -93,10 +98,7 @@ bool Connection::readHeader()
 
 	dataType = guessDataType(buffer);  // guess payload type from header
 	if(dataType == Undefined)
-	{
-//		abort();
 		return false;
-	}
 
 	buffer.clear();
 	numBytes = getDataLength();
@@ -157,7 +159,6 @@ void Connection::sendGreeting()
 	QByteArray data = "GREETING#" + QByteArray::number(greeting.size()) + '#' + greeting;
 	if(write(data) == data.size())
 		isGreetingSent = true;
-	QMessageBox::information(0, "", QString(data));
 }
 
 // read data length and wait for it
@@ -248,13 +249,6 @@ void Connection::timerEvent(QTimerEvent* timerEvent)
 	}
 }
 
-void Connection::registerUser()
-{
-	if(state != ReadyForUse)
-		return;
-	write("REQUEST_USER#" + userName.length() + "#" + userName.toUtf8());
-}
-
 void Connection::registerPhoto(const QString& photoPath)
 {
 	if(state != ReadyForUse)
@@ -264,12 +258,14 @@ void Connection::registerPhoto(const QString& photoPath)
 		return;
 
 	QByteArray data = file.readAll();
-	write("REGISTER_PHOTO#" + QByteArray::number(data.size()) + "#" + data);
+	QString format = QFileInfo(photoPath).suffix();
+	write("REGISTER_PHOTO#" + QByteArray::number(data.size() + format.length()) + "#" 
+							+ format.toUtf8() + "#" + data);
 }
 
-void Connection::requestPhotos()
+void Connection::requestPhoto(const QString& user)
 {
 	if(state != ReadyForUse)
 		return;
-	write("REQUEST_PHOTO#" + QString::number(1) + "#" + "R");
+	write("REQUEST_PHOTO#" + QByteArray::number(user.length()) + "#" + user.toUtf8());
 }
