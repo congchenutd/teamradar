@@ -3,6 +3,7 @@
 
 #include <extensionsystem/iplugin.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/inavigationwidgetfactory.h> 
 #include "TeamRadarWindow.h"
 #include "TeamRadarView.h"
 
@@ -11,8 +12,6 @@ namespace Core {
 	class IEditor;
 	class IMode;
 }
-
-namespace TeamRadar {
 
 class TeamRadarPlugin : public ExtensionSystem::IPlugin
 {
@@ -26,10 +25,17 @@ private slots:
     void onTeamRadarOption();
 
 private:
-	UserSetting* setting;
-	TeamRadarView view;
+	Setting* setting;
 };
 
-} // namespace TeamRadar
+
+class TeamRadarNavigationWidgetFactory : public Core::INavigationWidgetFactory 
+{ 
+public: 
+	Core::NavigationView createWidget(); 
+	QString displayName() const;
+	QString id() const;
+	virtual int priority() const { return 600; }
+}; 
 
 #endif // TEAMRADARPLUGIN_H

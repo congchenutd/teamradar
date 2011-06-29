@@ -3,6 +3,8 @@
 #include "MessageCollector.h"
 #include "TeamRadarView.h"
 #include "Connection.h"
+#include "PlayerWidget.h"
+#include "Setting.h"
 
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
@@ -23,7 +25,6 @@
 #include <QtGui/QPushButton>
 #include <QMainWindow>
 
-using namespace TeamRadar;
 
 bool TeamRadarPlugin::initialize(const QStringList &arguments, QString *error_message)
 {
@@ -55,7 +56,7 @@ bool TeamRadarPlugin::initialize(const QStringList &arguments, QString *error_me
 
 	// My stuff
 	MessageCollector::getInstance();
-	setting = MySetting<UserSetting>::getInstance();
+	setting = MySetting<Setting>::getInstance();
 	Connection* connection = Connection::getInstance(this);
 	connection->setUserName(setting->getUserName());
 	connection->connectToHost(setting->getServerAddress(), setting->getServerPort());
@@ -77,3 +78,21 @@ void TeamRadarPlugin::onTeamRadarOption()
 }
 
 Q_EXPORT_PLUGIN(TeamRadarPlugin)
+
+
+//////////////////////////////////////////////////////////////////////////
+// Factory
+Core::NavigationView TeamRadarNavigationWidgetFactory::createWidget()
+{
+	Core::NavigationView view; 
+	view.widget = new PlayerWidget;
+	return view;
+}
+
+QString TeamRadarNavigationWidgetFactory::displayName() const {
+	return "TeamRadar";
+}
+
+QString TeamRadarNavigationWidgetFactory::id() const {
+	return displayName();
+}

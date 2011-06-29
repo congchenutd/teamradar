@@ -15,8 +15,6 @@
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectexplorer.h>
 
-namespace TeamRadar {
-
 class MessageCollector : public QObject
 {
 	Q_OBJECT
@@ -33,6 +31,9 @@ private slots:
 	void onChangeMode(Core::IMode* mode, Core::IMode* oldMode);
 	void onOpenProject(ProjectExplorer::Project* project);
 
+signals:
+	void localEvent(QString);
+
 private:
 	void sendEvent(const QString& event, const QString& parameters);
 
@@ -44,7 +45,5 @@ private:
 	Core::IEditor*       currentEditor;
 	ProjectExplorer::ProjectExplorerPlugin* projectExplorer;
 };
-
-}
 
 #endif // MessageCollector_h__

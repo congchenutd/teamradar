@@ -3,6 +3,8 @@
 
 #include <QSettings>
 #include <QDir>
+#include <QProcessEnvironment>
+#include <QHostInfo>
 
 // a framework supporting multi-user ini file
 template <class T>
@@ -15,7 +17,7 @@ public:
 	void saveTo(const QString& file);
 
 	static QString findFile(const QString& section, const QVariant& v);
-	static T*      getInstance(const QString& fileName = "Global.ini");
+	static T*      getInstance(const QString& fileName = QString());
 	static void    destroySettingManager();
 
 protected:
@@ -39,14 +41,20 @@ typename MySetting<T>::Manager MySetting<T>::settingManager;
 template <class T>
 T* MySetting<T>::getInstance(const QString& name)
 {
+	// automatically generate file name
 	QString fileName(name);
-#ifdef Q_WS_WIN
-	fileName.prepend("WIN_");
+	if(fileName.isEmpty())
+	{
+		fileName.append(QHostInfo::localHostName() + "_");
+		QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
+#if defined(Q_WS_WIN)
+		fileName.append(environment.value("USERNAME", "UnknownUser") + ".ini");
+#elif defined(Q_WS_MAC)
+		fileName.append(environment.value("USER", "UnknownUser") + ".ini");
+#else
+		fileName.append(".ini");
 #endif
-
-#ifdef Q_WS_MAC
-	fileName.prepend("MAC_");
-#endif
+	}
 
 	typename Manager::iterator it = settingManager.find(fileName);
 	if(it != settingManager.end())

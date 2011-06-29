@@ -43,7 +43,7 @@
 				Name="VCCustomBuildTool" />
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Aggregationd.lib ExtensionSystemd.lib Botand.lib Utilsd.lib Cored.lib c:\Qt\4.7.3\lib\QtTestd4.lib c:\Qt\4.7.3\lib\QtGuid4.lib c:\Qt\4.7.3\lib\QtNetworkd4.lib c:\Qt\4.7.3\lib\QtCored4.lib"
+				AdditionalDependencies="C:/Users/cxc094020/Program/qt-creator-2.2.0-src/lib/qtcreator\Aggregationd.lib C:/Users/cxc094020/Program/qt-creator-2.2.0-src/lib/qtcreator\ExtensionSystemd.lib C:/Users/cxc094020/Program/qt-creator-2.2.0-src/lib/qtcreator\Botand.lib C:/Users/cxc094020/Program/qt-creator-2.2.0-src/lib/qtcreator\Utilsd.lib C:/Users/cxc094020/Program/qt-creator-2.2.0-src/lib/qtcreator/plugins/Nokia\Cored.lib c:\Qt\4.7.3\lib\QtTestd4.lib c:\Qt\4.7.3\lib\QtGuid4.lib c:\Qt\4.7.3\lib\QtNetworkd4.lib c:\Qt\4.7.3\lib\QtCored4.lib"
 				AdditionalLibraryDirectories="c:\Qt\4.7.3\lib,C:/Users/cxc094020/Program/qt-creator-2.2.0-src/lib/qtcreator,C:/Users/cxc094020/Program/qt-creator-2.2.0-src/lib/qtcreator/plugins/Nokia"
 				GenerateDebugInformation="true"
 				IgnoreImportLibrary="true"
@@ -134,13 +134,33 @@
 			<File
 				RelativePath="Connection.cpp" />
 			<File
+				RelativePath="Edge.cpp" />
+			<File
+				RelativePath="Engine.cpp" />
+			<File
+				RelativePath="Label.cpp" />
+			<File
+				RelativePath="LightTrail.cpp" />
+			<File
 				RelativePath="MessageCollector.cpp" />
+			<File
+				RelativePath="ModeTag.cpp" />
+			<File
+				RelativePath="Node.cpp" />
+			<File
+				RelativePath="PeerManager.cpp" />
+			<File
+				RelativePath="PlayerWidget.cpp" />
+			<File
+				RelativePath="Setting.cpp" />
 			<File
 				RelativePath="TeamRadarPlugin.cpp" />
 			<File
 				RelativePath="TeamRadarView.cpp" />
 			<File
 				RelativePath="TeamRadarWindow.cpp" />
+			<File
+				RelativePath="Utility.cpp" />
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -170,6 +190,56 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="Edge.h" />
+			<File
+				RelativePath="Engine.h">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="C:\Qt\4.7.3\bin\moc.exe;Engine.h"
+						CommandLine="C:\Qt\4.7.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DIDE_LIBRARY_BASENAME=\&quot;lib\&quot; -DWITH_TESTS -DQT_NO_CAST_TO_ASCII -DQT_USE_FAST_OPERATOR_PLUS -DQT_USE_FAST_CONCATENATION -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_PLUGIN -DQT_TESTLIB_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;c:\Qt\4.7.3\include\QtCore&quot; -I&quot;c:\Qt\4.7.3\include\QtNetwork&quot; -I&quot;c:\Qt\4.7.3\include\QtGui&quot; -I&quot;c:\Qt\4.7.3\include\QtTest&quot; -I&quot;c:\Qt\4.7.3\include&quot; -I&quot;..\..\libs&quot; -I&quot;c:\Users\cxc094020\Program\qt-creator-2.2.0-src\tools&quot; -I&quot;..\..\plugins&quot; -I&quot;..\..\libs\3rdparty\botan\build&quot; -I&quot;..\coreplugin&quot; -I&quot;c:\Qt\4.7.3\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -Ic:\Qt\4.7.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 Engine.h -o debug\moc_Engine.cpp"
+						Description="MOC Engine.h"
+						Outputs="debug\moc_Engine.cpp"
+						Path="c:\Qt\4.7.3\bin" />
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="C:\Qt\4.7.3\bin\moc.exe;Engine.h"
+						CommandLine="C:\Qt\4.7.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DIDE_LIBRARY_BASENAME=\&quot;lib\&quot; -DQT_NO_CAST_TO_ASCII -DQT_USE_FAST_OPERATOR_PLUS -DQT_USE_FAST_CONCATENATION -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_NO_DEBUG -DQT_PLUGIN -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;c:\Qt\4.7.3\include\QtCore&quot; -I&quot;c:\Qt\4.7.3\include\QtNetwork&quot; -I&quot;c:\Qt\4.7.3\include\QtGui&quot; -I&quot;c:\Qt\4.7.3\include&quot; -I&quot;..\..\libs&quot; -I&quot;c:\Users\cxc094020\Program\qt-creator-2.2.0-src\tools&quot; -I&quot;..\..\plugins&quot; -I&quot;..\..\libs\3rdparty\botan\build&quot; -I&quot;..\coreplugin&quot; -I&quot;c:\Qt\4.7.3\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -Ic:\Qt\4.7.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 Engine.h -o release\moc_Engine.cpp"
+						Description="MOC Engine.h"
+						Outputs="release\moc_Engine.cpp"
+						Path="c:\Qt\4.7.3\bin" />
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="Label.h" />
+			<File
+				RelativePath="LightTrail.h">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="C:\Qt\4.7.3\bin\moc.exe;LightTrail.h"
+						CommandLine="C:\Qt\4.7.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DIDE_LIBRARY_BASENAME=\&quot;lib\&quot; -DWITH_TESTS -DQT_NO_CAST_TO_ASCII -DQT_USE_FAST_OPERATOR_PLUS -DQT_USE_FAST_CONCATENATION -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_PLUGIN -DQT_TESTLIB_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;c:\Qt\4.7.3\include\QtCore&quot; -I&quot;c:\Qt\4.7.3\include\QtNetwork&quot; -I&quot;c:\Qt\4.7.3\include\QtGui&quot; -I&quot;c:\Qt\4.7.3\include\QtTest&quot; -I&quot;c:\Qt\4.7.3\include&quot; -I&quot;..\..\libs&quot; -I&quot;c:\Users\cxc094020\Program\qt-creator-2.2.0-src\tools&quot; -I&quot;..\..\plugins&quot; -I&quot;..\..\libs\3rdparty\botan\build&quot; -I&quot;..\coreplugin&quot; -I&quot;c:\Qt\4.7.3\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -Ic:\Qt\4.7.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 LightTrail.h -o debug\moc_LightTrail.cpp"
+						Description="MOC LightTrail.h"
+						Outputs="debug\moc_LightTrail.cpp"
+						Path="c:\Qt\4.7.3\bin" />
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="C:\Qt\4.7.3\bin\moc.exe;LightTrail.h"
+						CommandLine="C:\Qt\4.7.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DIDE_LIBRARY_BASENAME=\&quot;lib\&quot; -DQT_NO_CAST_TO_ASCII -DQT_USE_FAST_OPERATOR_PLUS -DQT_USE_FAST_CONCATENATION -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_NO_DEBUG -DQT_PLUGIN -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;c:\Qt\4.7.3\include\QtCore&quot; -I&quot;c:\Qt\4.7.3\include\QtNetwork&quot; -I&quot;c:\Qt\4.7.3\include\QtGui&quot; -I&quot;c:\Qt\4.7.3\include&quot; -I&quot;..\..\libs&quot; -I&quot;c:\Users\cxc094020\Program\qt-creator-2.2.0-src\tools&quot; -I&quot;..\..\plugins&quot; -I&quot;..\..\libs\3rdparty\botan\build&quot; -I&quot;..\coreplugin&quot; -I&quot;c:\Qt\4.7.3\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -Ic:\Qt\4.7.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 LightTrail.h -o release\moc_LightTrail.cpp"
+						Description="MOC LightTrail.h"
+						Outputs="release\moc_LightTrail.cpp"
+						Path="c:\Qt\4.7.3\bin" />
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="MessageCollector.h">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -192,6 +262,83 @@
 						Path="c:\Qt\4.7.3\bin" />
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath="ModeTag.h" />
+			<File
+				RelativePath="MySetting.h" />
+			<File
+				RelativePath="Node.h">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="C:\Qt\4.7.3\bin\moc.exe;Node.h"
+						CommandLine="C:\Qt\4.7.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DIDE_LIBRARY_BASENAME=\&quot;lib\&quot; -DWITH_TESTS -DQT_NO_CAST_TO_ASCII -DQT_USE_FAST_OPERATOR_PLUS -DQT_USE_FAST_CONCATENATION -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_PLUGIN -DQT_TESTLIB_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;c:\Qt\4.7.3\include\QtCore&quot; -I&quot;c:\Qt\4.7.3\include\QtNetwork&quot; -I&quot;c:\Qt\4.7.3\include\QtGui&quot; -I&quot;c:\Qt\4.7.3\include\QtTest&quot; -I&quot;c:\Qt\4.7.3\include&quot; -I&quot;..\..\libs&quot; -I&quot;c:\Users\cxc094020\Program\qt-creator-2.2.0-src\tools&quot; -I&quot;..\..\plugins&quot; -I&quot;..\..\libs\3rdparty\botan\build&quot; -I&quot;..\coreplugin&quot; -I&quot;c:\Qt\4.7.3\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -Ic:\Qt\4.7.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 Node.h -o debug\moc_Node.cpp"
+						Description="MOC Node.h"
+						Outputs="debug\moc_Node.cpp"
+						Path="c:\Qt\4.7.3\bin" />
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="C:\Qt\4.7.3\bin\moc.exe;Node.h"
+						CommandLine="C:\Qt\4.7.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DIDE_LIBRARY_BASENAME=\&quot;lib\&quot; -DQT_NO_CAST_TO_ASCII -DQT_USE_FAST_OPERATOR_PLUS -DQT_USE_FAST_CONCATENATION -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_NO_DEBUG -DQT_PLUGIN -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;c:\Qt\4.7.3\include\QtCore&quot; -I&quot;c:\Qt\4.7.3\include\QtNetwork&quot; -I&quot;c:\Qt\4.7.3\include\QtGui&quot; -I&quot;c:\Qt\4.7.3\include&quot; -I&quot;..\..\libs&quot; -I&quot;c:\Users\cxc094020\Program\qt-creator-2.2.0-src\tools&quot; -I&quot;..\..\plugins&quot; -I&quot;..\..\libs\3rdparty\botan\build&quot; -I&quot;..\coreplugin&quot; -I&quot;c:\Qt\4.7.3\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -Ic:\Qt\4.7.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 Node.h -o release\moc_Node.cpp"
+						Description="MOC Node.h"
+						Outputs="release\moc_Node.cpp"
+						Path="c:\Qt\4.7.3\bin" />
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="PeerManager.h">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="C:\Qt\4.7.3\bin\moc.exe;PeerManager.h"
+						CommandLine="C:\Qt\4.7.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DIDE_LIBRARY_BASENAME=\&quot;lib\&quot; -DWITH_TESTS -DQT_NO_CAST_TO_ASCII -DQT_USE_FAST_OPERATOR_PLUS -DQT_USE_FAST_CONCATENATION -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_PLUGIN -DQT_TESTLIB_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;c:\Qt\4.7.3\include\QtCore&quot; -I&quot;c:\Qt\4.7.3\include\QtNetwork&quot; -I&quot;c:\Qt\4.7.3\include\QtGui&quot; -I&quot;c:\Qt\4.7.3\include\QtTest&quot; -I&quot;c:\Qt\4.7.3\include&quot; -I&quot;..\..\libs&quot; -I&quot;c:\Users\cxc094020\Program\qt-creator-2.2.0-src\tools&quot; -I&quot;..\..\plugins&quot; -I&quot;..\..\libs\3rdparty\botan\build&quot; -I&quot;..\coreplugin&quot; -I&quot;c:\Qt\4.7.3\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -Ic:\Qt\4.7.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PeerManager.h -o debug\moc_PeerManager.cpp"
+						Description="MOC PeerManager.h"
+						Outputs="debug\moc_PeerManager.cpp"
+						Path="c:\Qt\4.7.3\bin" />
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="C:\Qt\4.7.3\bin\moc.exe;PeerManager.h"
+						CommandLine="C:\Qt\4.7.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DIDE_LIBRARY_BASENAME=\&quot;lib\&quot; -DQT_NO_CAST_TO_ASCII -DQT_USE_FAST_OPERATOR_PLUS -DQT_USE_FAST_CONCATENATION -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_NO_DEBUG -DQT_PLUGIN -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;c:\Qt\4.7.3\include\QtCore&quot; -I&quot;c:\Qt\4.7.3\include\QtNetwork&quot; -I&quot;c:\Qt\4.7.3\include\QtGui&quot; -I&quot;c:\Qt\4.7.3\include&quot; -I&quot;..\..\libs&quot; -I&quot;c:\Users\cxc094020\Program\qt-creator-2.2.0-src\tools&quot; -I&quot;..\..\plugins&quot; -I&quot;..\..\libs\3rdparty\botan\build&quot; -I&quot;..\coreplugin&quot; -I&quot;c:\Qt\4.7.3\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -Ic:\Qt\4.7.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PeerManager.h -o release\moc_PeerManager.cpp"
+						Description="MOC PeerManager.h"
+						Outputs="release\moc_PeerManager.cpp"
+						Path="c:\Qt\4.7.3\bin" />
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="PlayerWidget.h">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="C:\Qt\4.7.3\bin\moc.exe;PlayerWidget.h"
+						CommandLine="C:\Qt\4.7.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DIDE_LIBRARY_BASENAME=\&quot;lib\&quot; -DWITH_TESTS -DQT_NO_CAST_TO_ASCII -DQT_USE_FAST_OPERATOR_PLUS -DQT_USE_FAST_CONCATENATION -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_PLUGIN -DQT_TESTLIB_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;c:\Qt\4.7.3\include\QtCore&quot; -I&quot;c:\Qt\4.7.3\include\QtNetwork&quot; -I&quot;c:\Qt\4.7.3\include\QtGui&quot; -I&quot;c:\Qt\4.7.3\include\QtTest&quot; -I&quot;c:\Qt\4.7.3\include&quot; -I&quot;..\..\libs&quot; -I&quot;c:\Users\cxc094020\Program\qt-creator-2.2.0-src\tools&quot; -I&quot;..\..\plugins&quot; -I&quot;..\..\libs\3rdparty\botan\build&quot; -I&quot;..\coreplugin&quot; -I&quot;c:\Qt\4.7.3\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -Ic:\Qt\4.7.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PlayerWidget.h -o debug\moc_PlayerWidget.cpp"
+						Description="MOC PlayerWidget.h"
+						Outputs="debug\moc_PlayerWidget.cpp"
+						Path="c:\Qt\4.7.3\bin" />
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="C:\Qt\4.7.3\bin\moc.exe;PlayerWidget.h"
+						CommandLine="C:\Qt\4.7.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DIDE_LIBRARY_BASENAME=\&quot;lib\&quot; -DQT_NO_CAST_TO_ASCII -DQT_USE_FAST_OPERATOR_PLUS -DQT_USE_FAST_CONCATENATION -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_NO_DEBUG -DQT_PLUGIN -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;c:\Qt\4.7.3\include\QtCore&quot; -I&quot;c:\Qt\4.7.3\include\QtNetwork&quot; -I&quot;c:\Qt\4.7.3\include\QtGui&quot; -I&quot;c:\Qt\4.7.3\include&quot; -I&quot;..\..\libs&quot; -I&quot;c:\Users\cxc094020\Program\qt-creator-2.2.0-src\tools&quot; -I&quot;..\..\plugins&quot; -I&quot;..\..\libs\3rdparty\botan\build&quot; -I&quot;..\coreplugin&quot; -I&quot;c:\Qt\4.7.3\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -Ic:\Qt\4.7.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PlayerWidget.h -o release\moc_PlayerWidget.cpp"
+						Description="MOC PlayerWidget.h"
+						Outputs="release\moc_PlayerWidget.cpp"
+						Path="c:\Qt\4.7.3\bin" />
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="Setting.h" />
+			<File
+				RelativePath="TeamRadarEvent.h" />
 			<File
 				RelativePath="TeamRadarPlugin.h">
 				<FileConfiguration
@@ -262,6 +409,8 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="Utility.h" />
+			<File
 				RelativePath="..\..\shared\qtcreator_gui_pch.h">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -298,6 +447,30 @@
 					ExcludedFromBuild="true" />
 			</File>
 			<File
+				RelativePath="debug\moc_Engine.cpp">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true" />
+			</File>
+			<File
+				RelativePath="release\moc_Engine.cpp">
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true" />
+			</File>
+			<File
+				RelativePath="debug\moc_LightTrail.cpp">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true" />
+			</File>
+			<File
+				RelativePath="release\moc_LightTrail.cpp">
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true" />
+			</File>
+			<File
 				RelativePath="debug\moc_MessageCollector.cpp">
 				<FileConfiguration
 					Name="Release|Win32"
@@ -305,6 +478,42 @@
 			</File>
 			<File
 				RelativePath="release\moc_MessageCollector.cpp">
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true" />
+			</File>
+			<File
+				RelativePath="debug\moc_Node.cpp">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true" />
+			</File>
+			<File
+				RelativePath="release\moc_Node.cpp">
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true" />
+			</File>
+			<File
+				RelativePath="debug\moc_PeerManager.cpp">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true" />
+			</File>
+			<File
+				RelativePath="release\moc_PeerManager.cpp">
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true" />
+			</File>
+			<File
+				RelativePath="debug\moc_PlayerWidget.cpp">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true" />
+			</File>
+			<File
+				RelativePath="release\moc_PlayerWidget.cpp">
 				<FileConfiguration
 					Name="Debug|Win32"
 					ExcludedFromBuild="true" />
@@ -346,6 +555,18 @@
 					ExcludedFromBuild="true" />
 			</File>
 			<File
+				RelativePath="debug\qrc_Resources.cpp">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true" />
+			</File>
+			<File
+				RelativePath="release\qrc_Resources.cpp">
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true" />
+			</File>
+			<File
 				RelativePath="..\..\shared\qtcreator_gui_pch.h.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -365,15 +586,38 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="ui_TeamRadarDlg.h" />
+				RelativePath="ui_PlayerWidget.h" />
 			<File
-				RelativePath="ui_TeamRadarView.h" />
+				RelativePath="ui_TeamRadarDlg.h" />
 		</Filter>
 		<Filter
 			Name="Form Files"
 			Filter="ui"
 			UniqueIdentifier="{99349809-55BA-4b9d-BF79-8FDBB0286EB3}"
 			ParseFiles="false">
+			<File
+				RelativePath="PlayerWidget.ui">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="C:\Qt\4.7.3\bin\uic.exe;PlayerWidget.ui;TeamRadarView.h"
+						CommandLine="C:\Qt\4.7.3\bin\uic.exe PlayerWidget.ui -o ui_PlayerWidget.h"
+						Description="UIC PlayerWidget.ui"
+						Outputs="ui_PlayerWidget.h"
+						Path="c:\Qt\4.7.3\bin" />
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="C:\Qt\4.7.3\bin\uic.exe;PlayerWidget.ui;TeamRadarView.h"
+						CommandLine="C:\Qt\4.7.3\bin\uic.exe PlayerWidget.ui -o ui_PlayerWidget.h"
+						Description="UIC PlayerWidget.ui"
+						Outputs="ui_PlayerWidget.h"
+						Path="c:\Qt\4.7.3\bin" />
+				</FileConfiguration>
+			</File>
 			<File
 				RelativePath="TeamRadarDlg.ui">
 				<FileConfiguration
@@ -397,29 +641,67 @@
 						Path="c:\Qt\4.7.3\bin" />
 				</FileConfiguration>
 			</File>
+		</Filter>
+		<Filter
+			Name="Resource Files"
+			Filter="qrc;*"
+			UniqueIdentifier="{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}"
+			ParseFiles="false">
 			<File
-				RelativePath="TeamRadarView.ui">
+				RelativePath="Images\AddUser.png" />
+			<File
+				RelativePath="Images\Connect.png" />
+			<File
+				RelativePath="Images\Design.png" />
+			<File
+				RelativePath="Images\Disconnect.png" />
+			<File
+				RelativePath="Images\Expand.png" />
+			<File
+				RelativePath="Images\Head_Boss.png" />
+			<File
+				RelativePath="Images\Head_Female.png" />
+			<File
+				RelativePath="Images\Head_Male.png" />
+			<File
+				RelativePath="Images\Label.png" />
+			<File
+				RelativePath="Images\Open.png" />
+			<File
+				RelativePath="Images\Options.png" />
+			<File
+				RelativePath="Images\Path.png" />
+			<File
+				RelativePath="Images\RemoveUser.png" />
+			<File
+				RelativePath="Resources.qrc">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						AdditionalDependencies="C:\Qt\4.7.3\bin\uic.exe;TeamRadarView.ui"
-						CommandLine="C:\Qt\4.7.3\bin\uic.exe TeamRadarView.ui -o ui_TeamRadarView.h"
-						Description="UIC TeamRadarView.ui"
-						Outputs="ui_TeamRadarView.h"
+						AdditionalDependencies="C:\Qt\4.7.3\bin\rcc.exe;Images\AddUser.png;Images\Connect.png;Images\Design.png;Images\Disconnect.png;Images\Expand.png;Images\Head_Boss.png;Images\Head_Female.png;Images\Head_Male.png;Images\Label.png;Images\Open.png;Images\Options.png;Images\Path.png;Images\RemoveUser.png;Images\Save.png;Images\Shadow.png;Images\UserEdit.png;Resources.qrc"
+						CommandLine="C:\Qt\4.7.3\bin\rcc.exe -name Resources Resources.qrc -o debug\qrc_Resources.cpp"
+						Description="RCC Resources.qrc"
+						Outputs="debug\qrc_Resources.cpp"
 						Path="c:\Qt\4.7.3\bin" />
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						AdditionalDependencies="C:\Qt\4.7.3\bin\uic.exe;TeamRadarView.ui"
-						CommandLine="C:\Qt\4.7.3\bin\uic.exe TeamRadarView.ui -o ui_TeamRadarView.h"
-						Description="UIC TeamRadarView.ui"
-						Outputs="ui_TeamRadarView.h"
+						AdditionalDependencies="C:\Qt\4.7.3\bin\rcc.exe;Images\AddUser.png;Images\Connect.png;Images\Design.png;Images\Disconnect.png;Images\Expand.png;Images\Head_Boss.png;Images\Head_Female.png;Images\Head_Male.png;Images\Label.png;Images\Open.png;Images\Options.png;Images\Path.png;Images\RemoveUser.png;Images\Save.png;Images\Shadow.png;Images\UserEdit.png;Resources.qrc"
+						CommandLine="C:\Qt\4.7.3\bin\rcc.exe -name Resources Resources.qrc -o release\qrc_Resources.cpp"
+						Description="RCC Resources.qrc"
+						Outputs="release\qrc_Resources.cpp"
 						Path="c:\Qt\4.7.3\bin" />
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath="Images\Save.png" />
+			<File
+				RelativePath="Images\Shadow.png" />
+			<File
+				RelativePath="Images\UserEdit.png" />
 		</Filter>
 		<Filter
 			Name="COPY"

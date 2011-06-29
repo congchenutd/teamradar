@@ -4,10 +4,8 @@
 #include <QtGui/QDialog>
 #include "ui_TeamRadarDlg.h"
 #include "MySetting.h"
-
-namespace TeamRadar {
 	
-class UserSetting;
+class Setting;
 
 class TeamRadarWindow : public QDialog
 {
@@ -25,30 +23,10 @@ private:
 
 private:
 	Ui::TeamRadarDlgClass ui;
-	UserSetting* setting;
+	Setting* setting;
 	QString userName;
 	bool imageChanged;
 };
 
-
-//////////////////////////////////////////////////////////////////////////
-class UserSetting : public MySetting<UserSetting>
-{
-public:
-	UserSetting(const QString& fileName);
-
-	QString getServerAddress() const;
-	quint16 getServerPort()    const;
-	QString getUserName()      const;
-
-	void setServerAddress(const QString& address);
-	void setServerPort(quint16 port);
-	void setUserName(const QString& name);
-
-private:
-	void loadDefaults();
-};
-
-} // namespace TeamRadar
 
 #endif // TEAMRADARWINDOW_H
