@@ -24,6 +24,7 @@ public:
 		Pong,
 		RegisterResponse,
 		PhotoResponse,
+		UserListResponse,
 		Event,
 	} DataType;
 
@@ -37,6 +38,8 @@ public:
 
 	void registerPhoto(const QString& photoPath);
 	void requestPhoto (const QString& user);
+
+	void requestUserList();
 
 protected:
 	void timerEvent(QTimerEvent* timerEvent);

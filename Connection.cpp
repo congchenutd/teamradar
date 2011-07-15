@@ -1,4 +1,5 @@
 #include "Connection.h"
+#include "PeerManager.h"
 #include <QHostAddress>
 #include <QFile>
 #include <QFileInfo>
@@ -205,6 +206,12 @@ void Connection::processData()
 	case Event:
 		emit newMessage(QString::fromUtf8(buffer));
 		break;
+	case PhotoResponse:
+		PeerManager::getInstance()->setImage(buffer);
+		break;
+	case UserListResponse:
+		PeerManager::getInstance()->updateUserList(buffer);
+		break;
 	default:
 		break;
 	}
@@ -224,10 +231,12 @@ Connection::DataType Connection::guessDataType(const QByteArray& header)
 		return Pong;
 	if(header.startsWith("EVENT"))
 		return Event;
-	if(header.startsWith("REGISTER"))
+	if(header.startsWith("REGISTER_RESPONSE"))   // useless, server does not respond
 		return RegisterResponse;
-	if(header.startsWith("PHOTO"))
+	if(header.startsWith("PHOTO_RESPONSE"))
 		return PhotoResponse;
+	if(header.startsWith("USERLIST_RESPONSE"))
+		return UserListResponse;
 	return Undefined;
 }
 
@@ -268,4 +277,11 @@ void Connection::requestPhoto(const QString& user)
 	if(state != ReadyForUse)
 		return;
 	write("REQUEST_PHOTO#" + QByteArray::number(user.length()) + "#" + user.toUtf8());
+}
+
+void Connection::requestUserList()
+{
+	if(state != ReadyForUse)
+		return;
+	write("REQUEST_USERLIST#");
 }

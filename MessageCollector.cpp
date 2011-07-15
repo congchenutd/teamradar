@@ -1,20 +1,28 @@
 #include "MessageCollector.h"
 #include "Connection.h"
+#include "Setting.h"
 #include <QtGui/QMessageBox>
+#include <projectexplorer/project.h>
+#include <projectexplorer/projectexplorer.h>
+#include <coreplugin/filemanager.h>
 
 ////////////////////////////// MessageCollector ///////////////////////////////
 MessageCollector::MessageCollector()
 {
 	currentEditor = 0;
-	Core::ICore* core = Core::ICore::instance();
-	editorManager = core->editorManager();
-	modeManager   = core->modeManager();
-//	projectExplorer->saveModifiedFiles();
-	//projectExplorer = ProjectExplorer::ProjectExplorerPlugin::instance();
+	editorManager = Core::ICore::instance()->editorManager();
+	modeManager   = Core::ICore::instance()->modeManager();
+	fileManager   = Core::ICore::instance()->fileManager();
+
+	// FIXME: Can not get link ProjectExplorer!!!!!
+//	projectExplorer = ProjectExplorer::ProjectExplorerPlugin::instance();
+//	connect(projectExplorer, SIGNAL(currentProjectChanged(ProjectExplorer::Project*)), this, SLOT(onOpenProject(ProjectExplorer::Project*)));
+
 	connect(editorManager, SIGNAL(currentEditorChanged(Core::IEditor*)),   this, SLOT(onCurrentChanged(Core::IEditor*)));
 	connect(editorManager, SIGNAL(editorCreated(Core::IEditor*, QString)), this, SLOT(onOpenFile(Core::IEditor*)));
 	connect(editorManager, SIGNAL(editorsClosed(QList<Core::IEditor*>)),   this, SLOT(onCloseFiles(QList<Core::IEditor*>)));
 	connect(modeManager,   SIGNAL(currentModeChanged(Core::IMode*, Core::IMode*)), this, SLOT(onChangeMode(Core::IMode*, Core::IMode*)));
+	connect(fileManager, SIGNAL(currentFileChanged(QString)), this, SLOT(onOpenProject(QString)));
 }
 
 MessageCollector* MessageCollector::getInstance()
@@ -59,18 +67,24 @@ void MessageCollector::onChangeMode(Core::IMode* mode, Core::IMode* oldMode)
 
 void MessageCollector::sendEvent(const QString& event, const QString& parameters)
 {
-	Connection* connection = Connection::getInstance();
-	if(connection->getState() != Connection::ReadyForUse)
-		return;
 	QByteArray body = QString(event + '#' + parameters).toUtf8();
-	QByteArray data = "EVENT#" + QByteArray::number(body.size()) + '#' + body;
-	connection->write(data);
-	emit localEvent(data);
+	QByteArray localMessage = Setting::getInstance()->getUserName().toUtf8() + '#' + body;
+	emit localEvent(localMessage);
+	
+	QByteArray remoteMessage = "EVENT#" + QByteArray::number(body.size()) + '#' + body;
+	Connection* connection = Connection::getInstance();
+	if(connection->getState() == Connection::ReadyForUse)
+		connection->write(remoteMessage);
 }
 
-void MessageCollector::onOpenProject(ProjectExplorer::Project* project)
+//void MessageCollector::onOpenProject(ProjectExplorer::Project* project) {
+////	sendEvent("OPENPROJECT", project->projectDirectory());
+//}
+
+void MessageCollector::onOpenProject(const QString& projectFileName)
 {
-	sendEvent("OpenProject", project->displayName());
+	if(projectFileName.endsWith(".pro"))
+		sendEvent("OPENPROJECT", QFileInfo(projectFileName).absolutePath());
 }
 
 MessageCollector* MessageCollector::instance = 0;

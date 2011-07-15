@@ -29,7 +29,8 @@ private slots:
 	void onChangeFile();
 	void onCloseFiles(QList<Core::IEditor*>);
 	void onChangeMode(Core::IMode* mode, Core::IMode* oldMode);
-	void onOpenProject(ProjectExplorer::Project* project);
+//	void onOpenProject(ProjectExplorer::Project* project);
+	void onOpenProject(const QString& projectFileName);
 
 signals:
 	void localEvent(QString);
@@ -44,6 +45,7 @@ private:
 	Core::ModeManager*   modeManager;
 	Core::IEditor*       currentEditor;
 	ProjectExplorer::ProjectExplorerPlugin* projectExplorer;
+	Core::FileManager*   fileManager;
 };
 
 #endif // MessageCollector_h__
