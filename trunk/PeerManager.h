@@ -21,9 +21,11 @@ class PeerManager : public QObject
 public:
 	static PeerManager* getInstance();
 	void    setImage(const QString& userName, const QString& imagePath);
+	void    setImage(const QByteArray& rawData);
 	QString getImage(const QString& userName) const;
 	QColor getDeveloperColor(const QString& userName);
 	void   setDeveloperColor(const QString& userName, const QColor& color);
+	void updateUserList(const QByteArray& list);
 
 private:
 	PeerManager(QObject* parent = 0);

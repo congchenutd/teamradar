@@ -171,6 +171,11 @@ void PlayerWidget::play(const TeamRadarEvent& event)
 		ui.graphicsView->addDeveloper(event.userName, peerManager->getImage(event.userName));
 	else if(event.eventType == "DISCONNECTED")
 		ui.graphicsView->removeDeveloper(event.userName);
+	else if(event.eventType == "OPENPROJECT")
+	{
+		Setting::getInstance()->setValue("RootPath", event.parameter);
+//		ui.graphicsView->loadDir(event.parameter);
+	}
 }
 
 void PlayerWidget::onPlaylistClicked(const QModelIndex& idx) {
@@ -186,9 +191,9 @@ void PlayerWidget::onPlaylistCoubleClicked(const QModelIndex& idx)
 void PlayerWidget::onOnline()
 {
 	if(online)   // go offline
-		ui.btOnline->setIcon(QIcon(":/Images/Connect.png"));
-	else         // go online
 		ui.btOnline->setIcon(QIcon(":/Images/Disconnect.png"));
+	else         // go online
+		ui.btOnline->setIcon(QIcon(":/Images/Connect.png"));
 	online = !online;
 	ui.btPlayPause->setEnabled(!online);
 	ui.btLoad     ->setEnabled(!online);
@@ -201,7 +206,7 @@ void PlayerWidget::onOnline()
 		Setting* setting = Setting::getInstance();
 		if(!ui.graphicsView->isLoaded())
 			ui.graphicsView->loadDir(setting->value("RootPath").toString(), 0);
-		play(TeamRadarEvent(setting->getUserName(), "CONNECTED", ""));
+		play(TeamRadarEvent(setting->getUserName(), "CONNECTED", ""));  // add myself
 	}
 }
 
@@ -235,9 +240,10 @@ void PlayerWidget::onNewMessage(const QString& message)
 	if(!online)
 		return;
 
+	// username, event, parameters
 	QStringList sections = message.split("#");
-	if(sections.size() != 4)
+	if(sections.size() != 3)
 		return;
-	TeamRadarEvent event(sections[1], sections[2], sections[3]);
+	TeamRadarEvent event(sections[0], sections[1], sections[2]);
 	play(event);
 }

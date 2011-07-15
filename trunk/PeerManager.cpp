@@ -27,6 +27,23 @@ void PeerManager::setImage(const QString& userName, const QString& imagePath)
 		it->image = imagePath;
 }
 
+// filename + # + filedata
+void PeerManager::setImage(const QByteArray& rawData)
+{
+	int seperator = rawData.indexOf('#');
+	if(seperator == -1)
+		return;
+
+	QByteArray fileName = rawData.left(seperator);
+	QByteArray fileData = rawData.right(rawData.length() - seperator - 1);
+	QFile file(fileName);
+	if(file.open(QFile::WriteOnly | QFile::Truncate))
+		file.write(fileData);
+
+	QString developerName = QFileInfo(fileName).baseName();
+	setImage(developerName, fileName);
+}
+
 QString PeerManager::getImage(const QString& userName) const
 {
 	Peers::Iterator it = developers.find(userName);
@@ -55,4 +72,9 @@ void PeerManager::setDeveloperColor(const QString& userName, const QColor& color
 	}
 	else
 		it->color = color;
+}
+
+void PeerManager::updateUserList(const QByteArray& list)
+{
+
 }
