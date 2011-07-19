@@ -173,9 +173,11 @@ void PlayerWidget::play(const TeamRadarEvent& event)
 		ui.graphicsView->removeDeveloper(event.userName);
 	else if(event.eventType == "OPENPROJECT")
 	{
+		if(event.userName != Setting::getInstance()->getUserName())
+			return;
 		Setting::getInstance()->setValue("RootPath", event.parameter);
 		ui.graphicsView->loadDir(event.parameter);
-		play(TeamRadarEvent(Setting::getInstance()->getUserName(), "CONNECTED", ""));  // add myself
+		play(TeamRadarEvent(event.userName, "CONNECTED", ""));  // add myself
 	}
 }
 
