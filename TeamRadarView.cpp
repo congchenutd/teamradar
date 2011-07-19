@@ -366,6 +366,7 @@ void TeamRadarView::onPin(bool pin) {
 void TeamRadarView::clear()
 {
 	scene()->clear();
+	humans.clear();
 	setRoot(0);
 }
 
