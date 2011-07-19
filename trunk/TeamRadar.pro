@@ -7,6 +7,7 @@ TARGET = TeamRadar
 
 include(../../qtcreatorplugin.pri)
 include(../../plugins/coreplugin/coreplugin.pri)
+include(../../plugins/projectexplorer/projectexplorer.pri)
 
 QT += network
 

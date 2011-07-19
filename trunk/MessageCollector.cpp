@@ -15,14 +15,14 @@ MessageCollector::MessageCollector()
 	fileManager   = Core::ICore::instance()->fileManager();
 
 	// FIXME: Can not get link ProjectExplorer!!!!!
-//	projectExplorer = ProjectExplorer::ProjectExplorerPlugin::instance();
-//	connect(projectExplorer, SIGNAL(currentProjectChanged(ProjectExplorer::Project*)), this, SLOT(onOpenProject(ProjectExplorer::Project*)));
+	projectExplorer = ProjectExplorer::ProjectExplorerPlugin::instance();
+	connect(projectExplorer, SIGNAL(currentProjectChanged(ProjectExplorer::Project*)), this, SLOT(onOpenProject(ProjectExplorer::Project*)));
 
 	connect(editorManager, SIGNAL(currentEditorChanged(Core::IEditor*)),   this, SLOT(onCurrentChanged(Core::IEditor*)));
 	connect(editorManager, SIGNAL(editorCreated(Core::IEditor*, QString)), this, SLOT(onOpenFile(Core::IEditor*)));
 	connect(editorManager, SIGNAL(editorsClosed(QList<Core::IEditor*>)),   this, SLOT(onCloseFiles(QList<Core::IEditor*>)));
 	connect(modeManager,   SIGNAL(currentModeChanged(Core::IMode*, Core::IMode*)), this, SLOT(onChangeMode(Core::IMode*, Core::IMode*)));
-	connect(fileManager, SIGNAL(currentFileChanged(QString)), this, SLOT(onOpenProject(QString)));
+//	connect(fileManager, SIGNAL(currentFileChanged(QString)), this, SLOT(onOpenProject(QString)));
 }
 
 MessageCollector* MessageCollector::getInstance()
@@ -77,14 +77,9 @@ void MessageCollector::sendEvent(const QString& event, const QString& parameters
 		connection->write(remoteMessage);
 }
 
-//void MessageCollector::onOpenProject(ProjectExplorer::Project* project) {
-////	sendEvent("OPENPROJECT", project->projectDirectory());
-//}
-
-void MessageCollector::onOpenProject(const QString& projectFileName)
-{
-	if(projectFileName.endsWith(".pro"))
-		sendEvent("OPENPROJECT", QFileInfo(projectFileName).absolutePath());
+void MessageCollector::onOpenProject(ProjectExplorer::Project* project) {
+	if(project != 0)
+		sendEvent("OPENPROJECT", project->projectDirectory());
 }
 
 MessageCollector* MessageCollector::instance = 0;

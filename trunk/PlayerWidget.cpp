@@ -174,7 +174,8 @@ void PlayerWidget::play(const TeamRadarEvent& event)
 	else if(event.eventType == "OPENPROJECT")
 	{
 		Setting::getInstance()->setValue("RootPath", event.parameter);
-//		ui.graphicsView->loadDir(event.parameter);
+		ui.graphicsView->loadDir(event.parameter);
+		play(TeamRadarEvent(Setting::getInstance()->getUserName(), "CONNECTED", ""));  // add myself
 	}
 }
 
@@ -206,7 +207,7 @@ void PlayerWidget::onOnline()
 		Setting* setting = Setting::getInstance();
 		if(!ui.graphicsView->isLoaded())
 			ui.graphicsView->loadDir(setting->value("RootPath").toString(), 0);
-		play(TeamRadarEvent(setting->getUserName(), "CONNECTED", ""));  // add myself
+//		play(TeamRadarEvent(setting->getUserName(), "CONNECTED", ""));  // add myself
 	}
 }
 
