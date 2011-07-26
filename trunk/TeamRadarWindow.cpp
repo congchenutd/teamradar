@@ -34,7 +34,7 @@ void TeamRadarWindow::accept()
 
 	// register the photo on server
 	if(imageChanged)
-		Connection::getInstance()->registerPhoto(userName + ".png");
+		registerPhoto();
 	QDialog::accept();
 }
 
@@ -78,4 +78,22 @@ void TeamRadarWindow::onSetImage()
     ui.labelImage->setPixmap(pixmap);
 	imageChanged = true;
 	pixmap.save(userName + ".png");
+}
+
+void TeamRadarWindow::registerPhoto()
+{
+	Connection* connection = Connection::getInstance();
+	if(connection->getState() != Connection::ReadyForUse)
+		return;
+
+	QString photoPath = userName + ".png";
+	QFile file(photoPath);
+	if(!file.open(QFile::ReadOnly))
+		return;
+
+	QByteArray data = file.readAll();
+	QString format = QFileInfo(photoPath).suffix();
+	connection->write("REGISTER_PHOTO#" + 
+		               QByteArray::number(data.size() + format.length()) + "#" + 
+					   format.toUtf8() + "#" + data);
 }

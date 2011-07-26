@@ -36,11 +36,6 @@ public:
 	void setUserName(const QString& name) { userName = name; }
 	ConnectionState getState() const { return state; }
 
-	void registerPhoto(const QString& photoPath);
-	void requestPhoto (const QString& user);
-
-	void requestUserList();
-
 protected:
 	void timerEvent(QTimerEvent* timerEvent);
 
@@ -48,6 +43,8 @@ signals:
 	void readyForUse();
 	void newMessage(const QString& message);
 	void connectionFailed(const QString& message);
+	void userList(const QByteArray& buffer);
+	void photoResponse(const QByteArray& buffer);
 
 private slots:
 	void onReadyRead();
