@@ -6,8 +6,11 @@
 #include <QString>
 #include <QColor>
 
+class Connection;
+
 struct DeveloperInfo
 {
+//	DeveloperInfo(const QString& img, const QColor& clr) : image(img), color(clr) {}
 	QString image;
 	QColor  color;
 };
@@ -25,13 +28,20 @@ public:
 	QString getImage(const QString& userName) const;
 	QColor getDeveloperColor(const QString& userName);
 	void   setDeveloperColor(const QString& userName, const QColor& color);
-	void updateUserList(const QByteArray& list);
+
+private slots:
+	void onConnected();
+	void onUserList(const QByteArray& list);
+	void onPhotoResponse(const QByteArray& photoData);
 
 private:
 	PeerManager(QObject* parent = 0);
+	void requestPhoto(const QString& user);
+
 private:
 	static PeerManager* instance;
 	Peers developers;
+	Connection* connection;
 };
 
 

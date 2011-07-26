@@ -5,6 +5,7 @@
 #include "Connection.h"
 #include "PlayerWidget.h"
 #include "Setting.h"
+#include "PeerManager.h"
 
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
@@ -56,6 +57,7 @@ bool TeamRadarPlugin::initialize(const QStringList &arguments, QString *error_me
 
 	// My stuff
 	MessageCollector::getInstance();
+	PeerManager::getInstance();
 	setting = MySetting<Setting>::getInstance();
 	Connection* connection = Connection::getInstance(this);
 	connection->setUserName(setting->getUserName());

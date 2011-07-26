@@ -207,10 +207,10 @@ void Connection::processData()
 		emit newMessage(QString::fromUtf8(buffer));
 		break;
 	case PhotoResponse:
-		PeerManager::getInstance()->setImage(buffer);
+		emit photoResponse(buffer);
 		break;
 	case UserListResponse:
-		PeerManager::getInstance()->updateUserList(buffer);
+		emit userList(buffer);
 		break;
 	default:
 		break;
@@ -256,32 +256,4 @@ void Connection::timerEvent(QTimerEvent* timerEvent)
 		killTimer(timerId);
 		timerId = 0;
 	}
-}
-
-void Connection::registerPhoto(const QString& photoPath)
-{
-	if(state != ReadyForUse)
-		return;
-	QFile file(photoPath);
-	if(!file.open(QFile::ReadOnly))
-		return;
-
-	QByteArray data = file.readAll();
-	QString format = QFileInfo(photoPath).suffix();
-	write("REGISTER_PHOTO#" + QByteArray::number(data.size() + format.length()) + "#" 
-							+ format.toUtf8() + "#" + data);
-}
-
-void Connection::requestPhoto(const QString& user)
-{
-	if(state != ReadyForUse)
-		return;
-	write("REQUEST_PHOTO#" + QByteArray::number(user.length()) + "#" + user.toUtf8());
-}
-
-void Connection::requestUserList()
-{
-	if(state != ReadyForUse)
-		return;
-	write("REQUEST_USERLIST#");
 }

@@ -1,8 +1,15 @@
 #include "PeerManager.h"
 #include "Setting.h"
+#include "Connection.h"
 
 PeerManager::PeerManager(QObject *parent)
-	: QObject(parent) {}
+	: QObject(parent)
+{
+	connection = Connection::getInstance();
+	connect(connection, SIGNAL(readyForUse()),             this, SLOT(onConnected()));
+	connect(connection, SIGNAL(userList(QByteArray)),      this, SLOT(onUserList(QByteArray)));
+	connect(connection, SIGNAL(photoResponse(QByteArray)), this, SLOT(onPhotoResponse(QByteArray)));
+}
 
 PeerManager* PeerManager::getInstance()
 {
@@ -74,7 +81,46 @@ void PeerManager::setDeveloperColor(const QString& userName, const QColor& color
 		it->color = color;
 }
 
-void PeerManager::updateUserList(const QByteArray& list)
+void PeerManager::requestPhoto(const QString& user)
 {
+	if(connection->getState() != Connection::ReadyForUse)
+		return;
+	connection->write("REQUEST_PHOTO#" + 
+					   QByteArray::number(user.length()) + "#" + 
+					   user.toUtf8());
+}
 
+void PeerManager::onConnected()
+{
+	// request user list
+	if(connection->getState() != Connection::ReadyForUse)
+		return;
+	connection->write("REQUEST_USERLIST#");
+}
+
+void PeerManager::onUserList(const QByteArray& list)
+{
+	developers.clear();
+	QList<QByteArray> userNames = list.split(';');
+	foreach(QString name, userNames)
+	{
+		developers.insert(name, DeveloperInfo());
+		requestPhoto(name);
+	}
+}
+
+void PeerManager::onPhotoResponse(const QByteArray& photoData)
+{
+	int seperator = photoData.indexOf('#');
+	if(seperator == -1)
+		return;
+
+	QString fileName = photoData.left(seperator);
+	QByteArray fileData = photoData.right(photoData.length() - seperator - 1);
+	QFile file(fileName);
+	if(file.open(QFile::WriteOnly | QFile::Truncate))
+		file.write(fileData);
+
+	QString userName = QFileInfo(fileName).baseName();
+	setImage(userName, fileName);
 }

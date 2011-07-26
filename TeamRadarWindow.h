@@ -20,6 +20,7 @@ private slots:
 
 private:
 	QString guessUserName() const;
+	void registerPhoto();
 
 private:
 	Ui::TeamRadarDlgClass ui;
