@@ -25,9 +25,9 @@ PlayerWidget::PlayerWidget(QWidget *parent) :
 	peerManager->setDeveloperColor("Carl", Qt::blue);
 	peerManager->setDeveloperColor("Mike", Qt::cyan);
 	peerManager->setDeveloperColor("Jane", Qt::magenta);
-	peerManager->setImage("Carl", ":/Images/Head_Boss.png");
-	peerManager->setImage("Mike", ":/Images/Head_Male.png");
-	peerManager->setImage("Jane", ":/Images/Head_Female.png");
+	//peerManager->setImage("Carl", ":/Images/Head_Boss.png");
+	//peerManager->setImage("Mike", ":/Images/Head_Male.png");
+	//peerManager->setImage("Jane", ":/Images/Head_Female.png");
 
 	model = new QStandardItemModel(this);
 	model->setColumnCount(4);

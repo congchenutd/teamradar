@@ -1,11 +1,13 @@
 #include "TeamRadarWindow.h"
 #include "Connection.h"
 #include "Setting.h"
+#include "PeerManager.h"
 #include <QHostAddress>
 #include <QtGui/QTextEdit>
 #include <QtGui/QVBoxLayout>
 #include <QProcess>
 #include <QFileDialog>
+#include <QColorDialog>
 
 TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
 {
@@ -23,7 +25,16 @@ TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
 	QPixmap pixmap = QPixmap(userName + ".png").scaled(128, 128);
 	ui.labelImage->setPixmap(pixmap);
 
-    connect(ui.btImage, SIGNAL(clicked()), this, SLOT(onSetImage()));
+	model.setColumnCount(3);
+	model.setHorizontalHeaderLabels(QStringList() << "User" << "Color" << "Photo");
+	ui.tvPeers->setModel(&model);
+	ui.tvPeers->hideColumn(PEER_IMAGE);
+
+    connect(ui.btImage,        SIGNAL(clicked()), this, SLOT(onSetImage()));
+	connect(ui.btRefreshPeers, SIGNAL(clicked()), this, SLOT(onRefresh()));
+	connect(ui.tvPeers, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPeer(QModelIndex)));
+
+//	onRefresh();
 }
 
 void TeamRadarWindow::accept()
@@ -96,4 +107,27 @@ void TeamRadarWindow::registerPhoto()
 	connection->write("REGISTER_PHOTO#" + 
 		               QByteArray::number(data.size() + format.length()) + "#" + 
 					   format.toUtf8() + "#" + data);
+}
+
+void TeamRadarWindow::onRefresh()
+{
+	PeerManager* peerManager = PeerManager::getInstance();
+	peerManager->refreshUserList();
+	Peers peers = peerManager->getPeersList();
+
+	model.removeRows(0, model.rowCount());
+	for(Peers::const_iterator it = peers.constBegin();it != peers.constEnd(); ++it)
+	{
+		int lastRow = model.rowCount();
+		model.insertRow(lastRow);
+		model.setData(model.index(lastRow, PEER_NAME),  it.key());
+		model.setData(model.index(lastRow, PEER_IMAGE), it.value().image);
+	}
+}
+
+void TeamRadarWindow::onEditPeer(const QModelIndex& idx)
+{
+	QColor color = QColorDialog::getColor(model.data(model.index(idx.row(), 1)).toString());
+	if(color.isValid())
+		model.setData(model.index(idx.row(), 1), color);
 }

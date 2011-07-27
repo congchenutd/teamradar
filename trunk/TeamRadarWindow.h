@@ -4,6 +4,7 @@
 #include <QtGui/QDialog>
 #include "ui_TeamRadarDlg.h"
 #include "MySetting.h"
+#include "PeerModel.h"
 	
 class Setting;
 
@@ -17,16 +18,22 @@ public:
 
 private slots:
     void onSetImage();
+	void onRefresh();
+	void onEditPeer(const QModelIndex& idx);
 
 private:
 	QString guessUserName() const;
 	void registerPhoto();
+
+public:
+	enum {PEER_NAME, PEER_COLOR, PEER_IMAGE};
 
 private:
 	Ui::TeamRadarDlgClass ui;
 	Setting* setting;
 	QString userName;
 	bool imageChanged;
+	PeerModel model;
 };
 
 

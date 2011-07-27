@@ -50,6 +50,7 @@ private slots:
 	void onReadyRead();
 	void sendPing();
 	void sendGreeting();
+	void onDisconnected();
 
 private:
 	bool readHeader();
@@ -62,7 +63,7 @@ private:
 public:
 	static const int  MaxBufferSize   = 1024 * 1024;
 	static const int  TransferTimeout = 30 * 1000;
-	static const int  PongTimeout     = 60 * 1000;
+	static const int  PongTimeout     = 120 * 1000;
 	static const int  PingInterval    = 10 * 1000;
 
 private:
