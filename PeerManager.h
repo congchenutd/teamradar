@@ -10,9 +10,11 @@ class Connection;
 
 struct DeveloperInfo
 {
-//	DeveloperInfo(const QString& img, const QColor& clr) : image(img), color(clr) {}
-	QString image;
+	DeveloperInfo(const QString& name);
+	QString name;
 	QColor  color;
+	bool    online; 
+	QString image;
 };
 
 typedef QMap<QString, DeveloperInfo> Peers;
@@ -24,10 +26,12 @@ class PeerManager : public QObject
 public:
 	static PeerManager* getInstance();
 	void    setImage(const QString& userName, const QString& imagePath);
-	void    setImage(const QByteArray& rawData);
 	QString getImage(const QString& userName) const;
 	QColor getDeveloperColor(const QString& userName);
 	void   setDeveloperColor(const QString& userName, const QColor& color);
+	void   refreshUserList();
+	Peers  getPeersList() const;
+	void   setColor(const QString& userName, const QColor& color);
 
 private slots:
 	void onConnected();
@@ -40,7 +44,7 @@ private:
 
 private:
 	static PeerManager* instance;
-	Peers developers;
+	Peers peers;
 	Connection* connection;
 };
 

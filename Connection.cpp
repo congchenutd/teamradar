@@ -1,5 +1,6 @@
 #include "Connection.h"
 #include "PeerManager.h"
+#include "Setting.h"
 #include <QHostAddress>
 #include <QFile>
 #include <QFileInfo>
@@ -18,6 +19,8 @@ Connection::Connection(QObject* parent) : QTcpSocket(parent)
 	connect(this, SIGNAL(connected()), this, SLOT(sendGreeting()));
 	connect(this, SIGNAL(disconnected()), &pingTimer, SLOT(stop()));
 	connect(&pingTimer, SIGNAL(timeout()), this, SLOT(sendPing()));
+
+	connect(this, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
 }
 
 void Connection::onReadyRead()
@@ -256,4 +259,10 @@ void Connection::timerEvent(QTimerEvent* timerEvent)
 		killTimer(timerId);
 		timerId = 0;
 	}
+}
+
+void Connection::onDisconnected()
+{
+	Setting* setting = MySetting<Setting>::getInstance();
+	connectToHost(setting->getServerAddress(), setting->getServerPort());
 }
