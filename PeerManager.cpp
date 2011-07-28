@@ -128,7 +128,7 @@ void PeerManager::setColor(const QString& userName, const QColor& color)
 }
 
 //////////////////////////////////////////////////////////////////////////
-DeveloperInfo::DeveloperInfo(const QString& n) : name(n), online(false)
+DeveloperInfo::DeveloperInfo(const QString& n) : name(n), online(true)
 {
 	image = Setting::getInstance()->value("DefaultDeveloperImage").toString();
 	color = Setting::getInstance()->getColor("DefaultDeveloperColor");

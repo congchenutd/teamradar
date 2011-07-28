@@ -9,7 +9,7 @@ include(../../qtcreatorplugin.pri)
 include(../../plugins/coreplugin/coreplugin.pri)
 include(../../plugins/projectexplorer/projectexplorer.pri)
 
-QT += network
+QT += network sql
 
 # Input
 HEADERS += Connection.h \
@@ -22,6 +22,7 @@ HEADERS += Connection.h \
            MySetting.h \
            Node.h \
            PeerManager.h \
+	   PeerModel.h \
            PlayerWidget.h \
            Setting.h \
            TeamRadarEvent.h \
@@ -39,6 +40,7 @@ SOURCES += Connection.cpp \
            ModeTag.cpp \
            Node.cpp \
            PeerManager.cpp \
+	   PeerModel.cpp \
            PlayerWidget.cpp \
            Setting.cpp \
            TeamRadarPlugin.cpp \
