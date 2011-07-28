@@ -56,6 +56,10 @@ bool TeamRadarPlugin::initialize(const QStringList &arguments, QString *error_me
 	toolsMenu->addAction(command);
 
 	// My stuff
+
+	PeerModel::openDB("TeamRadar.db");
+	PeerModel::createTables();
+
 	MessageCollector::getInstance();
 	PeerManager::getInstance();
 	setting = MySetting<Setting>::getInstance();

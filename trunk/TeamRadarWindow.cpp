@@ -8,6 +8,7 @@
 #include <QProcess>
 #include <QFileDialog>
 #include <QColorDialog>
+#include <QSqlQuery>
 
 TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
 {
@@ -25,10 +26,13 @@ TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
 	QPixmap pixmap = QPixmap(userName + ".png").scaled(128, 128);
 	ui.labelImage->setPixmap(pixmap);
 
-	model.setColumnCount(3);
-	model.setHorizontalHeaderLabels(QStringList() << "User" << "Color" << "Photo");
+	model.setEditStrategy(QSqlTableModel::OnManualSubmit);
+	model.setTable("Peers");
+	model.select();
 	ui.tvPeers->setModel(&model);
-	ui.tvPeers->hideColumn(PEER_IMAGE);
+//	ui.tvPeers->hideColumn(PEER_IMAGE);
+//	ui.tvPeers->hideColumn(PEER_ONLINE);
+	resizeTable();
 
     connect(ui.btImage,        SIGNAL(clicked()), this, SLOT(onSetImage()));
 	connect(ui.btRefreshPeers, SIGNAL(clicked()), this, SLOT(onRefresh()));
@@ -115,14 +119,22 @@ void TeamRadarWindow::onRefresh()
 	peerManager->refreshUserList();
 	Peers peers = peerManager->getPeersList();
 
-	model.removeRows(0, model.rowCount());
+	PeerModel::makeAllOffline();
 	for(Peers::const_iterator it = peers.constBegin();it != peers.constEnd(); ++it)
 	{
-		int lastRow = model.rowCount();
-		model.insertRow(lastRow);
-		model.setData(model.index(lastRow, PEER_NAME),  it.key());
-		model.setData(model.index(lastRow, PEER_IMAGE), it.value().image);
+		if(PeerModel::userExists(it.key()))
+			PeerModel::updateUser(it.value());
+		else
+		{
+			int lastRow = model.rowCount();
+			model.insertRow(lastRow);
+			model.setData(model.index(lastRow, PEER_NAME),   it.key());
+			model.setData(model.index(lastRow, PEER_IMAGE),  it.value().image);
+			model.setData(model.index(lastRow, PEER_ONLINE), true);
+		}
 	}
+	model.submitAll();
+	resizeTable();
 }
 
 void TeamRadarWindow::onEditPeer(const QModelIndex& idx)
@@ -130,4 +142,10 @@ void TeamRadarWindow::onEditPeer(const QModelIndex& idx)
 	QColor color = QColorDialog::getColor(model.data(model.index(idx.row(), 1)).toString());
 	if(color.isValid())
 		model.setData(model.index(idx.row(), 1), color);
+}
+
+void TeamRadarWindow::resizeTable()
+{
+	ui.tvPeers->resizeRowsToContents();
+	ui.tvPeers->resizeColumnsToContents();
 }

@@ -24,9 +24,10 @@ private slots:
 private:
 	QString guessUserName() const;
 	void registerPhoto();
+	void resizeTable();
 
 public:
-	enum {PEER_NAME, PEER_COLOR, PEER_IMAGE};
+	enum {PEER_NAME, PEER_COLOR, PEER_IMAGE, PEER_ONLINE};
 
 private:
 	Ui::TeamRadarDlgClass ui;
