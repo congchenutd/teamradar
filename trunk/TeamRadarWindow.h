@@ -7,6 +7,7 @@
 #include "PeerModel.h"
 	
 class Setting;
+class PeerManager;
 
 class TeamRadarWindow : public QDialog
 {
@@ -20,6 +21,7 @@ private slots:
     void onSetImage();
 	void onRefresh();
 	void onEditPeer(const QModelIndex& idx);
+	void onUserListChanged();
 
 private:
 	QString guessUserName() const;
@@ -35,6 +37,7 @@ private:
 	QString userName;
 	bool imageChanged;
 	PeerModel model;
+	PeerManager* peerManager;
 };
 
 

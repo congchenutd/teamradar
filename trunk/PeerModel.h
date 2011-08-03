@@ -16,6 +16,9 @@ public:
 	static void makeAllOffline();
 	static bool userExists(const QString& name);
 	static void updateUser(const DeveloperInfo& info);
+
+private:
+	static QPixmap toGrayPixmap(const QImage& colorImage);
 };
 
 #endif

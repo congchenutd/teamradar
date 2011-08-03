@@ -18,9 +18,10 @@ QVariant PeerModel::data(const QModelIndex& idx, int role) const
 		{
 			QImage image(data(
 				index(idx.row(), TeamRadarWindow::PEER_IMAGE)).toString());
+			image = image.scaled(64, 64);
 			bool online = data(index(idx.row(), TeamRadarWindow::PEER_ONLINE)).toBool();
-			QPixmap pixmap = QPixmap::fromImage(image, /*online ? Qt::AutoColor : */Qt::MonoOnly);
-			return pixmap.scaled(64, 64);
+			QPixmap pixmap = online ? QPixmap::fromImage(image) : toGrayPixmap(image);
+			return pixmap;
 		}
 	}
 	else if(idx.column() == TeamRadarWindow::PEER_COLOR)   // Color
@@ -76,4 +77,18 @@ void PeerModel::updateUser(const DeveloperInfo& info)
 	QSqlQuery query;
 	query.exec(tr("update Peers set Image  = \"%1\"   where Name = \"%2\"").arg(info.image).arg(info.name));
 	query.exec(tr("update Peers set Online = \"true\" where Name = \"%1\"").arg(info.name));
+}
+
+QPixmap PeerModel::toGrayPixmap(const QImage& colorImage)
+{
+	int width  = colorImage.width();
+	int height = colorImage.height();
+	QImage grayImage(width, height, QImage::Format_RGB32);
+	for(int i=0; i<width; ++i)
+		for(int j=0; j<height; ++j)
+		{
+			int gray = qGray(colorImage.pixel(i, j));
+			grayImage.setPixel(i, j, qRgb(gray, gray, gray));
+		}
+	return QPixmap::fromImage(grayImage);
 }
