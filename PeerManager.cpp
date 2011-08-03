@@ -71,12 +71,12 @@ void PeerManager::setDeveloperColor(const QString& userName, const QColor& color
 }
 
 void PeerManager::onConnected() {
-	refreshUserList();
+//	refreshUserList();
 }
 
 void PeerManager::refreshUserList() {
 	if(connection->getState() == Connection::ReadyForUse)
-		connection->write("REQUEST_USERLIST#");
+		connection->write("REQUEST_USERLIST#" + QByteArray::number(1) + '#' + 'U');
 }
 
 void PeerManager::onUserList(const QByteArray& list)
@@ -88,6 +88,7 @@ void PeerManager::onUserList(const QByteArray& list)
 			peers.insert(name, DeveloperInfo(name));
 		requestPhoto(name);
 	}
+	emit userListChanged();
 }
 
 void PeerManager::requestPhoto(const QString& user)

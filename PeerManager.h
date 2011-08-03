@@ -33,6 +33,9 @@ public:
 	Peers  getPeersList() const;
 	void   setColor(const QString& userName, const QColor& color);
 
+signals:
+	void userListChanged();
+
 private slots:
 	void onConnected();
 	void onUserList(const QByteArray& list);

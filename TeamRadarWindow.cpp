@@ -13,6 +13,7 @@
 TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
 {
 	imageChanged = false;
+	peerManager = PeerManager::getInstance();
     ui.setupUi(this);
 
 	setting = MySetting<Setting>::getInstance();
@@ -37,6 +38,7 @@ TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
     connect(ui.btImage,        SIGNAL(clicked()), this, SLOT(onSetImage()));
 	connect(ui.btRefreshPeers, SIGNAL(clicked()), this, SLOT(onRefresh()));
 	connect(ui.tvPeers, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPeer(QModelIndex)));
+	connect(peerManager,       SIGNAL(userListChanged()), this, SLOT(onUserListChanged()));
 
 //	onRefresh();
 }
@@ -113,10 +115,12 @@ void TeamRadarWindow::registerPhoto()
 					   format.toUtf8() + "#" + data);
 }
 
-void TeamRadarWindow::onRefresh()
-{
-	PeerManager* peerManager = PeerManager::getInstance();
+void TeamRadarWindow::onRefresh() {
 	peerManager->refreshUserList();
+}
+
+void TeamRadarWindow::onUserListChanged()
+{
 	Peers peers = peerManager->getPeersList();
 
 	PeerModel::makeAllOffline();
