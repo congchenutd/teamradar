@@ -4,7 +4,15 @@
 #include <QSqlDatabase>
 #include <QMessageBox>
 #include <QSqlQuery>
+#include "Setting.h"
 
+DeveloperInfo::DeveloperInfo(const QString& n) : name(n), online(false)
+{
+	image = Setting::getInstance()->value("DefaultDeveloperImage").toString();
+	color = Setting::getInstance()->getColor("DefaultDeveloperColor");
+}
+
+//////////////////////////////////////////////////////////////////////////
 PeerModel::PeerModel(QObject *parent) : QSqlTableModel(parent) {}
 
 QVariant PeerModel::data(const QModelIndex& idx, int role) const
@@ -75,8 +83,29 @@ bool PeerModel::userExists(const QString& name)
 void PeerModel::updateUser(const DeveloperInfo& info)
 {
 	QSqlQuery query;
-	query.exec(tr("update Peers set Image  = \"%1\"   where Name = \"%2\"").arg(info.image).arg(info.name));
-	query.exec(tr("update Peers set Online = \"true\" where Name = \"%1\"").arg(info.name));
+	query.exec(tr("delete from Peers where Name = \"%1\"").arg(info.name));
+	addUser(info);
+}
+
+void PeerModel::addUser(const DeveloperInfo& info)
+{
+	QSqlQuery query;
+	query.exec(tr("insert into Peers values (\"%1\", \"%2\", \"%3\", \"%4\")")
+		.arg(info.name).arg(info.color.name()).arg(info.image).arg(info.online));
+}
+
+DeveloperInfo PeerModel::getUserInfo(const QString& name)
+{
+	QSqlQuery query;
+	query.exec(tr("select Color, Image, Online from Peers where Name =\"%1\"").arg(name));
+	DeveloperInfo result(name);
+	if(query.next())
+	{
+		result.color  = query.value(0).toString();
+		result.image  = query.value(1).toString();
+		result.online = query.value(2).toBool();
+	}
+	return result;
 }
 
 QPixmap PeerModel::toGrayPixmap(const QImage& colorImage)

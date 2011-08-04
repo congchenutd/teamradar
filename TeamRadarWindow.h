@@ -4,10 +4,10 @@
 #include <QtGui/QDialog>
 #include "ui_TeamRadarDlg.h"
 #include "MySetting.h"
-#include "PeerModel.h"
 	
 class Setting;
 class PeerManager;
+class PeerModel;
 
 class TeamRadarWindow : public QDialog
 {
@@ -36,7 +36,7 @@ private:
 	Setting* setting;
 	QString userName;
 	bool imageChanged;
-	PeerModel model;
+	PeerModel* model;
 	PeerManager* peerManager;
 };
 

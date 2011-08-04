@@ -1,10 +1,15 @@
 #include "PeerManager.h"
 #include "Setting.h"
 #include "Connection.h"
+#include "PeerModel.h"
 
-PeerManager::PeerManager(QObject *parent)
-	: QObject(parent)
+PeerManager::PeerManager(QObject *parent) : QObject(parent)
 {
+	model = new PeerModel(this);
+	model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+	model->setTable("Peers");
+	model->select();
+
 	connection = Connection::getInstance();
 	connect(connection, SIGNAL(readyForUse()),             this, SLOT(onConnected()));
 	connect(connection, SIGNAL(userList(QByteArray)),      this, SLOT(onUserList(QByteArray)));
@@ -22,7 +27,7 @@ PeerManager* PeerManager::instance = 0;
 
 void PeerManager::setImage(const QString& userName, const QString& imagePath)
 {
-	// copy to local
+	// copy image to local
 	QString fileName = userName + "." + QFileInfo(imagePath).suffix();
 	if(fileName != imagePath)
 	{
@@ -30,44 +35,24 @@ void PeerManager::setImage(const QString& userName, const QString& imagePath)
 		QFile::copy(imagePath, fileName);
 	}
 
-	Peers::Iterator it = peers.find(userName);
-	if(it == peers.end())   // no such user, add one
-	{
-		DeveloperInfo developer(userName);
-		developer.image = fileName;
-		peers.insert(userName, developer);
-	}
-	else
-		it->image = fileName;
+	DeveloperInfo userInfo = model->getUserInfo(userName);
+	userInfo.image = fileName;
+	model->updateUser(userInfo);
 }
 
-QString PeerManager::getImage(const QString& userName) const
-{
-	Peers::Iterator it = peers.find(userName);
-	return it == peers.end() ?
-		Setting::getInstance()->value("DefaultDeveloperImage").toString() 
-		: it->image;
+QString PeerManager::getImage(const QString& userName) const {
+	return model->getUserInfo(userName).image;
 }
 
-QColor PeerManager::getDeveloperColor(const QString& userName)
-{
-	Peers::Iterator it = peers.find(userName);
-	if(it == peers.end())
-		return Setting::getInstance()->getColor("DefaultDeveloperColor");
-	return it->color;
+QColor PeerManager::getDeveloperColor(const QString& userName) {
+	return model->getUserInfo(userName).color;
 }
 
 void PeerManager::setDeveloperColor(const QString& userName, const QColor& color)
 {
-	Peers::Iterator it = peers.find(userName);
-	if(it == peers.end())
-	{
-		DeveloperInfo developer(userName);
-		developer.color = color;
-		peers.insert(userName, developer);
-	}
-	else
-		it->color = color;
+	DeveloperInfo userInfo = model->getUserInfo(userName);
+	userInfo.color = color;
+	model->updateUser(userInfo);
 }
 
 void PeerManager::onConnected() {
@@ -79,36 +64,40 @@ void PeerManager::refreshUserList() {
 		connection->write("REQUEST_USERLIST#" + QByteArray::number(1) + '#' + 'U');
 }
 
+// online user list
 void PeerManager::onUserList(const QByteArray& list)
 {
+	model->makeAllOffline();
 	QList<QByteArray> userNames = list.split(';');
 	foreach(QString name, userNames)
 	{
-		if(!peers.contains(name))
-			peers.insert(name, DeveloperInfo(name));
+		DeveloperInfo user = model->getUserInfo(name);
+		user.online = true;
+		model->updateUser(user);
 		requestPhoto(name);
 	}
+	model->select();
 	emit userListChanged();
 }
 
-void PeerManager::requestPhoto(const QString& user)
-{
-	if(connection->getState() != Connection::ReadyForUse)
-		return;
-	connection->write("REQUEST_PHOTO#" + 
-		QByteArray::number(user.length()) + "#" + 
-		user.toUtf8());
+void PeerManager::requestPhoto(const QString& user) {
+	if(connection->getState() == Connection::ReadyForUse)
+		connection->write("REQUEST_PHOTO#" + 
+			QByteArray::number(user.length()) + "#" + user.toUtf8());
 }
 
 // filename + # + filedata
 void PeerManager::onPhotoResponse(const QByteArray& photoData)
 {
+	// parse data
 	int seperator = photoData.indexOf('#');
 	if(seperator == -1)
 		return;
 
 	QString fileName = photoData.left(seperator);
 	QByteArray fileData = photoData.right(photoData.length() - seperator - 1);
+
+	// save photo file
 	QFile file(fileName);
 	if(file.open(QFile::WriteOnly | QFile::Truncate))
 		file.write(fileData);
@@ -119,18 +108,4 @@ void PeerManager::onPhotoResponse(const QByteArray& photoData)
 
 Peers PeerManager::getPeersList() const {
 	return peers;
-}
-
-void PeerManager::setColor(const QString& userName, const QColor& color)
-{
-	Peers::Iterator it = peers.find(userName);
-	if(it == peers.end())
-		it->color = color;
-}
-
-//////////////////////////////////////////////////////////////////////////
-DeveloperInfo::DeveloperInfo(const QString& n) : name(n), online(true)
-{
-	image = Setting::getInstance()->value("DefaultDeveloperImage").toString();
-	color = Setting::getInstance()->getColor("DefaultDeveloperColor");
 }

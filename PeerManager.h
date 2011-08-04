@@ -5,17 +5,10 @@
 #include <QMap>
 #include <QString>
 #include <QColor>
+#include "PeerModel.h"
 
 class Connection;
-
-struct DeveloperInfo
-{
-	DeveloperInfo(const QString& name);
-	QString name;
-	QColor  color;
-	bool    online; 
-	QString image;
-};
+class PeerModel;
 
 typedef QMap<QString, DeveloperInfo> Peers;
 
@@ -31,7 +24,7 @@ public:
 	void   setDeveloperColor(const QString& userName, const QColor& color);
 	void   refreshUserList();
 	Peers  getPeersList() const;
-	void   setColor(const QString& userName, const QColor& color);
+	PeerModel* getPeerModel() const { return model; }
 
 signals:
 	void userListChanged();
@@ -49,6 +42,7 @@ private:
 	static PeerManager* instance;
 	Peers peers;
 	Connection* connection;
+	PeerModel* model;
 };
 
 
