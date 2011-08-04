@@ -2,6 +2,7 @@
 #include "Connection.h"
 #include "Setting.h"
 #include "PeerManager.h"
+#include "PeerModel.h"
 #include <QHostAddress>
 #include <QtGui/QTextEdit>
 #include <QtGui/QVBoxLayout>
@@ -27,10 +28,8 @@ TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
 	QPixmap pixmap = QPixmap(userName + ".png").scaled(128, 128);
 	ui.labelImage->setPixmap(pixmap);
 
-	model.setEditStrategy(QSqlTableModel::OnManualSubmit);
-	model.setTable("Peers");
-	model.select();
-	ui.tvPeers->setModel(&model);
+	model = peerManager->getPeerModel();
+	ui.tvPeers->setModel(model);
 //	ui.tvPeers->hideColumn(PEER_IMAGE);
 //	ui.tvPeers->hideColumn(PEER_ONLINE);
 	resizeTable();
@@ -119,33 +118,15 @@ void TeamRadarWindow::onRefresh() {
 	peerManager->refreshUserList();
 }
 
-void TeamRadarWindow::onUserListChanged()
-{
-	Peers peers = peerManager->getPeersList();
-
-	PeerModel::makeAllOffline();
-	for(Peers::const_iterator it = peers.constBegin();it != peers.constEnd(); ++it)
-	{
-		if(PeerModel::userExists(it.key()))
-			PeerModel::updateUser(it.value());
-		else
-		{
-			int lastRow = model.rowCount();
-			model.insertRow(lastRow);
-			model.setData(model.index(lastRow, PEER_NAME),   it.key());
-			model.setData(model.index(lastRow, PEER_IMAGE),  it.value().image);
-			model.setData(model.index(lastRow, PEER_ONLINE), true);
-		}
-	}
-	model.submitAll();
+void TeamRadarWindow::onUserListChanged() {
 	resizeTable();
 }
 
 void TeamRadarWindow::onEditPeer(const QModelIndex& idx)
 {
-	QColor color = QColorDialog::getColor(model.data(model.index(idx.row(), 1)).toString());
+	QColor color = QColorDialog::getColor(model->data(model->index(idx.row(), 1)).toString());
 	if(color.isValid())
-		model.setData(model.index(idx.row(), 1), color);
+		model->setData(model->index(idx.row(), 1), color);
 }
 
 void TeamRadarWindow::resizeTable()
