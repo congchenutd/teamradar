@@ -35,7 +35,7 @@ QVariant PeerModel::data(const QModelIndex& idx, int role) const
 	else if(idx.column() == TeamRadarWindow::PEER_COLOR)   // Color
 	{
 		if(role == Qt::DecorationRole)
-			return QColor(data(idx, Qt::DisplayRole).toString());
+			return QColor(QSqlTableModel::data(idx, Qt::DisplayRole).toString());
 		else if(role == Qt::DisplayRole)
 			return QVariant();
 	}
@@ -116,8 +116,15 @@ QPixmap PeerModel::toGrayPixmap(const QImage& colorImage)
 	for(int i=0; i<width; ++i)
 		for(int j=0; j<height; ++j)
 		{
-			int gray = qGray(colorImage.pixel(i, j));
-			grayImage.setPixel(i, j, qRgb(gray, gray, gray));
+			int pixel = colorImage.pixel(i, j);
+			int alpha = qAlpha(pixel);
+			if(alpha == 0)   // make transparent pixel white
+				grayImage.setPixel(i, j, qRgb(255, 255, 255));
+			else
+			{
+				int gray = qGray(pixel);
+				grayImage.setPixel(i, j, qRgb(gray, gray, gray));
+			}
 		}
 	return QPixmap::fromImage(grayImage);
 }
