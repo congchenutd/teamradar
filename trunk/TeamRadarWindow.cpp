@@ -30,8 +30,8 @@ TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
 
 	model = peerManager->getPeerModel();
 	ui.tvPeers->setModel(model);
-//	ui.tvPeers->hideColumn(PEER_IMAGE);
-//	ui.tvPeers->hideColumn(PEER_ONLINE);
+	ui.tvPeers->hideColumn(PEER_IMAGE);
+	ui.tvPeers->hideColumn(PEER_ONLINE);
 	resizeTable();
 
     connect(ui.btImage,        SIGNAL(clicked()), this, SLOT(onSetImage()));
@@ -39,7 +39,7 @@ TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
 	connect(ui.tvPeers, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPeer(QModelIndex)));
 	connect(peerManager,       SIGNAL(userListChanged()), this, SLOT(onUserListChanged()));
 
-//	onRefresh();
+	onRefresh();
 }
 
 void TeamRadarWindow::accept()
@@ -124,9 +124,10 @@ void TeamRadarWindow::onUserListChanged() {
 
 void TeamRadarWindow::onEditPeer(const QModelIndex& idx)
 {
-	QColor color = QColorDialog::getColor(model->data(model->index(idx.row(), 1)).toString());
+	QColor color = QColorDialog::getColor(
+		model->data(model->index(idx.row(), PEER_COLOR)).toString());
 	if(color.isValid())
-		model->setData(model->index(idx.row(), 1), color);
+		model->setData(model->index(idx.row(), PEER_COLOR), color);
 }
 
 void TeamRadarWindow::resizeTable()
