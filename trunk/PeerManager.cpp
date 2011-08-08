@@ -14,6 +14,8 @@ PeerManager::PeerManager(QObject *parent) : QObject(parent)
 	connect(connection, SIGNAL(readyForUse()),             this, SLOT(onConnected()));
 	connect(connection, SIGNAL(userList(QByteArray)),      this, SLOT(onUserList(QByteArray)));
 	connect(connection, SIGNAL(photoResponse(QByteArray)), this, SLOT(onPhotoResponse(QByteArray)));
+	connect(connection, SIGNAL(userConnected   (QString)), this, SLOT(onUserConnected   (QString)));
+	connect(connection, SIGNAL(userDisconnected(QString)), this, SLOT(onUserDisconnected(QString)));
 }
 
 PeerManager* PeerManager::getInstance()
@@ -56,7 +58,7 @@ void PeerManager::setDeveloperColor(const QString& userName, const QColor& color
 }
 
 void PeerManager::onConnected() {
-//	refreshUserList();
+	refreshUserList();
 }
 
 void PeerManager::refreshUserList() {
@@ -70,14 +72,24 @@ void PeerManager::onUserList(const QByteArray& list)
 	model->makeAllOffline();
 	QList<QByteArray> userNames = list.split(';');
 	foreach(QString name, userNames)
-	{
-		DeveloperInfo user = model->getUserInfo(name);
-		user.online = true;
-		model->updateUser(user);
+		updateUser(name, true);
+}
+
+void PeerManager::updateUser(const QString& name, bool online)
+{
+	DeveloperInfo user = model->getUserInfo(name);
+	user.online = online;
+	model->updateUser(user);
+	if(online)
 		requestPhoto(name);
-	}
 	model->select();
-	emit userListChanged();
+
+	QString msg(name + '#');
+	if(online)
+		msg += "CONNECTED#";
+	else
+		msg += "DISCONNECTED#";
+	emit userListChanged(msg);
 }
 
 void PeerManager::requestPhoto(const QString& user) {
@@ -106,6 +118,10 @@ void PeerManager::onPhotoResponse(const QByteArray& photoData)
 	setImage(userName, fileName);
 }
 
-Peers PeerManager::getPeersList() const {
-	return peers;
+void PeerManager::onUserConnected(const QString& name) {
+	updateUser(name.split('#').front(), true);
+}
+
+void PeerManager::onUserDisconnected(const QString& name) {
+	updateUser(name.split('#').front(), false);
 }

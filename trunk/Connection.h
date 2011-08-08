@@ -26,6 +26,8 @@ public:
 		PhotoResponse,
 		UserListResponse,
 		Event,
+		Connected,
+		Disconnected
 	} DataType;
 
 public:
@@ -45,6 +47,8 @@ signals:
 	void connectionFailed(const QString& message);
 	void userList(const QByteArray& buffer);
 	void photoResponse(const QByteArray& buffer);
+	void userConnected   (const QString& msg);
+	void userDisconnected(const QString& msg);
 
 private slots:
 	void onReadyRead();
@@ -63,7 +67,7 @@ private:
 public:
 	static const int  MaxBufferSize   = 1024 * 1024;
 	static const int  TransferTimeout = 30 * 1000;
-	static const int  PongTimeout     = 120 * 1000;
+	static const int  PongTimeout     = 60 * 1000;
 	static const int  PingInterval    = 10 * 1000;
 
 private:

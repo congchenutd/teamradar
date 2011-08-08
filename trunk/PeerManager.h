@@ -10,8 +10,6 @@
 class Connection;
 class PeerModel;
 
-typedef QMap<QString, DeveloperInfo> Peers;
-
 class PeerManager : public QObject
 {
 	Q_OBJECT
@@ -23,24 +21,25 @@ public:
 	QColor getDeveloperColor(const QString& userName);
 	void   setDeveloperColor(const QString& userName, const QColor& color);
 	void   refreshUserList();
-	Peers  getPeersList() const;
 	PeerModel* getPeerModel() const { return model; }
 
 signals:
-	void userListChanged();
+	void userListChanged(const QString& msg);
 
 private slots:
 	void onConnected();
 	void onUserList(const QByteArray& list);
 	void onPhotoResponse(const QByteArray& photoData);
+	void onUserConnected   (const QString& name);
+	void onUserDisconnected(const QString& name);
 
 private:
 	PeerManager(QObject* parent = 0);
 	void requestPhoto(const QString& user);
+	void updateUser(const QString& name, bool online);
 
 private:
 	static PeerManager* instance;
-	Peers peers;
 	Connection* connection;
 	PeerModel* model;
 };

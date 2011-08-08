@@ -67,8 +67,8 @@ void Connection::onReadyRead()
 			return;
 		}
 
-		pingTimer.start();     // start heart beat
-		pongTime.start();      // wait for peer's pong
+//		pingTimer.start();     // start heart beat
+//		pongTime.start();      // wait for peer's pong
 		state = ReadyForUse;
 		emit readyForUse();
 	}
@@ -102,7 +102,10 @@ bool Connection::readHeader()
 
 	dataType = guessDataType(buffer);  // guess payload type from header
 	if(dataType == Undefined)
+	{
+		buffer.clear();
 		return false;
+	}
 
 	buffer.clear();
 	numBytes = getDataLength();
@@ -148,11 +151,11 @@ int Connection::getDataLength()
 
 void Connection::sendPing()
 {
-	if(pongTime.elapsed() > PongTimeout)
-	{
-		abort();   // peer dead
-		return;
-	}
+	//if(pongTime.elapsed() > PongTimeout)
+	//{
+	//	abort();   // peer dead
+	//	return;
+	//}
 
 	write("PING#" + QByteArray::number(1) + '#' + "P");
 }
@@ -207,13 +210,19 @@ void Connection::processData()
 		pongTime.restart();
 		break;
 	case Event:
-		emit newMessage(QString::fromUtf8(buffer));
+		emit newMessage(buffer);
 		break;
 	case PhotoResponse:
 		emit photoResponse(buffer);
 		break;
 	case UserListResponse:
 		emit userList(buffer);
+		break;
+	case Connected:
+		emit userConnected(buffer);
+		break;
+	case Disconnected:
+		emit userDisconnected(buffer);
 		break;
 	default:
 		break;
@@ -240,6 +249,10 @@ Connection::DataType Connection::guessDataType(const QByteArray& header)
 		return PhotoResponse;
 	if(header.startsWith("USERLIST_RESPONSE"))
 		return UserListResponse;
+	if(header.startsWith("CONNECTED"))
+		return Connected;
+	if(header.startsWith("DISCONNECTED"))
+		return Disconnected;
 	return Undefined;
 }
 

@@ -37,7 +37,7 @@ TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
     connect(ui.btImage,        SIGNAL(clicked()), this, SLOT(onSetImage()));
 	connect(ui.btRefreshPeers, SIGNAL(clicked()), this, SLOT(onRefresh()));
 	connect(ui.tvPeers, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPeer(QModelIndex)));
-	connect(peerManager,       SIGNAL(userListChanged()), this, SLOT(onUserListChanged()));
+	connect(peerManager, SIGNAL(userListChanged(QString)), this, SLOT(onUserListChanged()));
 
 	onRefresh();
 }

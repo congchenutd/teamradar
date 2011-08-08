@@ -65,8 +65,9 @@ PlayerWidget::PlayerWidget(QWidget *parent) :
 	connect(ui.tvPlaylist, SIGNAL(clicked(QModelIndex)),       this, SLOT(onPlaylistClicked(QModelIndex)));
 	connect(ui.tvPlaylist, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onPlaylistCoubleClicked(QModelIndex)));
 
-	connect(Connection::getInstance(),       SIGNAL(newMessage(QString)), this, SLOT(onNewMessage(QString)));
-	connect(MessageCollector::getInstance(), SIGNAL(localEvent(QString)), this, SLOT(onNewMessage(QString)));
+	connect(Connection::getInstance(),       SIGNAL(newMessage(QString)),      this, SLOT(onNewMessage(QString)));
+	connect(MessageCollector::getInstance(), SIGNAL(localEvent(QString)),      this, SLOT(onNewMessage(QString)));
+	connect(PeerManager::getInstance(),      SIGNAL(userListChanged(QString)), this, SLOT(onNewMessage(QString)));
 }
 
 void PlayerWidget::onShowPlaylist(bool show)
@@ -238,12 +239,12 @@ void PlayerWidget::resizeEvent(QResizeEvent*) {
 	ui.graphicsView->autoScale();
 }
 
+// message = user#event#[parameters]
 void PlayerWidget::onNewMessage(const QString& message)
 {
 	if(!online)
 		return;
 
-	// username, event, parameters
 	QStringList sections = message.split("#");
 	if(sections.size() != 3)
 		return;
