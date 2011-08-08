@@ -22,7 +22,6 @@ public:
 		Greeting,
 		Ping,
 		Pong,
-		RegisterResponse,
 		PhotoResponse,
 		UserListResponse,
 		Event,
@@ -38,13 +37,15 @@ public:
 	void setUserName(const QString& name) { userName = name; }
 	ConnectionState getState() const { return state; }
 
+	void send(const QString& header, const QString& body = QString("P"));
+	void send(const QString& header, const QStringList& bodies);
+
 protected:
 	void timerEvent(QTimerEvent* timerEvent);
 
 signals:
 	void readyForUse();
 	void newMessage(const QString& message);
-	void connectionFailed(const QString& message);
 	void userList(const QByteArray& buffer);
 	void photoResponse(const QByteArray& buffer);
 	void userConnected   (const QString& msg);
@@ -63,7 +64,6 @@ private:
 	bool hasEnoughData();
 	void processData();
 	DataType guessDataType(const QByteArray& header);
-
 public:
 	static const int  MaxBufferSize   = 1024 * 1024;
 	static const int  TransferTimeout = 30 * 1000;
@@ -80,7 +80,6 @@ private:
 	QByteArray      buffer;
 	int             numBytes;
 	int             timerId;
-	bool            isGreetingSent;
 	QString         userName;
 };
 

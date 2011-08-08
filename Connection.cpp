@@ -11,7 +11,6 @@ Connection::Connection(QObject* parent) : QTcpSocket(parent)
 	dataType = Undefined;
 	numBytes = -1;
 	timerId = 0;
-	isGreetingSent = false;
 	pingTimer.setInterval(PingInterval);
 	userName = tr("Unknown");
 
@@ -48,12 +47,10 @@ void Connection::onReadyRead()
 			abort();
 			return;
 		}
-		qDebug() << buffer;
 
 		if(buffer == "WRONG_USER")
 		{
 			abort();
-			emit connectionFailed(buffer);
 			return;
 		}
 
@@ -157,15 +154,11 @@ void Connection::sendPing()
 	//	return;
 	//}
 
-	write("PING#" + QByteArray::number(1) + '#' + "P");
+	send("PING");
 }
 
-void Connection::sendGreeting()
-{
-	QByteArray greeting = userName.toUtf8();
-	QByteArray data = "GREETING#" + QByteArray::number(greeting.size()) + '#' + greeting;
-	if(write(data) == data.size())
-		isGreetingSent = true;
+void Connection::sendGreeting() {
+	send("GREETING", userName.toUtf8());
 }
 
 // read data length and wait for it
@@ -204,7 +197,7 @@ void Connection::processData()
 	switch(dataType)
 	{
 	case Ping:
-		write("PONG#" + QByteArray::number(1) + '#' + "P");
+		send("PONG");
 		break;
 	case Pong:
 		pongTime.restart();
@@ -243,8 +236,6 @@ Connection::DataType Connection::guessDataType(const QByteArray& header)
 		return Pong;
 	if(header.startsWith("EVENT"))
 		return Event;
-	if(header.startsWith("REGISTER_RESPONSE"))   // useless, server does not respond
-		return RegisterResponse;
 	if(header.startsWith("PHOTO_RESPONSE"))
 		return PhotoResponse;
 	if(header.startsWith("USERLIST_RESPONSE"))
@@ -265,8 +256,7 @@ Connection* Connection::getInstance(QObject* parent)
 
 Connection* Connection::instance = 0;
 
-void Connection::timerEvent(QTimerEvent* timerEvent)
-{
+void Connection::timerEvent(QTimerEvent* timerEvent) {
 	if(timerEvent->timerId() == timerId) {
 		abort();
 		killTimer(timerId);
@@ -274,8 +264,19 @@ void Connection::timerEvent(QTimerEvent* timerEvent)
 	}
 }
 
+// auto reconnect
 void Connection::onDisconnected()
 {
 	Setting* setting = MySetting<Setting>::getInstance();
 	connectToHost(setting->getServerAddress(), setting->getServerPort());
+}
+
+void Connection::send(const QString& header, const QString& body) {
+	write(header.toUtf8() + '#' + 
+		  QByteArray::number(body.length()) + '#' + 
+		  body.toUtf8());
+}
+
+void Connection::send(const QString& header, const QStringList& bodies) {
+	send(header, bodies.join("#"));
 }
