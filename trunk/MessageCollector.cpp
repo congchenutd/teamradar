@@ -71,10 +71,9 @@ void MessageCollector::sendEvent(const QString& event, const QString& parameters
 	QByteArray localMessage = Setting::getInstance()->getUserName().toUtf8() + '#' + body;
 	emit localEvent(localMessage);
 	
-	QByteArray remoteMessage = "EVENT#" + QByteArray::number(body.size()) + '#' + body;
 	Connection* connection = Connection::getInstance();
 	if(connection->getState() == Connection::ReadyForUse)
-		connection->write(remoteMessage);
+		connection->send("EVENT", body);
 }
 
 void MessageCollector::onOpenProject(ProjectExplorer::Project* project) {

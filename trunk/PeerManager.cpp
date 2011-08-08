@@ -62,8 +62,7 @@ void PeerManager::onConnected() {
 }
 
 void PeerManager::refreshUserList() {
-	if(connection->getState() == Connection::ReadyForUse)
-		connection->write("REQUEST_USERLIST#" + QByteArray::number(1) + '#' + 'U');
+	connection->send("REQUEST_USERLIST#");
 }
 
 // online user list
@@ -93,9 +92,7 @@ void PeerManager::updateUser(const QString& name, bool online)
 }
 
 void PeerManager::requestPhoto(const QString& user) {
-	if(connection->getState() == Connection::ReadyForUse)
-		connection->write("REQUEST_PHOTO#" + 
-			QByteArray::number(user.length()) + "#" + user.toUtf8());
+	connection->send("REQUEST_PHOTO#", user);
 }
 
 // filename + # + filedata

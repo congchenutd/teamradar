@@ -109,9 +109,7 @@ void TeamRadarWindow::registerPhoto()
 
 	QByteArray data = file.readAll();
 	QString format = QFileInfo(photoPath).suffix();
-	connection->write("REGISTER_PHOTO#" + 
-		               QByteArray::number(data.size() + format.length()) + "#" + 
-					   format.toUtf8() + "#" + data);
+	connection->send("REGISTER_PHOTO#", QStringList() << format << data);
 }
 
 void TeamRadarWindow::onRefresh() {
