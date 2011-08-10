@@ -30,8 +30,7 @@ private slots:
 	void onConnected();
 	void onUserList(const QByteArray& list);
 	void onPhotoResponse(const QByteArray& photoData);
-	void onUserConnected   (const QString& name);
-	void onUserDisconnected(const QString& name);
+	void onNewMessage(const QString& message);
 
 private:
 	PeerManager(QObject* parent = 0);

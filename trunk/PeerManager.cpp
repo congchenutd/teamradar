@@ -14,8 +14,7 @@ PeerManager::PeerManager(QObject *parent) : QObject(parent)
 	connect(connection, SIGNAL(readyForUse()),             this, SLOT(onConnected()));
 	connect(connection, SIGNAL(userList(QByteArray)),      this, SLOT(onUserList(QByteArray)));
 	connect(connection, SIGNAL(photoResponse(QByteArray)), this, SLOT(onPhotoResponse(QByteArray)));
-	connect(connection, SIGNAL(userConnected   (QString)), this, SLOT(onUserConnected   (QString)));
-	connect(connection, SIGNAL(userDisconnected(QString)), this, SLOT(onUserDisconnected(QString)));
+	connect(connection, SIGNAL(newMessage(QString)),       this, SLOT(onNewMessage(QString)));
 }
 
 PeerManager* PeerManager::getInstance()
@@ -62,7 +61,7 @@ void PeerManager::onConnected() {
 }
 
 void PeerManager::refreshUserList() {
-	connection->send("REQUEST_USERLIST#");
+	connection->send("REQUEST_USERLIST");
 }
 
 // online user list
@@ -76,23 +75,24 @@ void PeerManager::onUserList(const QByteArray& list)
 
 void PeerManager::updateUser(const QString& name, bool online)
 {
+	// update online info
 	DeveloperInfo user = model->getUserInfo(name);
 	user.online = online;
 	model->updateUser(user);
-	if(online)
+
+	// update photo
+	if(online && Setting::getInstance()->getUserName() != name)
 		requestPhoto(name);
 	model->select();
 
+	// notify player
 	QString msg(name + '#');
-	if(online)
-		msg += "CONNECTED#";
-	else
-		msg += "DISCONNECTED#";
+	msg += online ? "CONNECTED#" : "DISCONNECTED";
 	emit userListChanged(msg);
 }
 
 void PeerManager::requestPhoto(const QString& user) {
-	connection->send("REQUEST_PHOTO#", user);
+	connection->send("REQUEST_PHOTO", user.toUtf8());
 }
 
 // filename + # + filedata
@@ -115,10 +115,13 @@ void PeerManager::onPhotoResponse(const QByteArray& photoData)
 	setImage(userName, fileName);
 }
 
-void PeerManager::onUserConnected(const QString& name) {
-	updateUser(name.split('#').front(), true);
-}
-
-void PeerManager::onUserDisconnected(const QString& name) {
-	updateUser(name.split('#').front(), false);
+// user#event#parameters
+void PeerManager::onNewMessage(const QString& message)
+{
+	QString user  = message.split('#').at(0);
+	QString event = message.split('#').at(1);
+	if(event == "CONNECTED")
+		updateUser(user, true);
+	else if(event == "DISCONNECTED")
+		updateUser(user, false);
 }

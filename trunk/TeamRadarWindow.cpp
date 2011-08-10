@@ -36,8 +36,8 @@ TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
 
     connect(ui.btImage,        SIGNAL(clicked()), this, SLOT(onSetImage()));
 	connect(ui.btRefreshPeers, SIGNAL(clicked()), this, SLOT(onRefresh()));
-	connect(ui.tvPeers, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPeer(QModelIndex)));
-	connect(peerManager, SIGNAL(userListChanged(QString)), this, SLOT(onUserListChanged()));
+	connect(ui.tvPeers,  SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPeer(QModelIndex)));
+	connect(peerManager, SIGNAL(userListChanged(QString)),   this, SLOT(onUserListChanged()));
 
 	onRefresh();
 }
@@ -108,8 +108,8 @@ void TeamRadarWindow::registerPhoto()
 		return;
 
 	QByteArray data = file.readAll();
-	QString format = QFileInfo(photoPath).suffix();
-	connection->send("REGISTER_PHOTO#", QStringList() << format << data);
+	QByteArray format = QFileInfo(photoPath).suffix().toUtf8();
+	connection->send("REGISTER_PHOTO", QList<QByteArray>() << format << data);
 }
 
 void TeamRadarWindow::onRefresh() {
@@ -125,7 +125,11 @@ void TeamRadarWindow::onEditPeer(const QModelIndex& idx)
 	QColor color = QColorDialog::getColor(
 		model->data(model->index(idx.row(), PEER_COLOR)).toString());
 	if(color.isValid())
+	{
 		model->setData(model->index(idx.row(), PEER_COLOR), color);
+		model->submitAll();
+		resizeTable();
+	}
 }
 
 void TeamRadarWindow::resizeTable()

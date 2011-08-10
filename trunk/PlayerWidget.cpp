@@ -22,9 +22,9 @@ PlayerWidget::PlayerWidget(QWidget *parent) :
 	playing = false;
 	peerManager = PeerManager::getInstance();
 
-	peerManager->setDeveloperColor("Carl", Qt::black);
-	peerManager->setDeveloperColor("Mike", Qt::darkBlue);
-	peerManager->setDeveloperColor("Jane", Qt::darkMagenta);
+	//peerManager->setDeveloperColor("Carl", Qt::black);
+	//peerManager->setDeveloperColor("Mike", Qt::darkBlue);
+	//peerManager->setDeveloperColor("Jane", Qt::darkMagenta);
 	//peerManager->setImage("Carl", ":/Images/Head_Boss.png");
 	//peerManager->setImage("Mike", ":/Images/Head_Male.png");
 	//peerManager->setImage("Jane", ":/Images/Head_Female.png");
