@@ -211,12 +211,6 @@ void Connection::processData()
 	case UserListResponse:
 		emit userList(buffer);
 		break;
-	case Connected:
-		emit userConnected(buffer);
-		break;
-	case Disconnected:
-		emit userDisconnected(buffer);
-		break;
 	default:
 		break;
 	}
@@ -240,10 +234,6 @@ Connection::DataType Connection::guessDataType(const QByteArray& header)
 		return PhotoResponse;
 	if(header.startsWith("USERLIST_RESPONSE"))
 		return UserListResponse;
-	if(header.startsWith("CONNECTED"))
-		return Connected;
-	if(header.startsWith("DISCONNECTED"))
-		return Disconnected;
 	return Undefined;
 }
 
@@ -271,12 +261,20 @@ void Connection::onDisconnected()
 	connectToHost(setting->getServerAddress(), setting->getServerPort());
 }
 
-void Connection::send(const QString& header, const QString& body) {
-	write(header.toUtf8() + '#' + 
-		  QByteArray::number(body.length()) + '#' + 
-		  body.toUtf8());
+void Connection::send(const QByteArray& header, const QByteArray& body)
+{
+	QByteArray message(header);
+	if(!header.endsWith("#"))
+		message.append("#");
+	message.append(QByteArray::number(body.length()) + '#' + body);
+	write(message);
 }
 
-void Connection::send(const QString& header, const QStringList& bodies) {
-	send(header, bodies.join("#"));
+void Connection::send(const QByteArray& header, const QList<QByteArray>& bodies)
+{
+	QByteArray joined;
+	foreach(QByteArray body, bodies)
+		joined.append(body + "#");
+	joined.chop(1);
+	send(header, joined);
 }

@@ -24,9 +24,7 @@ public:
 		Pong,
 		PhotoResponse,
 		UserListResponse,
-		Event,
-		Connected,
-		Disconnected
+		Event
 	} DataType;
 
 public:
@@ -37,8 +35,8 @@ public:
 	void setUserName(const QString& name) { userName = name; }
 	ConnectionState getState() const { return state; }
 
-	void send(const QString& header, const QString& body = QString("P"));
-	void send(const QString& header, const QStringList& bodies);
+	void send(const QByteArray& header, const QByteArray& body = QByteArray("P"));
+	void send(const QByteArray& header, const QList<QByteArray>& bodies);
 
 protected:
 	void timerEvent(QTimerEvent* timerEvent);
@@ -48,8 +46,6 @@ signals:
 	void newMessage(const QString& message);
 	void userList(const QByteArray& buffer);
 	void photoResponse(const QByteArray& buffer);
-	void userConnected   (const QString& msg);
-	void userDisconnected(const QString& msg);
 
 private slots:
 	void onReadyRead();
@@ -64,6 +60,7 @@ private:
 	bool hasEnoughData();
 	void processData();
 	DataType guessDataType(const QByteArray& header);
+
 public:
 	static const int  MaxBufferSize   = 1024 * 1024;
 	static const int  TransferTimeout = 30 * 1000;
