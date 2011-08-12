@@ -61,13 +61,13 @@ PlayerWidget::PlayerWidget(QWidget *parent) :
 	connect(ui.btLoad,      SIGNAL(clicked()),     this, SLOT(onLoad()));
 	connect(ui.btOnline,    SIGNAL(clicked()),     this, SLOT(onOnline()));
 	connect(ui.btEffects,   SIGNAL(clicked(bool)), this, SLOT(onEffects(bool)));
-	connect(ui.sbSpeed,     SIGNAL(valueChanged(double)), this, SLOT(onSpeed(double)));
-	connect(ui.tvPlaylist, SIGNAL(clicked(QModelIndex)),       this, SLOT(onPlaylistClicked(QModelIndex)));
-	connect(ui.tvPlaylist, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onPlaylistCoubleClicked(QModelIndex)));
+	connect(ui.sbSpeed,     SIGNAL(valueChanged(double)),       this, SLOT(onSpeed(double)));
+	connect(ui.tvPlaylist,  SIGNAL(clicked      (QModelIndex)), this, SLOT(onPlaylistClicked(QModelIndex)));
+	connect(ui.tvPlaylist,  SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onPlaylistCoubleClicked(QModelIndex)));
 
-	connect(Connection::getInstance(),       SIGNAL(newMessage(QString)),      this, SLOT(onNewMessage(QString)));
-	connect(MessageCollector::getInstance(), SIGNAL(localEvent(QString)),      this, SLOT(onNewMessage(QString)));
-	connect(PeerManager::getInstance(),      SIGNAL(userListChanged(QString)), this, SLOT(onNewMessage(QString)));
+	connect(Receiver::        getInstance(), SIGNAL(newMessage     (QString)), this, SLOT(onNewMessage(QString)));
+	connect(MessageCollector::getInstance(), SIGNAL(localEvent     (QString)), this, SLOT(onNewMessage(QString)));
+	connect(PeerManager::     getInstance(), SIGNAL(userListChanged(QString)), this, SLOT(onNewMessage(QString)));
 }
 
 void PlayerWidget::onShowPlaylist(bool show)
@@ -177,8 +177,10 @@ void PlayerWidget::play(const TeamRadarEvent& event)
 		if(event.userName != Setting::getInstance()->getUserName())
 			return;
 		Setting::getInstance()->setValue("RootPath", event.parameter);
+		
+		// load dir, and refresh users
 		ui.graphicsView->loadDir(event.parameter);
-		play(TeamRadarEvent(event.userName, "CONNECTED", ""));  // add myself
+		PeerManager::getInstance()->refreshUserList();
 	}
 }
 

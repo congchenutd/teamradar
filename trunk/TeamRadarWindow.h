@@ -19,7 +19,6 @@ public:
 
 private slots:
     void onSetImage();
-	void onRefresh();
 	void onEditPeer(const QModelIndex& idx);
 	void onUserListChanged();
 
