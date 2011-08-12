@@ -34,12 +34,11 @@ TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
 	ui.tvPeers->hideColumn(PEER_ONLINE);
 	resizeTable();
 
-    connect(ui.btImage,        SIGNAL(clicked()), this, SLOT(onSetImage()));
-	connect(ui.btRefreshPeers, SIGNAL(clicked()), this, SLOT(onRefresh()));
+    connect(ui.btImage,  SIGNAL(clicked()), this, SLOT(onSetImage()));
 	connect(ui.tvPeers,  SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPeer(QModelIndex)));
 	connect(peerManager, SIGNAL(userListChanged(QString)),   this, SLOT(onUserListChanged()));
 
-	onRefresh();
+	peerManager->refreshUserList();
 }
 
 void TeamRadarWindow::accept()
@@ -98,10 +97,6 @@ void TeamRadarWindow::onSetImage()
 
 void TeamRadarWindow::registerPhoto()
 {
-	Connection* connection = Connection::getInstance();
-	if(connection->getState() != Connection::ReadyForUse)
-		return;
-
 	QString photoPath = userName + ".png";
 	QFile file(photoPath);
 	if(!file.open(QFile::ReadOnly))
@@ -109,11 +104,7 @@ void TeamRadarWindow::registerPhoto()
 
 	QByteArray data = file.readAll();
 	QByteArray format = QFileInfo(photoPath).suffix().toUtf8();
-	connection->send("REGISTER_PHOTO", QList<QByteArray>() << format << data);
-}
-
-void TeamRadarWindow::onRefresh() {
-	peerManager->refreshUserList();
+	Sender::getInstance()->sendPhotoRegistration(format, data);
 }
 
 void TeamRadarWindow::onUserListChanged() {

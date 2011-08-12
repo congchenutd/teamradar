@@ -10,11 +10,10 @@ PeerManager::PeerManager(QObject *parent) : QObject(parent)
 	model->setTable("Peers");
 	model->select();
 
-	connection = Connection::getInstance();
-	connect(connection, SIGNAL(readyForUse()),             this, SLOT(onConnected()));
-	connect(connection, SIGNAL(userList(QByteArray)),      this, SLOT(onUserList(QByteArray)));
-	connect(connection, SIGNAL(photoResponse(QByteArray)), this, SLOT(onPhotoResponse(QByteArray)));
-	connect(connection, SIGNAL(newMessage(QString)),       this, SLOT(onNewMessage(QString)));
+	Receiver* receiver = Receiver::getInstance();
+	connect(receiver, SIGNAL(userList(QByteArray)),      this, SLOT(onUserList(QByteArray)));
+	connect(receiver, SIGNAL(photoResponse(QByteArray)), this, SLOT(onPhotoResponse(QByteArray)));
+	connect(receiver, SIGNAL(newMessage(QString)),       this, SLOT(onNewMessage(QString)));
 }
 
 PeerManager* PeerManager::getInstance()
@@ -56,19 +55,15 @@ void PeerManager::setDeveloperColor(const QString& userName, const QColor& color
 	model->updateUser(userInfo);
 }
 
-void PeerManager::onConnected() {
-	refreshUserList();
-}
-
 void PeerManager::refreshUserList() {
-	connection->send("REQUEST_USERLIST");
+	Sender::getInstance()->sendUserListRequest();
 }
 
 // online user list
 void PeerManager::onUserList(const QByteArray& list)
 {
 	model->makeAllOffline();
-	QList<QByteArray> userNames = list.split(';');
+	QList<QByteArray> userNames = list.split('#');
 	foreach(QString name, userNames)
 		updateUser(name, true);
 }
@@ -92,7 +87,7 @@ void PeerManager::updateUser(const QString& name, bool online)
 }
 
 void PeerManager::requestPhoto(const QString& user) {
-	connection->send("REQUEST_PHOTO", user.toUtf8());
+	Sender::getInstance()->sendPhotoRequest(user);
 }
 
 // filename + # + filedata

@@ -7,7 +7,6 @@
 #include <QColor>
 #include "PeerModel.h"
 
-class Connection;
 class PeerModel;
 
 class PeerManager : public QObject
@@ -27,7 +26,6 @@ signals:
 	void userListChanged(const QString& msg);
 
 private slots:
-	void onConnected();
 	void onUserList(const QByteArray& list);
 	void onPhotoResponse(const QByteArray& photoData);
 	void onNewMessage(const QString& message);
@@ -39,7 +37,6 @@ private:
 
 private:
 	static PeerManager* instance;
-	Connection* connection;
 	PeerModel* model;
 };
 

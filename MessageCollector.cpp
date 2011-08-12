@@ -70,10 +70,8 @@ void MessageCollector::sendEvent(const QString& event, const QString& parameters
 	QByteArray body = QString(event + '#' + parameters).toUtf8();
 	QByteArray localMessage = Setting::getInstance()->getUserName().toUtf8() + '#' + body;
 	emit localEvent(localMessage);
-	
-	Connection* connection = Connection::getInstance();
-	if(connection->getState() == Connection::ReadyForUse)
-		connection->send("EVENT", body);
+
+	Sender::getInstance()->sendEvent(event, parameters);
 }
 
 void MessageCollector::onOpenProject(ProjectExplorer::Project* project) {
