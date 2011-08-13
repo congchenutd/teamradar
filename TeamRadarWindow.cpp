@@ -34,7 +34,7 @@ TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
 	ui.tvPeers->hideColumn(PEER_ONLINE);
 	resizeTable();
 
-    connect(ui.btImage,  SIGNAL(clicked()), this, SLOT(onSetImage()));
+    connect(ui.btImage,  SIGNAL(clicked()),                  this, SLOT(onSetImage()));
 	connect(ui.tvPeers,  SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPeer(QModelIndex)));
 	connect(peerManager, SIGNAL(userListChanged(QString)),   this, SLOT(onUserListChanged()));
 
@@ -76,9 +76,7 @@ QString TeamRadarWindow::guessUserName() const
 		}
 	}
 
-	if(result.isEmpty())
-		result = "Unknown";
-	return result;
+	return result.isEmpty() ? "Unknown" : result;
 }
 
 void TeamRadarWindow::onSetImage()

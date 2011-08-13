@@ -35,6 +35,7 @@ void PeerManager::setImage(const QString& userName, const QString& imagePath)
 		QFile::copy(imagePath, fileName);
 	}
 
+	// update the db
 	DeveloperInfo userInfo = model->getUserInfo(userName);
 	userInfo.image = fileName;
 	model->updateUser(userInfo);
@@ -65,10 +66,11 @@ void PeerManager::onUserList(const QByteArray& list)
 	model->makeAllOffline();
 	QList<QByteArray> userNames = list.split('#');
 	foreach(QString name, userNames)
-		updateUser(name, true);
+		setUserOnline(name, true);
 }
 
-void PeerManager::updateUser(const QString& name, bool online)
+// update the online status in the database, and notify player of the change
+void PeerManager::setUserOnline(const QString& name, bool online)
 {
 	// update online info
 	DeveloperInfo user = model->getUserInfo(name);
@@ -116,7 +118,7 @@ void PeerManager::onNewMessage(const QString& message)
 	QString user  = message.split('#').at(0);
 	QString event = message.split('#').at(1);
 	if(event == "CONNECTED")
-		updateUser(user, true);
+		setUserOnline(user, true);
 	else if(event == "DISCONNECTED")
-		updateUser(user, false);
+		setUserOnline(user, false);
 }
