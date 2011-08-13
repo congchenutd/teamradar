@@ -5,6 +5,8 @@
 #include "ui_TeamRadarDlg.h"
 #include "MySetting.h"
 	
+// Configuration dialog
+
 class Setting;
 class PeerManager;
 class PeerModel;

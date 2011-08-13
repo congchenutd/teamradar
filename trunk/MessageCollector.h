@@ -4,7 +4,6 @@
 #include <QObject>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
-//#include <coreplugin/basemode.h>
 #include <coreplugin/coreconstants.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/imode.h>
@@ -15,6 +14,7 @@
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectexplorer.h>
 
+// Captures signals from IDE, and notifies the player and the server
 class MessageCollector : public QObject
 {
 	Q_OBJECT
@@ -30,13 +30,12 @@ private slots:
 	void onCloseFiles(QList<Core::IEditor*>);
 	void onChangeMode(Core::IMode* mode, Core::IMode* oldMode);
 	void onOpenProject(ProjectExplorer::Project* project);
-//	void onOpenProject(const QString& projectFileName);
 
 signals:
 	void localEvent(QString);
 
 private:
-	void sendEvent(const QString& event, const QString& parameters);
+	void sendEvent(const QString& event, const QString& parameters);  // to the server
 
 private:
 	static MessageCollector* instance;
@@ -45,7 +44,7 @@ private:
 	Core::ModeManager*   modeManager;
 	Core::IEditor*       currentEditor;
 	ProjectExplorer::ProjectExplorerPlugin* projectExplorer;
-	Core::FileManager*   fileManager;
+//	Core::FileManager*   fileManager;
 };
 
 #endif // MessageCollector_h__

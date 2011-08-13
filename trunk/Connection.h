@@ -6,7 +6,7 @@
 #include <QTime>
 #include <QStringList>
 
-// Parse the message header & body from Connection
+// Parses the message header & body from Connection
 // Accepts 4 types of header: GREETING, PHOTO_RESPONSE, USERLIST_RESPONSE, EVENT
 // Format of packet: header#size#body
 // Format of body:
@@ -44,6 +44,7 @@ private:
 
 
 // A TCP socket connected to the server
+// A singleton: there is one connection from the client to the server
 class Connection : public QTcpSocket
 {
 	Q_OBJECT

@@ -155,8 +155,6 @@ void PlayerWidget::play(int row)
 {
 	currentRow = row;
 	selectRow(row);
-
-	// play the event
 	play(TeamRadarEvent(model->data(model->index(row, UserName)) .toString(),
 						model->data(model->index(row, EventType)).toString(),
 						model->data(model->index(row, Parameter)).toString()));
@@ -188,8 +186,7 @@ void PlayerWidget::onPlaylistClicked(const QModelIndex& idx) {
 	currentRow = idx.isValid() ? idx.row() : -1;
 }
 
-void PlayerWidget::onPlaylistCoubleClicked(const QModelIndex& idx)
-{
+void PlayerWidget::onPlaylistCoubleClicked(const QModelIndex& idx) {
 	if(idx.isValid())
 		play(currentRow);
 }
@@ -250,6 +247,8 @@ void PlayerWidget::onNewMessage(const QString& message)
 	QStringList sections = message.split("#");
 	if(sections.size() != 3)
 		return;
+
+	// user, event, parameters
 	TeamRadarEvent event(sections[0], sections[1], sections[2]);
 	play(event);
 }
