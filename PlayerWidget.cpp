@@ -162,6 +162,9 @@ void PlayerWidget::play(int row)
 
 void PlayerWidget::play(const TeamRadarEvent& event)
 {
+	if(PeerModel::isBlocked(event.userName))
+		return;
+
 	if(event.eventType == "SAVE")
 		ui.graphicsView->moveDeveloperTo(event.userName, event.parameter);
 	else if(event.eventType == "MODE")

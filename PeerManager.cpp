@@ -94,7 +94,7 @@ void PeerManager::setUserOnline(const QString& name, bool online)
 	}
 
 	// notify player
-	QString event = online ? "CONNECTED#" : "DISCONNECTED#";
+	QString event = online ? "CONNECTED" : "DISCONNECTED";
 	emit userOnline(TeamRadarEvent(name, event));
 }
 
