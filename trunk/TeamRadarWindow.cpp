@@ -3,6 +3,8 @@
 #include "Setting.h"
 #include "PeerManager.h"
 #include "PeerModel.h"
+#include "TeamRadarEvent.h"
+#include "ImageColorBoolDelegate.h"
 #include <QHostAddress>
 #include <QtGui/QTextEdit>
 #include <QtGui/QVBoxLayout>
@@ -13,54 +15,63 @@
 
 TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
 {
-	imageChanged = false;
 	peerManager = PeerManager::getInstance();
     ui.setupUi(this);
 
 	setting = MySetting<Setting>::getInstance();
-	ui.leServerAddress->setText(setting->getServerAddress());
-	ui.sbPort->setValue(setting->getServerPort());
-	userName = setting->getUserName();
-	if(userName.isEmpty())
-		userName = guessUserName();
-	ui.leUserName->setText(userName);
+	ui.leServerAddress->setText (setting->getServerAddress());
+	ui.sbPort         ->setValue(setting->getServerPort());
+	ui.leUserName->setText(setting->getUserName().isEmpty() ? 
+											guessUserName() : setting->getUserName());
 
-	QPixmap pixmap = QPixmap(userName + ".png").scaled(128, 128);
+	QPixmap pixmap = QPixmap(getUserName() + ".png").scaled(128, 128);
 	ui.labelImage->setPixmap(pixmap);
+	setColor(setting->getColor("DefaultDeveloperColor"));
 
 	model = peerManager->getPeerModel();
 	ui.tvPeers->setModel(model);
+	ui.tvPeers->setItemDelegate(new ImageColorBoolDelegate(model, ui.tvPeers));
 	ui.tvPeers->hideColumn(PEER_IMAGE);
 	ui.tvPeers->hideColumn(PEER_ONLINE);
-	resizeTable();
 
-    connect(ui.btImage,  SIGNAL(clicked()),                  this, SLOT(onSetImage()));
-	connect(ui.tvPeers,  SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPeer(QModelIndex)));
-	connect(peerManager, SIGNAL(userListChanged(QString)),   this, SLOT(onUserListChanged()));
+	connect(model,       SIGNAL(selected()), ui.tvPeers, SLOT(resizeRowsToContents()));
+	connect(model,       SIGNAL(selected()), ui.tvPeers, SLOT(resizeColumnsToContents()));
+    connect(ui.btImage,  SIGNAL(clicked()),  this,       SLOT(onSetImage()));
+	connect(ui.btColor,  SIGNAL(clicked()),  this,       SLOT(onSetColor()));
 
 	peerManager->refreshUserList();
 }
 
 void TeamRadarWindow::accept()
 {
+	// save photo file
+	QString imageFileName = getUserName() + ".png";
+	ui.labelImage->pixmap()->save(imageFileName);
+
 	setting->setServerAddress(ui.leServerAddress->text());
 	setting->setServerPort(ui.sbPort->value());
-	setting->setUserName(ui.leUserName->text());
+	setting->setUserName(getUserName());
+	setting->setColor("DefaultDeveloperColor", color);
 
-	// register the photo on server
-	if(imageChanged)
-		registerPhoto();
+	DeveloperInfo userInfo = model->getUserInfo(getUserName());
+	userInfo.image = imageFileName;
+	userInfo.color = color;
+	model->updateUser(userInfo);
+
+	// send settings to the server
+	registerPhoto();
+	registerColor();
+
 	QDialog::accept();
 }
 
 QString TeamRadarWindow::guessUserName() const
 {
-	QString result;
-
 	// search environmental variables for user name
 	QStringList envVariables;
 	envVariables << "USERNAME.*" << "USER.*" << "USERDOMAIN.*"
 				 << "HOSTNAME.*" << "DOMAINNAME.*";
+	QString result;
 	QStringList environment = QProcess::systemEnvironment();
 	foreach(QString string, envVariables)
 	{
@@ -86,43 +97,44 @@ void TeamRadarWindow::onSetImage()
     if(fileName.isEmpty())
         return;
 
-	// save photo file
-	QPixmap pixmap = QPixmap(fileName).scaled(128, 128);
-    ui.labelImage->setPixmap(pixmap);
-	imageChanged = true;
-	pixmap.save(userName + ".png");
+	ui.labelImage->setPixmap(QPixmap(fileName).scaled(128, 128));
 }
 
 void TeamRadarWindow::registerPhoto()
 {
-	QString photoPath = userName + ".png";
-	QFile file(photoPath);
+	QFile file(getUserName() + ".png");
 	if(!file.open(QFile::ReadOnly))
 		return;
 
 	QByteArray data = file.readAll();
-	QByteArray format = QFileInfo(photoPath).suffix().toUtf8();
-	Sender::getInstance()->sendPhotoRegistration(format, data);
-}
-
-void TeamRadarWindow::onUserListChanged() {
-	resizeTable();
-}
-
-void TeamRadarWindow::onEditPeer(const QModelIndex& idx)
-{
-	QColor color = QColorDialog::getColor(
-		model->data(model->index(idx.row(), PEER_COLOR)).toString());
-	if(color.isValid())
-	{
-		model->setData(model->index(idx.row(), PEER_COLOR), color);
-		model->submitAll();
-		resizeTable();
-	}
+	Sender::getInstance()->sendPhotoRegistration("png", data);
 }
 
 void TeamRadarWindow::resizeTable()
 {
 	ui.tvPeers->resizeRowsToContents();
 	ui.tvPeers->resizeColumnsToContents();
+}
+
+void TeamRadarWindow::onSetColor() {
+	setColor(QColorDialog::getColor(color));
+}
+
+QString TeamRadarWindow::getUserName() const {
+	return ui.leUserName->text();
+}
+
+void TeamRadarWindow::setColor(const QColor& clr)
+{
+	if(clr.isValid())
+	{
+		color = clr;
+		QPixmap pixmap(ui.labelColor->size());
+		pixmap.fill(color);
+		ui.labelColor->setPixmap(pixmap);
+	}
+}
+
+void TeamRadarWindow::registerColor() {
+	Sender::getInstance()->sendColorRegistration(color);
 }

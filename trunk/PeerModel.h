@@ -1,7 +1,7 @@
 #ifndef PEER_MODEL_H
 #define PEER_MODEL_H
 
-#include <QSqlTableModel>
+#include "ImageColorBoolModel.h"
 
 struct DeveloperInfo
 {
@@ -10,13 +10,16 @@ struct DeveloperInfo
 	QColor  color;
 	bool    online; 
 	QString image;
+	bool    receive;
 };
 
-class PeerModel : public QSqlTableModel
+class PeerModel : public ImageColorBoolModel
 {
+	Q_OBJECT
+
 public:
 	PeerModel(QObject* parent = 0);
-	QVariant data(const QModelIndex& idx, int role = Qt::DisplayRole) const;
+	bool select();
 	
 	static bool openDB(const QString& dbName);
 	static void createTables();
@@ -28,6 +31,20 @@ public:
 
 private:
 	static QPixmap toGrayPixmap(const QImage& colorImage);
+
+signals:
+	void selected();
+
+public:
+	enum {NAME, COLOR, IMAGE, ONLINE, RECEIVE};
+};
+
+
+class Test : public QObject
+{
+Q_OBJECT
+signals:
+	void foo();
 };
 
 #endif

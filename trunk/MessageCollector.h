@@ -15,6 +15,9 @@
 #include <projectexplorer/projectexplorer.h>
 
 // Captures signals from IDE, and notifies the player and the server
+
+struct TeamRadarEvent;
+
 class MessageCollector : public QObject
 {
 	Q_OBJECT
@@ -32,7 +35,7 @@ private slots:
 	void onOpenProject(ProjectExplorer::Project* project);
 
 signals:
-	void localEvent(QString);
+	void localEvent(const TeamRadarEvent& event);
 
 private:
 	void sendEvent(const QString& event, const QString& parameters);  // to the server

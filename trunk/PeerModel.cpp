@@ -6,41 +6,20 @@
 #include <QSqlQuery>
 #include "Setting.h"
 
-DeveloperInfo::DeveloperInfo(const QString& n) : name(n), online(false)
+DeveloperInfo::DeveloperInfo(const QString& n) : name(n), online(false), receive(true)
 {
 	image = Setting::getInstance()->value("DefaultDeveloperImage").toString();
 	color = Setting::getInstance()->getColor("DefaultDeveloperColor");
 }
 
 //////////////////////////////////////////////////////////////////////////
-PeerModel::PeerModel(QObject *parent) : QSqlTableModel(parent) {}
+PeerModel::PeerModel(QObject *parent) : ImageColorBoolModel(parent) {}
 
-QVariant PeerModel::data(const QModelIndex& idx, int role) const
+bool PeerModel::select()
 {
-	if(!idx.isValid())
-		return QSqlTableModel::data(idx, role);
-
-	if(idx.column() == TeamRadarWindow::PEER_NAME)        // name
-	{
-		if(role == Qt::DecorationRole)
-		{
-			QImage image(data(
-				index(idx.row(), TeamRadarWindow::PEER_IMAGE)).toString());
-			image = image.scaled(64, 64);
-			bool online = data(index(idx.row(), TeamRadarWindow::PEER_ONLINE)).toBool();
-			QPixmap pixmap = online ? QPixmap::fromImage(image) : toGrayPixmap(image);
-			return pixmap;
-		}
-	}
-	else if(idx.column() == TeamRadarWindow::PEER_COLOR)   // Color
-	{
-		if(role == Qt::DecorationRole)
-			return QColor(QSqlTableModel::data(idx, Qt::DisplayRole).toString());
-		else if(role == Qt::DisplayRole)
-			return QVariant();
-	}
-
-	return QSqlTableModel::data(idx, role);
+	bool result = ImageColorBoolModel::select();
+	emit selected();
+	return result;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -60,10 +39,11 @@ void PeerModel::createTables()
 {
 	QSqlQuery query;
 	query.exec("create table Peers( \
-			   Name   varchar primary key, \
-			   Color  varchar, \
-			   Image  varchar, \
-			   Online bool \
+			   Name    varchar primary key, \
+			   Color   varchar, \
+			   Image   varchar, \
+			   Online  bool, \
+			   Receive bool \
 			   )");
 }
 
@@ -90,20 +70,21 @@ void PeerModel::updateUser(const DeveloperInfo& info)
 void PeerModel::addUser(const DeveloperInfo& info)
 {
 	QSqlQuery query;
-	query.exec(tr("insert into Peers values (\"%1\", \"%2\", \"%3\", \"%4\")")
-		.arg(info.name).arg(info.color.name()).arg(info.image).arg(info.online));
+	query.exec(tr("insert into Peers values (\"%1\", \"%2\", \"%3\", \"%4\", \"%5\")")
+		.arg(info.name).arg(info.color.name()).arg(info.image).arg(info.online).arg(info.receive));
 }
 
 DeveloperInfo PeerModel::getUserInfo(const QString& name)
 {
 	QSqlQuery query;
-	query.exec(tr("select Color, Image, Online from Peers where Name =\"%1\"").arg(name));
+	query.exec(tr("select Color, Image, Online, Receive from Peers where Name =\"%1\"").arg(name));
 	DeveloperInfo result(name);
 	if(query.next())
 	{
-		result.color  = query.value(0).toString();
-		result.image  = query.value(1).toString();
-		result.online = query.value(2).toBool();
+		result.color   = query.value(0).toString();
+		result.image   = query.value(1).toString();
+		result.online  = query.value(2).toBool();
+		result.receive = query.value(3).toBool();
 	}
 	return result;
 }

@@ -21,23 +21,24 @@ public:
 
 private slots:
     void onSetImage();
-	void onEditPeer(const QModelIndex& idx);
-	void onUserListChanged();
+	void onSetColor();
 
 private:
 	QString guessUserName() const;
 	void registerPhoto();
+	void registerColor();
 	void resizeTable();
+	QString getUserName() const;
+	void setColor(const QColor& color);
 
 public:
 	enum {PEER_NAME, PEER_COLOR, PEER_IMAGE, PEER_ONLINE};
 
 private:
 	Ui::TeamRadarDlgClass ui;
-	Setting* setting;
-	QString userName;
-	bool imageChanged;
-	PeerModel* model;
+	Setting*     setting;
+	QColor       color;
+	PeerModel*   model;
 	PeerManager* peerManager;
 };
 
