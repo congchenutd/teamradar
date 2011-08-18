@@ -7,7 +7,7 @@
 
 Connection::Connection(QObject* parent) : QTcpSocket(parent)
 {
-	state = WaitingForGreeting;
+	ready = false;
 	dataType = Receiver::Undefined;
 	numBytes = -1;
 	transferTimerID = 0;
@@ -21,51 +21,7 @@ Connection::Connection(QObject* parent) : QTcpSocket(parent)
 
 void Connection::onReadyRead()
 {
-	if(state == WaitingForGreeting)
-	{
-		if(!readHeader())   // read header and guess data type
-			return;
-		if(dataType != Receiver::Greeting)
-		{
-			abort();
-			return;
-		}
-		state = ReadingGreeting;
-	}
-
-	if(state == ReadingGreeting)
-	{
-		if(!hasEnoughData())        // get data length and make sure there is data
-			return;
-
-		buffer = read(numBytes);    // read greeting
-		if(buffer.size() != numBytes)
-		{
-			abort();
-			return;
-		}
-
-		if(buffer == "WRONG_USER")
-		{
-			abort();
-			return;
-		}
-
-		dataType = Receiver::Undefined;
-		numBytes = 0;
-		buffer.clear();
-
-		if(!isValid())   // why do we need this??
-		{
-			abort();
-			return;
-		}
-
-		state = ReadyForUse;
-	}
-
-	do
-	{
+	do {
 		if(dataType == Receiver::Undefined && !readHeader())   // read header
 			return;
 		if(!hasEnoughData())                         // read data
@@ -255,6 +211,9 @@ void Receiver::processData(Receiver::DataType dataType, const QByteArray& buffer
 {
 	switch(dataType)
 	{
+	case Greeting:
+		receiveGreeting(buffer);
+		break;
 	case Event:
 		receiveNewMessage(buffer);
 		break;
@@ -269,6 +228,14 @@ void Receiver::processData(Receiver::DataType dataType, const QByteArray& buffer
 	default:
 		break;
 	}
+}
+
+void Receiver::receiveGreeting(const QByteArray& buffer)
+{
+	if(buffer == "WRONG_USER")
+		abort();
+	else
+		Connection::getInstance()->setReadyForUse();
 }
 
 void Receiver::receiveNewMessage(const QByteArray& buffer)
@@ -304,7 +271,6 @@ void Receiver::receiveColor(const QByteArray& buffer)
 	}
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 Sender* Sender::getInstance()
 {
@@ -320,31 +286,31 @@ Sender::Sender() {
 Sender* Sender::instance = 0;
 
 void Sender::sendEvent(const QString& event, const QString& parameters) {
-	if(connection->getState() == Connection::ReadyForUse)
-		connection->send("EVENT", event.toUtf8() + "#" + parameters.toUtf8());
+	if(connection->isReadyForUse())
+		connection->send("EVENT", QList<QByteArray>() << event.toUtf8() << parameters.toUtf8());
 }
 
 void Sender::sendUserListRequest() {
-	if(connection->getState() == Connection::ReadyForUse)
+	if(connection->isReadyForUse())
 		connection->send("REQUEST_USERLIST");
 }
 
 void Sender::sendPhotoRequest(const QString& targetUser) {
-	if(connection->getState() == Connection::ReadyForUse)
+	if(connection->isReadyForUse())
 		connection->send("REQUEST_PHOTO", targetUser.toUtf8());
 }
 
 void Sender::sendPhotoRegistration(const QByteArray& format, const QByteArray& photoData) {
-	if(connection->getState() == Connection::ReadyForUse)
+	if(connection->isReadyForUse())
 		connection->send("REGISTER_PHOTO", QList<QByteArray>() << format << photoData);
 }
 
 void Sender::sendColorRegistration(const QColor& color) {
-	if(connection->getState() == Connection::ReadyForUse)
+	if(connection->isReadyForUse())
 		connection->send("REGISTER_COLOR", color.name().toUtf8());
 }
 
 void Sender::sendColorRequest(const QString& targetUser) {
-	if(connection->getState() == Connection::ReadyForUse)
+	if(connection->isReadyForUse())
 		connection->send("REQUEST_COLOR", targetUser.toUtf8());
 }

@@ -45,6 +45,7 @@ signals:
 	void colorResponse(const QString& targetUser, const QByteArray& color);
 
 private:
+	void receiveGreeting  (const QByteArray& buffer);
 	void receiveNewMessage(const QByteArray& buffer);
 	void receiveUserList  (const QByteArray& buffer);
 	void receivePhoto     (const QByteArray& buffer);
@@ -62,19 +63,13 @@ class Connection : public QTcpSocket
 	Q_OBJECT
 
 public:
-	typedef enum {
-		WaitingForGreeting,
-		ReadingGreeting,
-		ReadyForUse
-	} ConnectionState;
-
-public:
 	static Connection* getInstance(QObject* parent = 0);
 
 	Connection(QObject* parent = 0);
-	QString getUserName() const { return userName; }
+	QString getUserName()   const { return userName; }
+	bool    isReadyForUse() const { return ready;    }
 	void setUserName(const QString& name) { userName = name; }
-	ConnectionState getState() const { return state; }
+	void setReadyForUse()                 { ready    = true; }
 
 	void send(const QByteArray& header, const QByteArray& body = QByteArray("P"));
 	void send(const QByteArray& header, const QList<QByteArray>& bodies);
@@ -101,13 +96,13 @@ public:
 private:
 	static Connection* instance;
 
-	ConnectionState    state;
 	Receiver::DataType dataType;
-	QByteArray         buffer;
-	int                numBytes;
-	int                transferTimerID;
-	QString            userName;
-	Receiver*          receiver;
+	bool       ready;
+	QByteArray buffer;
+	int        numBytes;
+	int        transferTimerID;
+	QString    userName;
+	Receiver*  receiver;
 };
 
 // Sends headers: REQUEST_USERLIST, REQEUST_PHOTO, REGISTER_PHOTO, EVENT, 
