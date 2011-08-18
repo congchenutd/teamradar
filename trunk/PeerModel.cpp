@@ -109,3 +109,7 @@ QPixmap PeerModel::toGrayPixmap(const QImage& colorImage)
 		}
 	return QPixmap::fromImage(grayImage);
 }
+
+bool PeerModel::isBlocked(const QString& name) {
+	return !getUserInfo(name).receive;
+}
