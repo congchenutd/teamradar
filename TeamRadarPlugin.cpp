@@ -77,10 +77,7 @@ bool TeamRadarPlugin::initialize(const QStringList &arguments, QString *error_me
 void TeamRadarPlugin::onTeamRadarOption()
 {
     TeamRadarWindow dlg(0);
-	if(dlg.exec() == QDialog::Accepted)
-	{
-		Connection::getInstance()->setUserName(setting->getUserName());
-	}
+	dlg.exec();
 }
 
 Q_EXPORT_PLUGIN(TeamRadarPlugin)
@@ -96,7 +93,7 @@ Core::NavigationView TeamRadarNavigationWidgetFactory::createWidget()
 }
 
 QString TeamRadarNavigationWidgetFactory::displayName() const {
-	return "TeamRadar";
+	return "TeamRadar - " + Setting::getInstance()->getUserName();
 }
 
 QString TeamRadarNavigationWidgetFactory::id() const {

@@ -13,7 +13,9 @@ DeveloperInfo::DeveloperInfo(const QString& n) : name(n), online(false), receive
 }
 
 //////////////////////////////////////////////////////////////////////////
-PeerModel::PeerModel(QObject *parent) : ImageColorBoolModel(parent) {}
+PeerModel::PeerModel(QObject *parent) : ImageColorBoolModel(parent) 
+{
+}
 
 bool PeerModel::select()
 {
@@ -71,7 +73,7 @@ void PeerModel::addUser(const DeveloperInfo& info)
 {
 	QSqlQuery query;
 	query.exec(tr("insert into Peers values (\"%1\", \"%2\", \"%3\", \"%4\", \"%5\")")
-		.arg(info.name).arg(info.color.name()).arg(info.image).arg(info.online).arg(info.receive));
+		.arg(info.name).arg(info.color.name()).arg(info.image).arg(info.online ? "true" : "false").arg(info.receive));
 }
 
 DeveloperInfo PeerModel::getUserInfo(const QString& name)

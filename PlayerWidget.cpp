@@ -170,9 +170,13 @@ void PlayerWidget::play(const TeamRadarEvent& event)
 	else if(event.eventType == "MODE")
 		ui.graphicsView->setDeveloperMode(event.userName, event.parameter);
 	else if(event.eventType == "CONNECTED")
+	{
 		ui.graphicsView->addDeveloper(event.userName, peerManager->getImage(event.userName));
-	else if(event.eventType == "DISCONNECTED")
+		ui.labelConnection->setPixmap(QPixmap(":/Images/Green.png"));
+	}
+	else if(event.eventType == "DISCONNECTED") {
 		ui.graphicsView->removeDeveloper(event.userName);
+	}
 	else if(event.eventType == "OPENPROJECT")
 	{
 		if(event.userName != Setting::getInstance()->getUserName())
