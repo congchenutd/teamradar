@@ -29,15 +29,17 @@ TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
 	setColor(setting->getColor("DefaultDeveloperColor"));
 
 	model = peerManager->getPeerModel();
+	model->setFilter(tr("Name <> \"%1\"").arg(setting->getUserName()));  // no myself
+	model->setSort(model->ONLINE, Qt::DescendingOrder);   // "true" before "false"
 	ui.tvPeers->setModel(model);
 	ui.tvPeers->setItemDelegate(new ImageColorBoolDelegate(model, ui.tvPeers));
-	ui.tvPeers->hideColumn(PEER_IMAGE);
-	ui.tvPeers->hideColumn(PEER_ONLINE);
+	ui.tvPeers->hideColumn(model->IMAGE);
+	ui.tvPeers->hideColumn(model->ONLINE);
+	resizeTable();
 
-	connect(model,       SIGNAL(selected()), ui.tvPeers, SLOT(resizeRowsToContents()));
-	connect(model,       SIGNAL(selected()), ui.tvPeers, SLOT(resizeColumnsToContents()));
-    connect(ui.btImage,  SIGNAL(clicked()),  this,       SLOT(onSetImage()));
-	connect(ui.btColor,  SIGNAL(clicked()),  this,       SLOT(onSetColor()));
+	connect(model,       SIGNAL(selected()), this, SLOT(resizeTable()));
+    connect(ui.btImage,  SIGNAL(clicked()),  this, SLOT(onSetImage()));
+	connect(ui.btColor,  SIGNAL(clicked()),  this, SLOT(onSetColor()));
 
 	peerManager->refreshUserList();
 }

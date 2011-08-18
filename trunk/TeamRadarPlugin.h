@@ -13,6 +13,7 @@ namespace Core {
 	class IMode;
 }
 
+class TeamRadarNavigationWidgetFactory;
 class TeamRadarPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
@@ -27,7 +28,6 @@ private slots:
 private:
 	Setting* setting;
 };
-
 
 class TeamRadarNavigationWidgetFactory : public Core::INavigationWidgetFactory 
 { 

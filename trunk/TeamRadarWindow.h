@@ -22,17 +22,14 @@ public:
 private slots:
     void onSetImage();
 	void onSetColor();
+	void resizeTable();
 
 private:
 	QString guessUserName() const;
 	void registerPhoto();
 	void registerColor();
-	void resizeTable();
 	QString getUserName() const;
 	void setColor(const QColor& color);
-
-public:
-	enum {PEER_NAME, PEER_COLOR, PEER_IMAGE, PEER_ONLINE};
 
 private:
 	Ui::TeamRadarDlgClass ui;

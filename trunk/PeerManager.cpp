@@ -9,7 +9,7 @@ PeerManager::PeerManager(QObject *parent) : QObject(parent)
 	model->setColumnType(model->NAME,    model->NameColumn);
 	model->setColumnType(model->COLOR,   model->ColorColumn);
 	model->setColumnType(model->IMAGE,   model->ImageColumn);
-	model->setColumnType(model->ONLINE,  model->BoolColumn);
+//	model->setColumnType(model->ONLINE,  model->BoolColumn);
 	model->setColumnType(model->RECEIVE, model->BoolColumn);
 	model->setGrayImageBy(model->ONLINE);
 	model->setEditStrategy(QSqlTableModel::OnManualSubmit);
