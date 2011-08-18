@@ -5,16 +5,20 @@
 #include <QTimer>
 #include <QTime>
 #include <QStringList>
+#include "TeamRadarEvent.h"
 
 // Parses the message header & body from Connection
-// Accepts 4 types of header: GREETING, PHOTO_RESPONSE, USERLIST_RESPONSE, EVENT
+// Headers accepted: GREETING, PHOTO_RESPONSE, USERLIST_RESPONSE, EVENT
+//					 COLOR_RESPONSE
 // Format of packet: header#size#body
 // Format of body:
 //		GREETING: [OK, CONNECTED]/[WRONG_USER]
 //		PHOTO_RESPONSE: [filename#binary photo data]/[empty]
 //		USERLIST_RESPONSE: username1#username2#...
-//		EVENT: event#parameters
+//		EVENT: user#event#[parameters]
 //			Format of parameters: parameter1#parameter2#...
+//		COLOR_RESPONSE: [username#color]/[empty]
+
 class Receiver : public QObject
 {
 	Q_OBJECT
@@ -23,9 +27,10 @@ public:
 	typedef enum {
 		Undefined,
 		Greeting,
+		Event,
 		PhotoResponse,
 		UserListResponse,
-		Event
+		ColorResponse
 	} DataType;
 
 public:
@@ -34,9 +39,16 @@ public:
 	void processData(Receiver::DataType dataType, const QByteArray& buffer);
 
 signals:
-	void newMessage   (const QString& message);
-	void userList     (const QByteArray& buffer);
-	void photoResponse(const QByteArray& buffer);
+	void newEvent(const TeamRadarEvent& event);
+	void userList(const QList<QByteArray>& list);
+	void photoResponse(const QString& fileName,   const QByteArray& photoData);
+	void colorResponse(const QString& targetUser, const QByteArray& color);
+
+private:
+	void receiveNewMessage(const QByteArray& buffer);
+	void receiveUserList  (const QByteArray& buffer);
+	void receivePhoto     (const QByteArray& buffer);
+	void receiveColor     (const QByteArray& buffer);
 
 private:
 	static Receiver* instance;
@@ -98,14 +110,19 @@ private:
 	Receiver*          receiver;
 };
 
-// Sends 4 types of header: REQUEST_USERLIST, REQEUST_PHOTO, REGISTER_PHOTO, EVENT
+// Sends headers: REQUEST_USERLIST, REQEUST_PHOTO, REGISTER_PHOTO, EVENT, 
+//				  REGISTER_COLOR, REQUEST_COLOR
 // Format of packet: header#size#body
+// Does not need to send my user name, because the server knows who I am
 // Format of body:
 //		REQUEST_USERLIST: [empty], server knows the user name
-//		REQEUST_PHOTO: target user name
+//		REQUEST_PHOTO: target user name
 //		REGISTER_PHOTO: file format#binary photo data
 //		EVENT: event type#parameters
 //			Format of parameters: parameter1#parameter2#...
+//		REGISTER_COLOR: color
+//		REQUEST_COLOR: target user name
+
 class Sender : public QObject
 {
 public:
@@ -113,8 +130,10 @@ public:
 	Sender();
 	void sendEvent(const QString& event, const QString& parameters);
 	void sendUserListRequest();
-	void sendPhotoRequest(const QString& targetUser);
 	void sendPhotoRegistration(const QByteArray& format, const QByteArray& photoData);
+	void sendColorRegistration(const QColor& color);
+	void sendPhotoRequest(const QString& targetUser);
+	void sendColorRequest(const QString& targetUser);
 
 private:
 	static Sender* instance;

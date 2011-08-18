@@ -9,6 +9,7 @@
 
 // Handles the status and configurations of peers
 class PeerModel;
+struct TeamRadarEvent;
 
 class PeerManager : public QObject
 {
@@ -24,17 +25,17 @@ public:
 	PeerModel* getPeerModel() const { return model; }    // the underlying model
 
 signals:
-	void userListChanged(const QString& msg);
+	void userOnline(const TeamRadarEvent& event);
 
-	// handle server messages
+// handle server messages
 private slots:
-	void onUserList(const QByteArray& list);
-	void onPhotoResponse(const QByteArray& photoData);
-	void onNewMessage(const QString& message);   // intercept CONNECTED/DISCONNECTED messages
+	void onUserList(const QList<QByteArray>& list);
+	void onPhotoResponse(const QString& fileName, const QByteArray& photoData);
+	void onColorResponse(const QString& userName, const QByteArray& color);
+	void onEvent(const TeamRadarEvent& event);   // intercept CONNECTED/DISCONNECTED messages
 
 private:
 	PeerManager(QObject* parent = 0);
-	void requestPhoto(const QString& user);
 	void setUserOnline(const QString& name, bool online);  // update online status
 
 private:

@@ -246,6 +246,8 @@ Receiver::DataType Receiver::guessDataType(const QByteArray& header)
 		return PhotoResponse;
 	if(header.startsWith("USERLIST_RESPONSE"))
 		return UserListResponse;
+	if(header.startsWith("COLOR_RESPONSE"))
+		return ColorResponse;
 	return Undefined;
 }
 
@@ -254,18 +256,54 @@ void Receiver::processData(Receiver::DataType dataType, const QByteArray& buffer
 	switch(dataType)
 	{
 	case Event:
-		emit newMessage(buffer);
+		receiveNewMessage(buffer);
 		break;
 	case PhotoResponse:
-		emit photoResponse(buffer);
+		receivePhoto(buffer);
 		break;
 	case UserListResponse:
-		emit userList(buffer);
+		receiveUserList(buffer);
 		break;
+	case ColorResponse:
+		receiveColor(buffer);
 	default:
 		break;
 	}
 }
+
+void Receiver::receiveNewMessage(const QByteArray& buffer)
+{
+	QList<QByteArray> sections = buffer.split('#');
+	if(sections.size() == 3)
+		emit newEvent(TeamRadarEvent(sections[0], sections[1], sections[2]));
+}
+
+void Receiver::receiveUserList(const QByteArray& buffer) {
+	emit userList(buffer.split('#'));
+}
+
+void Receiver::receivePhoto(const QByteArray& buffer)
+{
+	int seperator = buffer.indexOf('#');
+	if(seperator != -1)
+	{
+		QString fileName = buffer.left(seperator);
+		QByteArray photoData = buffer.right(buffer.length() - seperator - 1);
+		emit photoResponse(fileName, photoData);
+	}
+}
+
+void Receiver::receiveColor(const QByteArray& buffer)
+{
+	int seperator = buffer.indexOf('#');
+	if(seperator != -1)
+	{
+		QString targetUser = buffer.left(seperator);
+		QByteArray color = buffer.right(buffer.length() - seperator - 1);
+		emit colorResponse(targetUser, color);
+	}
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 Sender* Sender::getInstance()
@@ -299,4 +337,14 @@ void Sender::sendPhotoRequest(const QString& targetUser) {
 void Sender::sendPhotoRegistration(const QByteArray& format, const QByteArray& photoData) {
 	if(connection->getState() == Connection::ReadyForUse)
 		connection->send("REGISTER_PHOTO", QList<QByteArray>() << format << photoData);
+}
+
+void Sender::sendColorRegistration(const QColor& color) {
+	if(connection->getState() == Connection::ReadyForUse)
+		connection->send("REGISTER_COLOR", color.name().toUtf8());
+}
+
+void Sender::sendColorRequest(const QString& targetUser) {
+	if(connection->getState() == Connection::ReadyForUse)
+		connection->send("REQUEST_COLOR", targetUser.toUtf8());
 }

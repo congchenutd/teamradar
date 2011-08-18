@@ -65,9 +65,9 @@ PlayerWidget::PlayerWidget(QWidget *parent) :
 	connect(ui.tvPlaylist,  SIGNAL(clicked      (QModelIndex)), this, SLOT(onPlaylistClicked(QModelIndex)));
 	connect(ui.tvPlaylist,  SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onPlaylistCoubleClicked(QModelIndex)));
 
-	connect(Receiver::        getInstance(), SIGNAL(newMessage     (QString)), this, SLOT(onNewMessage(QString)));
-	connect(MessageCollector::getInstance(), SIGNAL(localEvent     (QString)), this, SLOT(onNewMessage(QString)));
-	connect(PeerManager::     getInstance(), SIGNAL(userListChanged(QString)), this, SLOT(onNewMessage(QString)));
+	connect(Receiver::        getInstance(), SIGNAL(newEvent  (TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
+	connect(MessageCollector::getInstance(), SIGNAL(localEvent(TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
+	connect(PeerManager::     getInstance(), SIGNAL(userOnline(TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
 }
 
 void PlayerWidget::onShowPlaylist(bool show)
@@ -251,4 +251,9 @@ void PlayerWidget::onNewMessage(const QString& message)
 	// user, event, parameters
 	TeamRadarEvent event(sections[0], sections[1], sections[2]);
 	play(event);
+}
+
+void PlayerWidget::onEvent(const TeamRadarEvent& event) {
+	if(online)
+		play(event);
 }

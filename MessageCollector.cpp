@@ -56,10 +56,7 @@ void MessageCollector::onChangeMode(Core::IMode* mode, Core::IMode* oldMode)
 
 void MessageCollector::sendEvent(const QString& event, const QString& parameters)
 {
-	QByteArray body = QString(event + '#' + parameters).toUtf8();
-	QByteArray localMessage = Setting::getInstance()->getUserName().toUtf8() + '#' + body;
-	emit localEvent(localMessage);
-
+	emit localEvent(TeamRadarEvent(Setting::getInstance()->getUserName(), event, parameters));
 	Sender::getInstance()->sendEvent(event, parameters);
 }
 

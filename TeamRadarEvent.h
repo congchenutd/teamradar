@@ -5,7 +5,7 @@
 
 struct TeamRadarEvent
 {
-	TeamRadarEvent::TeamRadarEvent(const QString& name, const QString& event, const QString& para)
+	TeamRadarEvent::TeamRadarEvent(const QString& name, const QString& event, const QString& para = QString())
 		: userName(name), eventType(event), parameter(para)
 	{}
 
