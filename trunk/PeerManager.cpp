@@ -6,13 +6,7 @@
 PeerManager::PeerManager(QObject *parent) : QObject(parent)
 {
 	model = new PeerModel(this);
-	model->setColumnType(model->NAME,    model->NameColumn);
-	model->setColumnType(model->COLOR,   model->ColorColumn);
-	model->setColumnType(model->IMAGE,   model->ImageColumn);
-//	model->setColumnType(model->ONLINE,  model->BoolColumn);
-	model->setColumnType(model->RECEIVE, model->BoolColumn);
-	model->setGrayImageBy(model->ONLINE);
-	model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+//	model->setEditStrategy(QSqlTableModel::OnManualSubmit);
 	model->setTable("Peers");
 	model->select();
 

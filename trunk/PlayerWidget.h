@@ -35,6 +35,7 @@ private slots:
 	void onEffects(bool show);
 	void onNewMessage(const QString& message);
 	void onEvent(const TeamRadarEvent& event);
+	void onDownload();
 
 private:
 	void play(int row);

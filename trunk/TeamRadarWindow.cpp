@@ -12,6 +12,7 @@
 #include <QFileDialog>
 #include <QColorDialog>
 #include <QSqlQuery>
+#include <QSortFilterProxyModel>
 
 TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
 {
@@ -31,15 +32,24 @@ TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
 	model = peerManager->getPeerModel();
 	model->setFilter(tr("Name <> \"%1\"").arg(setting->getUserName()));  // no myself
 	model->setSort(model->ONLINE, Qt::DescendingOrder);   // "true" before "false"
-	ui.tvPeers->setModel(model);
-	ui.tvPeers->setItemDelegate(new ImageColorBoolDelegate(model, ui.tvPeers));
+
+	ImageColorBoolProxy* proxy = new ImageColorBoolProxy(this);
+	proxy->setColumnType(model->NAME,    ImageColorBoolProxy::NameColumn);
+	proxy->setColumnType(model->COLOR,   ImageColorBoolProxy::ColorColumn);
+	proxy->setColumnType(model->IMAGE,   ImageColorBoolProxy::ImageColumn);
+	proxy->setColumnType(model->RECEIVE, ImageColorBoolProxy::BoolColumn);
+	proxy->setGrayImageBy(model->ONLINE);
+	proxy->setSourceModel(model);
+
+	ui.tvPeers->setModel(proxy);
+	ui.tvPeers->setItemDelegate(new ImageColorBoolDelegate(proxy, ui.tvPeers));
 	ui.tvPeers->hideColumn(model->IMAGE);
 	ui.tvPeers->hideColumn(model->ONLINE);
 	resizeTable();
 
-	connect(model,       SIGNAL(selected()), this, SLOT(resizeTable()));
-    connect(ui.btImage,  SIGNAL(clicked()),  this, SLOT(onSetImage()));
-	connect(ui.btColor,  SIGNAL(clicked()),  this, SLOT(onSetColor()));
+	connect(model,      SIGNAL(selected()), this, SLOT(resizeTable()));
+    connect(ui.btImage, SIGNAL(clicked()),  this, SLOT(onSetImage()));
+	connect(ui.btColor, SIGNAL(clicked()),  this, SLOT(onSetColor()));
 
 	peerManager->refreshUserList();
 }

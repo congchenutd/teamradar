@@ -314,3 +314,13 @@ void Sender::sendColorRequest(const QString& targetUser) {
 	if(connection->isReadyForUse())
 		connection->send("REQUEST_COLOR", targetUser.toUtf8());
 }
+
+void Sender::sendEventRequest(const QStringList& users, const QDateTime& startTime, 
+							  const QDateTime& endTime, const QStringList& eventTypes)
+{
+	if(connection->isReadyForUse())
+		connection->send("REQUEST_EVENTS", 
+			QList<QByteArray>() << users.join(";").toUtf8()
+								<< startTime.toString().toUtf8() + "-" + endTime.toString().toUtf8()
+								<< eventTypes.join(";").toUtf8());
+}

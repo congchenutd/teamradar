@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="/">
+    <file>Images/Download.png</file>
+    <file>Images/Chat.png</file>
     <file>Images/Green.png</file>
     <file>Images/Red.png</file>
     <file>Images/Head_Boss.png</file>

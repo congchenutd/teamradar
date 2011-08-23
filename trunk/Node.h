@@ -93,13 +93,13 @@ public:
 
 protected:
 	static TeamRadarView* view;
-	static qreal sensitivity;
+	static qreal sensitivity;    // for lay-out algorithm to converge
 	Edges   edges;
 	QPointF newPos;     // buffer before change, so that we can detect convergence
 	QString name;       // path for file/dir node, name for human
 	int     level;      // 0 being root
 	int     depth;      // depth of the subtree
-	QColor  color;      // human uses it for light trail
+	QColor  color;      // human uses it for light trail, also used for label
 	bool    pinned;     // unmovable by force if pinned
 	int     size;       // size of the subtree
 	TeamRadarNode* owner;
@@ -155,6 +155,7 @@ public:
 	void leaveCanvas();
 	void showConflict(bool show);
 	void updateOwner(bool expandable = true);    // move to a new owner
+	void chat();
 
 	virtual void   setNewPos(const QPointF& p);
 	virtual QMenu& getContextMenu() const;
@@ -209,5 +210,15 @@ private:
 	static int fadeOutDuration;
 };
 
+
+class ChatWindow : public TeamRadarNode
+{
+public:
+	ChatWindow(TeamRadarNode* owner, const QString& name);
+	enum { Type = UserType + 16 };
+	int type() const { return Type; }
+
+	virtual QMenu& getContextMenu() const;
+};
 
 #endif

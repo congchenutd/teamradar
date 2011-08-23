@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>488</width>
-    <height>412</height>
+    <width>484</width>
+    <height>416</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -105,6 +105,17 @@
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="btDownload">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="Resources.qrc">
+              <normaloff>:/Images/Download.png</normaloff>:/Images/Download.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="btOnline">
             <property name="toolTip">
              <string>Online/Offline</string>
@@ -133,6 +144,17 @@
             <property name="icon">
              <iconset resource="Resources.qrc">
               <normaloff>:/Images/Shadow.png</normaloff>:/Images/Shadow.png</iconset>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btShowChat">
+            <property name="icon">
+             <iconset resource="Resources.qrc">
+              <normaloff>:/Images/Chat.png</normaloff>:/Images/Chat.png</iconset>
             </property>
             <property name="checkable">
              <bool>true</bool>

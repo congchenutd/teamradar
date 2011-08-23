@@ -13,13 +13,14 @@ DeveloperInfo::DeveloperInfo(const QString& n) : name(n), online(false), receive
 }
 
 //////////////////////////////////////////////////////////////////////////
-PeerModel::PeerModel(QObject *parent) : ImageColorBoolModel(parent) 
+PeerModel::PeerModel(QObject *parent) : QSqlTableModel(parent) 
 {
+//	setEditStrategy(QSqlTableModel::OnFieldChange);
 }
 
 bool PeerModel::select()
 {
-	bool result = ImageColorBoolModel::select();
+	bool result = QSqlTableModel::select();
 	emit selected();
 	return result;
 }
