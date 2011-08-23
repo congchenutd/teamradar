@@ -7,6 +7,7 @@
 #include <QDir>
 #include <QPropertyAnimation>
 #include <QGraphicsDropShadowEffect>
+#include <QGraphicsWidget>
 #include <math.h>
 #include "Edge.h"
 #include "Node.h"
@@ -458,6 +459,7 @@ QMenu& HumanNode::getContextMenu() const
 	static QMenu menu;
 	menu.addAction(view->actionWorkOn);
 	menu.addAction(view->actionDel);
+	menu.addAction(view->actionChat);
 	return menu;
 }
 
@@ -652,6 +654,13 @@ void HumanNode::hideLabel()
 		getOwner()->hideLabel();
 }
 
+void HumanNode::chat()
+{
+	QGraphicsWidget* chatWidget = new QGraphicsWidget(this, Qt::Window);
+	chatWidget->resize(500, 500);
+	scene()->addItem(chatWidget);
+}
+
 //////////////////////////////////////////////////////////////////////////////////
 int AfterimageNode::fadeOutDuration = 10000;
 
@@ -684,3 +693,15 @@ void AfterimageNode::onDead()
 //	painter->drawImage(boundingRect(), image);
 //}
 
+//////////////////////////////////////////////////////////////////////////
+QMenu& ChatWindow::getContextMenu() const
+{
+	static QMenu menu;
+	return menu;
+}
+
+ChatWindow::ChatWindow(TeamRadarNode* owner, const QString& name) 
+: TeamRadarNode(owner, name)
+{
+
+}

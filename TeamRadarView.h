@@ -75,6 +75,7 @@ private slots:
 	void onCollapse();
 	void onPin(bool pin);
 	void onWorkOn();
+	void onChat();
 
 public:
 	QAction* actionAddDir;
@@ -84,6 +85,7 @@ public:
 	QAction* actionCollapse;
 	QAction* actionPin;
 	QAction* actionWorkOn;
+	QAction* actionChat;
 
 protected:
 	qreal scaleFactor;

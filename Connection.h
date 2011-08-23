@@ -117,6 +117,10 @@ private:
 //			Format of parameters: parameter1#parameter2#...
 //		REGISTER_COLOR: color
 //		REQUEST_COLOR: target user name
+//		REQUEST_EVENTS: user list#time span#event types
+//			user list: name1;name2;...
+//			time span: start time - end time
+//			event types: type1;type2;...
 
 class Sender : public QObject
 {
@@ -129,6 +133,8 @@ public:
 	void sendColorRegistration(const QColor& color);
 	void sendPhotoRequest(const QString& targetUser);
 	void sendColorRequest(const QString& targetUser);
+	void sendEventRequest(const QStringList& users, const QDateTime& startTime, 
+						  const QDateTime& endTime, const QStringList& eventTypes);
 
 private:
 	static Sender* instance;

@@ -2,6 +2,7 @@
 #define PEER_MODEL_H
 
 #include "ImageColorBoolModel.h"
+#include <QSqlTableModel>
 
 struct DeveloperInfo
 {
@@ -13,7 +14,7 @@ struct DeveloperInfo
 	bool    receive;
 };
 
-class PeerModel : public ImageColorBoolModel
+class PeerModel : public QSqlTableModel
 {
 	Q_OBJECT
 

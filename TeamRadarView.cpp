@@ -51,13 +51,15 @@ void TeamRadarView::initActions()
 	actionPin      = new QAction(tr("Pin"),      this);
 	actionPin->setCheckable(true);
 	actionWorkOn   = new QAction(tr("Work on"),  this);
+	actionChat     = new QAction(tr("Chat"),     this);
+	connect(actionPin,      SIGNAL(triggered(bool)), this, SLOT(onPin(bool)));
 	connect(actionAddDir,   SIGNAL(triggered()), this, SLOT(onAddDir()));
 	connect(actionAddFile,  SIGNAL(triggered()), this, SLOT(onAddFile()));
 	connect(actionDel,      SIGNAL(triggered()), this, SLOT(onDel()));
 	connect(actionExpand,   SIGNAL(triggered()), this, SLOT(onExpand()));
 	connect(actionCollapse, SIGNAL(triggered()), this, SLOT(onCollapse()));
-	connect(actionPin,      SIGNAL(triggered(bool)), this, SLOT(onPin(bool)));
 	connect(actionWorkOn,   SIGNAL(triggered()), this, SLOT(onWorkOn()));
+	connect(actionChat,     SIGNAL(triggered()), this, SLOT(onChat()));
 }
 
 void TeamRadarView::itemMoved() {
@@ -302,11 +304,12 @@ void TeamRadarView::mouseReleaseEvent(QMouseEvent* event)
 
 void TeamRadarView::contextMenuEvent(QContextMenuEvent *event)
 {
+	// catch the node, get the menu, and show it
 	currentNode = dynamic_cast<TeamRadarNode*>(itemAt(event->pos()));
 	if(currentNode == 0)
 		return;
-
 	currentNode->getContextMenu().exec(event->globalPos());
+
 	if(HumanNode* human = dynamic_cast<HumanNode*>(currentNode))
 		currentHuman = human;
 }
@@ -487,4 +490,10 @@ void TeamRadarView::setEffectsEnabled(bool enable)
 		if(TeamRadarNode* node = dynamic_cast<TeamRadarNode*>(item))
 			node->setEffectsEnabled(enable);
 	Setting::getInstance()->setValue("UseEffects", enable);
+}
+
+void TeamRadarView::onChat()
+{
+	if(currentHuman != 0)
+		currentHuman->chat();
 }

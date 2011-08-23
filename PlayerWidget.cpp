@@ -12,6 +12,7 @@
 #include "PeerManager.h"
 #include "Connection.h"
 #include "MessageCollector.h"
+#include "RequestEventsDlg.h"
 
 PlayerWidget::PlayerWidget(QWidget *parent) :
 	QWidget(parent)
@@ -57,10 +58,11 @@ PlayerWidget::PlayerWidget(QWidget *parent) :
 	onOnline();
 
 	connect(ui.btPlaylist,  SIGNAL(clicked(bool)), this, SLOT(onShowPlaylist(bool)));
+	connect(ui.btEffects,   SIGNAL(clicked(bool)), this, SLOT(onEffects(bool)));
 	connect(ui.btPlayPause, SIGNAL(clicked()),     this, SLOT(onPlayPause()));
 	connect(ui.btLoad,      SIGNAL(clicked()),     this, SLOT(onLoad()));
 	connect(ui.btOnline,    SIGNAL(clicked()),     this, SLOT(onOnline()));
-	connect(ui.btEffects,   SIGNAL(clicked(bool)), this, SLOT(onEffects(bool)));
+	connect(ui.btDownload,  SIGNAL(clicked()),     this, SLOT(onDownload()));
 	connect(ui.sbSpeed,     SIGNAL(valueChanged(double)),       this, SLOT(onSpeed(double)));
 	connect(ui.tvPlaylist,  SIGNAL(clicked      (QModelIndex)), this, SLOT(onPlaylistClicked(QModelIndex)));
 	connect(ui.tvPlaylist,  SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onPlaylistCoubleClicked(QModelIndex)));
@@ -200,14 +202,13 @@ void PlayerWidget::onPlaylistCoubleClicked(const QModelIndex& idx) {
 
 void PlayerWidget::onOnline()
 {
-	if(online)   // go offline
-		ui.btOnline->setIcon(QIcon(":/Images/Disconnect.png"));
-	else         // go online
-		ui.btOnline->setIcon(QIcon(":/Images/Connect.png"));
 	online = !online;
-	ui.btPlayPause->setEnabled(!online);
-	ui.btLoad     ->setEnabled(!online);
-	ui.sbSpeed    ->setEnabled(!online);
+	ui.btOnline->setIcon(online ? QIcon(":/Images/Connect.png") : QIcon(":/Images/Disconnect.png"));
+	ui.btPlayPause->setHidden(online);
+	ui.slider     ->setHidden(online);
+	ui.sbSpeed    ->setHidden(online);
+	ui.btLoad     ->setHidden(online);
+	ui.btDownload ->setHidden(online);
 	onShowPlaylist(!online);
 	ui.graphicsView->setEffectsEnabled(!online);
 
@@ -263,4 +264,10 @@ void PlayerWidget::onNewMessage(const QString& message)
 void PlayerWidget::onEvent(const TeamRadarEvent& event) {
 	if(online)
 		play(event);
+}
+
+void PlayerWidget::onDownload()
+{
+	RequestEventsDlg dlg(this);
+	dlg.exec();
 }
