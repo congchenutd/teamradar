@@ -41,6 +41,7 @@ public:
 	const Humans& getHumans() const { return humans; }
 	void setEffectsEnabled(bool enable);
 	TeamRadarNode* createNode(bool isDir, const QString& name, TeamRadarNode* owner);     // factory
+	bool humanExists(const QString& name);
 
 	void addDeveloper(const QString& name, const QString& image);
 	void moveDeveloperTo(const QString& name, const QString& relativePath);

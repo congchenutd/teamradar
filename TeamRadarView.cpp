@@ -375,7 +375,7 @@ void TeamRadarView::clear()
 
 void TeamRadarView::addDeveloper(const QString &name, const QString &image)
 {
-	if(humans.contains(name))  // already exists
+	if(humanExists(name))
 		return;
 	currentHuman = new HumanNode(name, QImage(image));
 	scene()->addItem(currentHuman);
@@ -496,4 +496,8 @@ void TeamRadarView::onChat()
 {
 	if(currentHuman != 0)
 		currentHuman->chat();
+}
+
+bool TeamRadarView::humanExists(const QString& name) {
+	return humans.contains(name);
 }

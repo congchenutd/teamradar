@@ -33,15 +33,17 @@ private slots:
 	void onPlaylistCoubleClicked(const QModelIndex& idx);
 	void onOnline();
 	void onEffects(bool show);
-	void onNewMessage(const QString& message);
 	void onEvent(const TeamRadarEvent& event);
 	void onDownload();
+	void onConnectedToServer(bool connected);
+	void onEventDownloaded(const TeamRadarEvent& event);
 
 private:
 	void play(int row);
 	void play(const TeamRadarEvent& event);
 	void stop();
 	void selectRow(int row);
+	void reloadProject();
 
 private:
 	enum {DateTime, UserName, EventType, Parameter};
