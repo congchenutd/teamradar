@@ -38,6 +38,7 @@ TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
 	proxy->setColumnType(model->COLOR,   ImageColorBoolProxy::ColorColumn);
 	proxy->setColumnType(model->IMAGE,   ImageColorBoolProxy::ImageColumn);
 	proxy->setColumnType(model->RECEIVE, ImageColorBoolProxy::BoolColumn);
+	proxy->setImageColumn(model->IMAGE);
 	proxy->setGrayImageBy(model->ONLINE);
 	proxy->setSourceModel(model);
 

@@ -14,9 +14,7 @@ DeveloperInfo::DeveloperInfo(const QString& n) : name(n), online(false), receive
 
 //////////////////////////////////////////////////////////////////////////
 PeerModel::PeerModel(QObject *parent) : QSqlTableModel(parent) 
-{
-//	setEditStrategy(QSqlTableModel::OnFieldChange);
-}
+{}
 
 bool PeerModel::select()
 {
@@ -47,6 +45,14 @@ void PeerModel::createTables()
 			   Image   varchar, \
 			   Online  bool, \
 			   Receive bool \
+			   )");
+
+	// for RequestEventsDlg
+	query.exec("create table PeersTemp( \
+			   Name     varchar primary key, \
+			   Image    varchar, \
+			   Online   bool, \
+			   Selected bool \
 			   )");
 }
 

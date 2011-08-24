@@ -46,13 +46,12 @@ PlayerWidget::PlayerWidget(QWidget *parent) :
 	ui.tvPlaylist->setModel(model);
 	playIcon  = style()->standardIcon(QStyle::SP_MediaPlay);
 	pauseIcon = style()->standardIcon(QStyle::SP_MediaPause);
-	ui.btPlayPause->setEnabled(false);
 	ui.btPlayPause->setIcon(playIcon);
 	ui.btLoad     ->setIcon(style()->standardIcon(QStyle::SP_DialogOpenButton));
 	ui.btPlaylist ->setIcon(style()->standardIcon(QStyle::SP_FileDialogDetailedView));
 	ui.btPlaylist ->setChecked(true);
 
-	ui.slider->setEnabled(false);
+	ui.slider->setMinimum(0);
 	ui.splitter->setSizes(QList<int>() << height() * 0.7 << height() * 0.3);
 //	ui.graphicsView->open("SavedGraph.graph");
 	onOnline();
@@ -67,9 +66,11 @@ PlayerWidget::PlayerWidget(QWidget *parent) :
 	connect(ui.tvPlaylist,  SIGNAL(clicked      (QModelIndex)), this, SLOT(onPlaylistClicked(QModelIndex)));
 	connect(ui.tvPlaylist,  SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onPlaylistCoubleClicked(QModelIndex)));
 
-	connect(Receiver::        getInstance(), SIGNAL(newEvent  (TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
+	connect(Connection::      getInstance(), SIGNAL(connectionStatusChanged(bool)), this, SLOT(onConnectedToServer(bool)));
 	connect(MessageCollector::getInstance(), SIGNAL(localEvent(TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
 	connect(PeerManager::     getInstance(), SIGNAL(userOnline(TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
+	connect(Receiver::        getInstance(), SIGNAL(newEvent  (TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
+	connect(Receiver::        getInstance(), SIGNAL(eventsResponse(TeamRadarEvent)), this, SLOT(onEventDownloaded(TeamRadarEvent)));
 }
 
 void PlayerWidget::onShowPlaylist(bool show)
@@ -122,9 +123,7 @@ void PlayerWidget::onLoad()
 				model->setData(model->index(lastRow, i), sections[i]);
 		}
 	}
-	ui.btPlayPause->setEnabled(true);
 	ui.tvPlaylist->resizeColumnsToContents();
-	ui.slider->setMinimum(0);
 	ui.slider->setMaximum(model->rowCount() - 1);
 	model->sort(DateTime);
 }
@@ -164,18 +163,16 @@ void PlayerWidget::play(int row)
 
 void PlayerWidget::play(const TeamRadarEvent& event)
 {
-	if(PeerModel::isBlocked(event.userName))
+	if(online && PeerModel::isBlocked(event.userName))
 		return;
 
-	if(event.eventType == "SAVE")
-		ui.graphicsView->moveDeveloperTo(event.userName, event.parameter);
-	else if(event.eventType == "MODE")
-		ui.graphicsView->setDeveloperMode(event.userName, event.parameter);
-	else if(event.eventType == "CONNECTED")
-	{
+	if(!ui.graphicsView->humanExists(event.userName))   // this overrides CONNECTED event
 		ui.graphicsView->addDeveloper(event.userName, peerManager->getImage(event.userName));
-		ui.labelConnection->setPixmap(QPixmap(":/Images/Green.png"));
-	}
+
+	if(event.eventType == "SAVE")
+		ui.graphicsView->moveDeveloperTo(event.userName, event.parameters);
+	else if(event.eventType == "MODE")
+		ui.graphicsView->setDeveloperMode(event.userName, event.parameters);
 	else if(event.eventType == "DISCONNECTED") {
 		ui.graphicsView->removeDeveloper(event.userName);
 	}
@@ -183,12 +180,16 @@ void PlayerWidget::play(const TeamRadarEvent& event)
 	{
 		if(event.userName != Setting::getInstance()->getUserName())
 			return;
-		Setting::getInstance()->setValue("RootPath", event.parameter);
-		
-		// load dir, and refresh users
-		ui.graphicsView->loadDir(event.parameter);
-		PeerManager::getInstance()->refreshUserList();
+		Setting::getInstance()->setValue("RootPath", event.parameters);
+		reloadProject();
 	}
+}
+
+void PlayerWidget::reloadProject()
+{
+	// load dir, and refresh users
+	ui.graphicsView->loadDir(Setting::getInstance()->value("RootPath").toString());
+	PeerManager::getInstance()->refreshUserList();
 }
 
 void PlayerWidget::onPlaylistClicked(const QModelIndex& idx) {
@@ -211,14 +212,7 @@ void PlayerWidget::onOnline()
 	ui.btDownload ->setHidden(online);
 	onShowPlaylist(!online);
 	ui.graphicsView->setEffectsEnabled(!online);
-
-	if(online)
-	{
-		Setting* setting = Setting::getInstance();
-		if(!ui.graphicsView->isLoaded())
-			ui.graphicsView->loadDir(setting->value("RootPath").toString(), 0);
-//		play(TeamRadarEvent(setting->getUserName(), "CONNECTED", ""));  // add myself
-	}
+	reloadProject();
 }
 
 void PlayerWidget::onEffects(bool show) {
@@ -246,21 +240,6 @@ void PlayerWidget::resizeEvent(QResizeEvent*) {
 	ui.graphicsView->autoScale();
 }
 
-// message = user#event#[parameters]
-void PlayerWidget::onNewMessage(const QString& message)
-{
-	if(!online)
-		return;
-
-	QStringList sections = message.split("#");
-	if(sections.size() != 3)
-		return;
-
-	// user, event, parameters
-	TeamRadarEvent event(sections[0], sections[1], sections[2]);
-	play(event);
-}
-
 void PlayerWidget::onEvent(const TeamRadarEvent& event) {
 	if(online)
 		play(event);
@@ -269,5 +248,30 @@ void PlayerWidget::onEvent(const TeamRadarEvent& event) {
 void PlayerWidget::onDownload()
 {
 	RequestEventsDlg dlg(this);
-	dlg.exec();
+	if(dlg.exec() == QDialog::Accepted) {
+		Sender::getInstance()->sendEventRequest(dlg.getUserList(), 
+			dlg.getStartTime(), dlg.getEndTime(), dlg.getEventList());
+	}
+}
+
+void PlayerWidget::onConnectedToServer(bool connected) {
+	ui.labelConnection->setPixmap(connected ? QPixmap(":/Images/Green.png") 
+											: QPixmap(":/Images/Red.png"));
+}
+
+void PlayerWidget::onEventDownloaded(const TeamRadarEvent& event)
+{
+	if(online)    // for offline only
+		return;
+
+	int lastRow = model->rowCount();
+	model->insertRow(lastRow);
+	model->setData(model->index(lastRow, 0), event.time);
+	model->setData(model->index(lastRow, 1), event.userName);
+	model->setData(model->index(lastRow, 2), event.eventType);
+	model->setData(model->index(lastRow, 3), event.parameters);
+
+	ui.tvPlaylist->resizeColumnsToContents();
+	ui.slider->setMaximum(model->rowCount() - 1);
+	model->sort(DateTime);
 }

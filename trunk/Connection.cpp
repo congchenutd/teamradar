@@ -76,7 +76,7 @@ int Connection::readDataIntoBuffer(int maxSize)
 	while(bytesAvailable() > 0 && buffer.size() < maxSize)
 	{
 		buffer.append(read(1));
-		if(buffer.endsWith('#'))
+		if(buffer.endsWith(Delimiter1))
 			break;
 	}
 
@@ -87,7 +87,7 @@ int Connection::readDataIntoBuffer(int maxSize)
 int Connection::getDataLength()
 {
 	// check if there are bytes, then read, and finally check ending
-	if (bytesAvailable() <= 0 || readDataIntoBuffer() <= 0 || !buffer.endsWith('#'))
+	if (bytesAvailable() <= 0 || readDataIntoBuffer() <= 0 || !buffer.endsWith(Delimiter1))
 		return 0;
 
 	buffer.chop(1);    // chop last char, the separator
@@ -160,6 +160,9 @@ void Connection::timerEvent(QTimerEvent* timerEvent) {
 // auto reconnect
 void Connection::onDisconnected()
 {
+	emit connectionStatusChanged(false);
+
+	 // reconnect
 	Setting* setting = MySetting<Setting>::getInstance();
 	connectToHost(setting->getServerAddress(), setting->getServerPort());
 }
@@ -167,9 +170,9 @@ void Connection::onDisconnected()
 void Connection::send(const QByteArray& header, const QByteArray& body)
 {
 	QByteArray message(header);
-	if(!header.endsWith("#"))
-		message.append("#");
-	message.append(QByteArray::number(body.length()) + '#' + body);
+	if(!header.endsWith(Delimiter1))
+		message.append(Delimiter1);
+	message.append(QByteArray::number(body.length()) + Delimiter1 + body);
 	write(message);
 }
 
@@ -177,9 +180,15 @@ void Connection::send(const QByteArray& header, const QList<QByteArray>& bodies)
 {
 	QByteArray joined;
 	foreach(QByteArray body, bodies)
-		joined.append(body + "#");
+		joined.append(body + Delimiter1);
 	joined.chop(1);  // remove last '#'
 	send(header, joined);
+}
+
+void Connection::setReadyForUse()
+{
+	ready = true;
+	emit connectionStatusChanged(true);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -192,10 +201,17 @@ Receiver* Receiver::getInstance()
 	return instance;
 }
 
+Receiver::Receiver()
+{
+	eventCount = eventsReceived = 0;
+}
+
 Receiver::DataType Receiver::guessDataType(const QByteArray& header)
 {
 	if(header.startsWith("GREETING"))
 		return Greeting;
+	if(header.startsWith("EVENT_RESPONSE"))  // startsWith is not greedy!!
+		return EventsResponse;               // put long prefix first
 	if(header.startsWith("EVENT"))
 		return Event;
 	if(header.startsWith("PHOTO_RESPONSE"))
@@ -215,7 +231,7 @@ void Receiver::processData(Receiver::DataType dataType, const QByteArray& buffer
 		receiveGreeting(buffer);
 		break;
 	case Event:
-		receiveNewMessage(buffer);
+		receiveEvent(buffer);
 		break;
 	case PhotoResponse:
 		receivePhoto(buffer);
@@ -225,6 +241,10 @@ void Receiver::processData(Receiver::DataType dataType, const QByteArray& buffer
 		break;
 	case ColorResponse:
 		receiveColor(buffer);
+		break;
+	case EventsResponse:
+		receiveEvents(buffer);
+		break;
 	default:
 		break;
 	}
@@ -238,20 +258,20 @@ void Receiver::receiveGreeting(const QByteArray& buffer)
 		Connection::getInstance()->setReadyForUse();
 }
 
-void Receiver::receiveNewMessage(const QByteArray& buffer)
+void Receiver::receiveEvent(const QByteArray& buffer)
 {
-	QList<QByteArray> sections = buffer.split('#');
-	if(sections.size() == 3)
-		emit newEvent(TeamRadarEvent(sections[0], sections[1], sections[2]));
+	QList<QByteArray> sections = buffer.split(Connection::Delimiter1);
+	if(sections.size() == 4)
+		emit newEvent(TeamRadarEvent(sections[0], sections[1], sections[2], sections[3]));
 }
 
 void Receiver::receiveUserList(const QByteArray& buffer) {
-	emit userList(buffer.split('#'));
+	emit userList(buffer.split(Connection::Delimiter1));
 }
 
 void Receiver::receivePhoto(const QByteArray& buffer)
 {
-	int seperator = buffer.indexOf('#');
+	int seperator = buffer.indexOf(Connection::Delimiter1);
 	if(seperator != -1)
 	{
 		QString fileName = buffer.left(seperator);
@@ -262,7 +282,7 @@ void Receiver::receivePhoto(const QByteArray& buffer)
 
 void Receiver::receiveColor(const QByteArray& buffer)
 {
-	int seperator = buffer.indexOf('#');
+	int seperator = buffer.indexOf(Connection::Delimiter1);
 	if(seperator != -1)
 	{
 		QString targetUser = buffer.left(seperator);
@@ -270,6 +290,15 @@ void Receiver::receiveColor(const QByteArray& buffer)
 		emit colorResponse(targetUser, color);
 	}
 }
+
+void Receiver::receiveEvents(const QByteArray& buffer)
+{
+	QList<QByteArray> sections = buffer.split(Connection::Delimiter1);
+	if(sections.size() != 4)
+		return;
+	emit eventsResponse(TeamRadarEvent(sections[0], sections[1], sections[2], sections[3]));
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 Sender* Sender::getInstance()

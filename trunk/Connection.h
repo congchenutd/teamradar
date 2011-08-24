@@ -15,7 +15,7 @@
 //		GREETING: [OK, CONNECTED]/[WRONG_USER]
 //		PHOTO_RESPONSE: [filename#binary photo data]/[empty]
 //		USERLIST_RESPONSE: username1#username2#...
-//		EVENT: user#event#[parameters]
+//		EVENT: user#event#[parameters]#time
 //			Format of parameters: parameter1#parameter2#...
 //		COLOR_RESPONSE: [username#color]/[empty]
 
@@ -30,11 +30,14 @@ public:
 		Event,
 		PhotoResponse,
 		UserListResponse,
-		ColorResponse
+		ColorResponse,
+		EventsResponse
 	} DataType;
 
 public:
 	static Receiver* getInstance();
+
+	Receiver();
 	DataType guessDataType(const QByteArray& header);
 	void processData(Receiver::DataType dataType, const QByteArray& buffer);
 
@@ -43,16 +46,20 @@ signals:
 	void userList(const QList<QByteArray>& list);
 	void photoResponse(const QString& fileName,   const QByteArray& photoData);
 	void colorResponse(const QString& targetUser, const QByteArray& color);
+	void eventsResponse(const TeamRadarEvent& event);
 
 private:
-	void receiveGreeting  (const QByteArray& buffer);
-	void receiveNewMessage(const QByteArray& buffer);
-	void receiveUserList  (const QByteArray& buffer);
-	void receivePhoto     (const QByteArray& buffer);
-	void receiveColor     (const QByteArray& buffer);
+	void receiveGreeting(const QByteArray& buffer);
+	void receiveEvent   (const QByteArray& buffer);
+	void receiveUserList(const QByteArray& buffer);
+	void receivePhoto   (const QByteArray& buffer);
+	void receiveColor   (const QByteArray& buffer);
+	void receiveEvents  (const QByteArray& buffer);
 
 private:
 	static Receiver* instance;
+	int eventCount;
+	int eventsReceived;
 };
 
 
@@ -69,13 +76,16 @@ public:
 	QString getUserName()   const { return userName; }
 	bool    isReadyForUse() const { return ready;    }
 	void setUserName(const QString& name) { userName = name; }
-	void setReadyForUse()                 { ready    = true; }
+	void setReadyForUse();
 
 	void send(const QByteArray& header, const QByteArray& body = QByteArray("P"));
 	void send(const QByteArray& header, const QList<QByteArray>& bodies);
 
 protected:
 	void timerEvent(QTimerEvent* timerEvent);
+
+signals:
+	void connectionStatusChanged(bool);
 
 private slots:
 	void onReadyRead();
@@ -92,6 +102,9 @@ private:
 public:
 	static const int MaxBufferSize   = 1024 * 1024;
 	static const int TransferTimeout = 30 * 1000;
+	static const char Delimiter1 = '#';
+	static const char Delimiter2 = ';';
+	static const char Delimiter3 = ',';
 
 private:
 	static Connection* instance;

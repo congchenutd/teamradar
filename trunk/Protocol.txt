@@ -1,0 +1,23 @@
+Server					Client
+	<- Greeting
+	->
+
+	<- Register_Photo
+
+	<- Register_Color
+
+	<- Request_UserList
+	-> UserList_Response
+
+	<- Request_Photo
+	-> Photo_Response
+
+	<- Request_Color
+	-> Color_Response
+
+	<- Event
+	->
+
+	<- Request_Events (UserList, TimeSpan, EventTypes)
+	-> Events_Response
+
