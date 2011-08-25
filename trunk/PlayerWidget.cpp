@@ -55,6 +55,7 @@ PlayerWidget::PlayerWidget(QWidget *parent) :
 	ui.splitter->setSizes(QList<int>() << height() * 0.7 << height() * 0.3);
 //	ui.graphicsView->open("SavedGraph.graph");
 	onOnline();
+	onConnectedToServer(Connection::getInstance()->isReadyForUse());
 
 	connect(ui.btPlaylist,  SIGNAL(clicked(bool)), this, SLOT(onShowPlaylist(bool)));
 	connect(ui.btEffects,   SIGNAL(clicked(bool)), this, SLOT(onEffects(bool)));
