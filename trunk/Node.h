@@ -76,7 +76,7 @@ public:
 
 	static void  setSensitivity(qreal s)    { sensitivity = s; }
 	static qreal getSensitivity()           { return sensitivity; }
-	static void  setGraph(TeamRadarView* g) { view = g; }
+	static void  setGraph(TeamRadarView* v) { view = v; }
 
 protected:
 	virtual QVariant itemChange(GraphicsItemChange change, const QVariant&);    // i.e. dragged
@@ -155,7 +155,7 @@ public:
 	void leaveCanvas();
 	void showConflict(bool show);
 	void updateOwner(bool expandable = true);    // move to a new owner
-	void chat();
+	void chat(const QString& content = QString());
 
 	virtual void   setNewPos(const QPointF& p);
 	virtual QMenu& getContextMenu() const;
@@ -210,15 +210,5 @@ private:
 	static int fadeOutDuration;
 };
 
-
-class ChatWindow : public TeamRadarNode
-{
-public:
-	ChatWindow(TeamRadarNode* owner, const QString& name);
-	enum { Type = UserType + 16 };
-	int type() const { return Type; }
-
-	virtual QMenu& getContextMenu() const;
-};
 
 #endif

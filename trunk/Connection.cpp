@@ -220,6 +220,8 @@ Receiver::DataType Receiver::guessDataType(const QByteArray& header)
 		return UserListResponse;
 	if(header.startsWith("COLOR_RESPONSE"))
 		return ColorResponse;
+	if(header.startsWith("CHAT"))
+		return Chat;
 	return Undefined;
 }
 
@@ -228,29 +230,32 @@ void Receiver::processData(Receiver::DataType dataType, const QByteArray& buffer
 	switch(dataType)
 	{
 	case Greeting:
-		receiveGreeting(buffer);
+		parseGreeting(buffer);
 		break;
 	case Event:
-		receiveEvent(buffer);
+		parseEvent(buffer);
 		break;
 	case PhotoResponse:
-		receivePhoto(buffer);
+		parsePhoto(buffer);
 		break;
 	case UserListResponse:
-		receiveUserList(buffer);
+		parseUserList(buffer);
 		break;
 	case ColorResponse:
-		receiveColor(buffer);
+		parseColor(buffer);
 		break;
 	case EventsResponse:
-		receiveEvents(buffer);
+		parseEvents(buffer);
+		break;
+	case Chat:
+		parseChat(buffer);
 		break;
 	default:
 		break;
 	}
 }
 
-void Receiver::receiveGreeting(const QByteArray& buffer)
+void Receiver::parseGreeting(const QByteArray& buffer)
 {
 	if(buffer == "WRONG_USER")
 		abort();
@@ -258,18 +263,18 @@ void Receiver::receiveGreeting(const QByteArray& buffer)
 		Connection::getInstance()->setReadyForUse();
 }
 
-void Receiver::receiveEvent(const QByteArray& buffer)
+void Receiver::parseEvent(const QByteArray& buffer)
 {
 	QList<QByteArray> sections = buffer.split(Connection::Delimiter1);
 	if(sections.size() == 4)
 		emit newEvent(TeamRadarEvent(sections[0], sections[1], sections[2], sections[3]));
 }
 
-void Receiver::receiveUserList(const QByteArray& buffer) {
+void Receiver::parseUserList(const QByteArray& buffer) {
 	emit userList(buffer.split(Connection::Delimiter1));
 }
 
-void Receiver::receivePhoto(const QByteArray& buffer)
+void Receiver::parsePhoto(const QByteArray& buffer)
 {
 	int seperator = buffer.indexOf(Connection::Delimiter1);
 	if(seperator != -1)
@@ -280,7 +285,7 @@ void Receiver::receivePhoto(const QByteArray& buffer)
 	}
 }
 
-void Receiver::receiveColor(const QByteArray& buffer)
+void Receiver::parseColor(const QByteArray& buffer)
 {
 	int seperator = buffer.indexOf(Connection::Delimiter1);
 	if(seperator != -1)
@@ -291,7 +296,7 @@ void Receiver::receiveColor(const QByteArray& buffer)
 	}
 }
 
-void Receiver::receiveEvents(const QByteArray& buffer)
+void Receiver::parseEvents(const QByteArray& buffer)
 {
 	QList<QByteArray> sections = buffer.split(Connection::Delimiter1);
 	if(sections.size() != 4)
@@ -299,6 +304,16 @@ void Receiver::receiveEvents(const QByteArray& buffer)
 	emit eventsResponse(TeamRadarEvent(sections[0], sections[1], sections[2], sections[3]));
 }
 
+void Receiver::parseChat(const QByteArray& buffer)
+{
+	int seperator = buffer.indexOf(Connection::Delimiter1);
+	if(seperator != -1)
+	{
+		QString peerName = buffer.left(seperator);
+		QString content = buffer.right(buffer.length() - seperator - 1);
+		emit chatMessage(peerName, content);
+	}
+}
 
 //////////////////////////////////////////////////////////////////////////
 Sender* Sender::getInstance()
@@ -345,11 +360,16 @@ void Sender::sendColorRequest(const QString& targetUser) {
 }
 
 void Sender::sendEventRequest(const QStringList& users, const QDateTime& startTime, 
-							  const QDateTime& endTime, const QStringList& eventTypes)
-{
+							  const QDateTime& endTime, const QStringList& eventTypes) {
 	if(connection->isReadyForUse())
 		connection->send("REQUEST_EVENTS", 
-			QList<QByteArray>() << users.join(";").toUtf8()
+			QList<QByteArray>() << users.join(QString(Connection::Delimiter2)).toUtf8()
 								<< startTime.toString().toUtf8() + "-" + endTime.toString().toUtf8()
-								<< eventTypes.join(";").toUtf8());
+								<< eventTypes.join(QString(Connection::Delimiter2)).toUtf8());
+}
+
+void Sender::sendChat(const QStringList& recipients, const QString& content) {
+	if(connection->isReadyForUse())
+		connection->send("CHAT", QList<QByteArray>() << recipients.join(QString(Connection::Delimiter2)).toUtf8()
+													 << content.toUtf8());
 }

@@ -67,6 +67,7 @@ PlayerWidget::PlayerWidget(QWidget *parent) :
 	connect(ui.tvPlaylist,  SIGNAL(clicked      (QModelIndex)), this, SLOT(onPlaylistClicked(QModelIndex)));
 	connect(ui.tvPlaylist,  SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onPlaylistCoubleClicked(QModelIndex)));
 
+	connect(Receiver::getInstance(), SIGNAL(chatMessage(QString, QString)), this, SLOT(onChatMessage(QString, QString)));
 	connect(Connection::      getInstance(), SIGNAL(connectionStatusChanged(bool)), this, SLOT(onConnectedToServer(bool)));
 	connect(MessageCollector::getInstance(), SIGNAL(localEvent(TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
 	connect(PeerManager::     getInstance(), SIGNAL(userOnline(TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
@@ -275,4 +276,9 @@ void PlayerWidget::onEventDownloaded(const TeamRadarEvent& event)
 	ui.tvPlaylist->resizeColumnsToContents();
 	ui.slider->setMaximum(model->rowCount() - 1);
 	model->sort(DateTime);
+}
+
+void PlayerWidget::onChatMessage(const QString& peerName, const QString& content) {
+	if(HumanNode* human = ui.graphicsView->findDeveloper(peerName))
+		human->chat(content);
 }
