@@ -31,7 +31,8 @@ public:
 		PhotoResponse,
 		UserListResponse,
 		ColorResponse,
-		EventsResponse
+		EventsResponse,
+		Chat
 	} DataType;
 
 public:
@@ -47,14 +48,16 @@ signals:
 	void photoResponse(const QString& fileName,   const QByteArray& photoData);
 	void colorResponse(const QString& targetUser, const QByteArray& color);
 	void eventsResponse(const TeamRadarEvent& event);
+	void chatMessage(const QString& peerName, const QString& content);
 
 private:
-	void receiveGreeting(const QByteArray& buffer);
-	void receiveEvent   (const QByteArray& buffer);
-	void receiveUserList(const QByteArray& buffer);
-	void receivePhoto   (const QByteArray& buffer);
-	void receiveColor   (const QByteArray& buffer);
-	void receiveEvents  (const QByteArray& buffer);
+	void parseGreeting(const QByteArray& buffer);
+	void parseEvent   (const QByteArray& buffer);
+	void parseUserList(const QByteArray& buffer);
+	void parsePhoto   (const QByteArray& buffer);
+	void parseColor   (const QByteArray& buffer);
+	void parseEvents  (const QByteArray& buffer);
+	void parseChat    (const QByteArray& buffer);
 
 private:
 	static Receiver* instance;
@@ -119,7 +122,7 @@ private:
 };
 
 // Sends headers: REQUEST_USERLIST, REQEUST_PHOTO, REGISTER_PHOTO, EVENT, 
-//				  REGISTER_COLOR, REQUEST_COLOR
+//				  REGISTER_COLOR, REQUEST_COLOR, CHAT
 // Format of packet: header#size#body
 // Does not need to send my user name, because the server knows who I am
 // Format of body:
@@ -134,6 +137,8 @@ private:
 //			user list: name1;name2;...
 //			time span: start time - end time
 //			event types: type1;type2;...
+//		CHAT: recipients#content
+//			recipients = name1;name2;...
 
 class Sender : public QObject
 {
@@ -148,6 +153,7 @@ public:
 	void sendColorRequest(const QString& targetUser);
 	void sendEventRequest(const QStringList& users, const QDateTime& startTime, 
 						  const QDateTime& endTime, const QStringList& eventTypes);
+	void sendChat(const QStringList& recipients, const QString& content);
 
 private:
 	static Sender* instance;

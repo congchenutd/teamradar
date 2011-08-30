@@ -212,6 +212,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="ChatWindow.cpp"
+				>
+			</File>
+			<File
 				RelativePath="Connection.cpp"
 				>
 			</File>
@@ -264,6 +268,10 @@
 				>
 			</File>
 			<File
+				RelativePath="RecipientsDlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath="RequestEventsDlg.cpp"
 				>
 			</File>
@@ -293,6 +301,32 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath="ChatWindow.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="MOC ChatWindow.h"
+						CommandLine="C:\Qt\4.7.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DIDE_LIBRARY_BASENAME=\&quot;lib\&quot; -DWITH_TESTS -DQT_NO_CAST_TO_ASCII -DQT_USE_FAST_OPERATOR_PLUS -DQT_USE_FAST_CONCATENATION -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_PLUGIN -DQT_TESTLIB_LIB -DQT_SQL_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;c:\Qt\4.7.3\include\QtCore&quot; -I&quot;c:\Qt\4.7.3\include\QtNetwork&quot; -I&quot;c:\Qt\4.7.3\include\QtGui&quot; -I&quot;c:\Qt\4.7.3\include\QtSql&quot; -I&quot;c:\Qt\4.7.3\include\QtTest&quot; -I&quot;c:\Qt\4.7.3\include&quot; -I&quot;..\..\libs&quot; -I&quot;c:\Users\cxc094020\Program\qt-creator-2.2.0-src\tools&quot; -I&quot;..\..\plugins&quot; -I&quot;..\..\libs\3rdparty\botan\build&quot; -I&quot;..\coreplugin&quot; -I&quot;c:\Qt\4.7.3\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -Ic:\Qt\4.7.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 ChatWindow.h -o debug\moc_ChatWindow.cpp&#x0D;&#x0A;"
+						AdditionalDependencies="C:\Qt\4.7.3\bin\moc.exe;ChatWindow.h"
+						Outputs="debug\moc_ChatWindow.cpp"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="MOC ChatWindow.h"
+						CommandLine="C:\Qt\4.7.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DIDE_LIBRARY_BASENAME=\&quot;lib\&quot; -DQT_NO_CAST_TO_ASCII -DQT_USE_FAST_OPERATOR_PLUS -DQT_USE_FAST_CONCATENATION -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_NO_DEBUG -DQT_PLUGIN -DQT_SQL_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;c:\Qt\4.7.3\include\QtCore&quot; -I&quot;c:\Qt\4.7.3\include\QtNetwork&quot; -I&quot;c:\Qt\4.7.3\include\QtGui&quot; -I&quot;c:\Qt\4.7.3\include\QtSql&quot; -I&quot;c:\Qt\4.7.3\include&quot; -I&quot;..\..\libs&quot; -I&quot;c:\Users\cxc094020\Program\qt-creator-2.2.0-src\tools&quot; -I&quot;..\..\plugins&quot; -I&quot;..\..\libs\3rdparty\botan\build&quot; -I&quot;..\coreplugin&quot; -I&quot;c:\Qt\4.7.3\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -Ic:\Qt\4.7.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 ChatWindow.h -o release\moc_ChatWindow.cpp&#x0D;&#x0A;"
+						AdditionalDependencies="C:\Qt\4.7.3\bin\moc.exe;ChatWindow.h"
+						Outputs="release\moc_ChatWindow.cpp"
+					/>
+				</FileConfiguration>
+			</File>
 			<File
 				RelativePath="Connection.h"
 				>
@@ -550,6 +584,32 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="RecipientsDlg.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="MOC RecipientsDlg.h"
+						CommandLine="C:\Qt\4.7.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DIDE_LIBRARY_BASENAME=\&quot;lib\&quot; -DWITH_TESTS -DQT_NO_CAST_TO_ASCII -DQT_USE_FAST_OPERATOR_PLUS -DQT_USE_FAST_CONCATENATION -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_PLUGIN -DQT_TESTLIB_LIB -DQT_SQL_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;c:\Qt\4.7.3\include\QtCore&quot; -I&quot;c:\Qt\4.7.3\include\QtNetwork&quot; -I&quot;c:\Qt\4.7.3\include\QtGui&quot; -I&quot;c:\Qt\4.7.3\include\QtSql&quot; -I&quot;c:\Qt\4.7.3\include\QtTest&quot; -I&quot;c:\Qt\4.7.3\include&quot; -I&quot;..\..\libs&quot; -I&quot;c:\Users\cxc094020\Program\qt-creator-2.2.0-src\tools&quot; -I&quot;..\..\plugins&quot; -I&quot;..\..\libs\3rdparty\botan\build&quot; -I&quot;..\coreplugin&quot; -I&quot;c:\Qt\4.7.3\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -Ic:\Qt\4.7.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 RecipientsDlg.h -o debug\moc_RecipientsDlg.cpp&#x0D;&#x0A;"
+						AdditionalDependencies="C:\Qt\4.7.3\bin\moc.exe;RecipientsDlg.h"
+						Outputs="debug\moc_RecipientsDlg.cpp"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="MOC RecipientsDlg.h"
+						CommandLine="C:\Qt\4.7.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DIDE_LIBRARY_BASENAME=\&quot;lib\&quot; -DQT_NO_CAST_TO_ASCII -DQT_USE_FAST_OPERATOR_PLUS -DQT_USE_FAST_CONCATENATION -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_NO_DEBUG -DQT_PLUGIN -DQT_SQL_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;c:\Qt\4.7.3\include\QtCore&quot; -I&quot;c:\Qt\4.7.3\include\QtNetwork&quot; -I&quot;c:\Qt\4.7.3\include\QtGui&quot; -I&quot;c:\Qt\4.7.3\include\QtSql&quot; -I&quot;c:\Qt\4.7.3\include&quot; -I&quot;..\..\libs&quot; -I&quot;c:\Users\cxc094020\Program\qt-creator-2.2.0-src\tools&quot; -I&quot;..\..\plugins&quot; -I&quot;..\..\libs\3rdparty\botan\build&quot; -I&quot;..\coreplugin&quot; -I&quot;c:\Qt\4.7.3\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -Ic:\Qt\4.7.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 RecipientsDlg.h -o release\moc_RecipientsDlg.cpp&#x0D;&#x0A;"
+						AdditionalDependencies="C:\Qt\4.7.3\bin\moc.exe;RecipientsDlg.h"
+						Outputs="release\moc_RecipientsDlg.cpp"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="RequestEventsDlg.h"
 				>
 			</File>
@@ -649,6 +709,30 @@
 			Filter="cpp;c;cxx;moc;h;def;odl;idl;res;"
 			UniqueIdentifier="{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}"
 			>
+			<File
+				RelativePath="release\moc_ChatWindow.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="debug\moc_ChatWindow.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
 			<File
 				RelativePath="release\moc_Connection.cpp"
 				>
@@ -842,6 +926,30 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="release\moc_RecipientsDlg.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="debug\moc_RecipientsDlg.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="release\moc_TeamRadarPlugin.cpp"
 				>
 				<FileConfiguration
@@ -890,18 +998,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\moc_TeamRadarWindow.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="debug\moc_TeamRadarWindow.cpp"
 				>
 				<FileConfiguration
@@ -914,10 +1010,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\qrc_Resources.cpp"
+				RelativePath="release\moc_TeamRadarWindow.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -930,6 +1026,18 @@
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="debug\qrc_Resources.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -962,6 +1070,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="ui_ChatWindow.h"
+				>
+			</File>
+			<File
 				RelativePath="ui_PlayerWidget.h"
 				>
 			</File>
@@ -980,6 +1092,32 @@
 			UniqueIdentifier="{99349809-55BA-4b9d-BF79-8FDBB0286EB3}"
 			ParseFiles="false"
 			>
+			<File
+				RelativePath="ChatWindow.ui"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="UIC ChatWindow.ui"
+						CommandLine="C:\Qt\4.7.3\bin\uic.exe ChatWindow.ui -o ui_ChatWindow.h&#x0D;&#x0A;"
+						AdditionalDependencies="C:\Qt\4.7.3\bin\uic.exe;ChatWindow.ui"
+						Outputs="ui_ChatWindow.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="UIC ChatWindow.ui"
+						CommandLine="C:\Qt\4.7.3\bin\uic.exe ChatWindow.ui -o ui_ChatWindow.h&#x0D;&#x0A;"
+						AdditionalDependencies="C:\Qt\4.7.3\bin\uic.exe;ChatWindow.ui"
+						Outputs="ui_ChatWindow.h"
+					/>
+				</FileConfiguration>
+			</File>
 			<File
 				RelativePath="PlayerWidget.ui"
 				>

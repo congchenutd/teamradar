@@ -19,6 +19,7 @@
 #include "ModeTag.h"
 #include "Utility.h"
 #include "PeerManager.h"
+#include "ChatWindow.h"
 
 TeamRadarView* TeamRadarNode::view = 0;
 qreal TeamRadarNode::sensitivity = 0.1;
@@ -654,11 +655,11 @@ void HumanNode::hideLabel()
 		getOwner()->hideLabel();
 }
 
-void HumanNode::chat()
+void HumanNode::chat(const QString& content)
 {
-	QGraphicsWidget* chatWidget = new QGraphicsWidget(this, Qt::Window);
-	chatWidget->resize(500, 500);
-	scene()->addItem(chatWidget);
+	ChatWindow* chatWindow = ChatWindow::getChatWindow(getName());
+	if(chatWindow != 0)
+		chatWindow->addPeerConversation(content);
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -693,15 +694,3 @@ void AfterimageNode::onDead()
 //	painter->drawImage(boundingRect(), image);
 //}
 
-//////////////////////////////////////////////////////////////////////////
-QMenu& ChatWindow::getContextMenu() const
-{
-	static QMenu menu;
-	return menu;
-}
-
-ChatWindow::ChatWindow(TeamRadarNode* owner, const QString& name) 
-: TeamRadarNode(owner, name)
-{
-
-}

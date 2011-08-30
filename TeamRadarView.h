@@ -47,6 +47,7 @@ public:
 	void moveDeveloperTo(const QString& name, const QString& relativePath);
 	void removeDeveloper(const QString& name);
 	void setDeveloperMode(const QString& developerName, const QString& mode);
+	HumanNode* findDeveloper(const QString& name);
 
 protected:
 	void keyPressEvent(QKeyEvent*   event);

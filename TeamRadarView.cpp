@@ -308,10 +308,11 @@ void TeamRadarView::contextMenuEvent(QContextMenuEvent *event)
 	currentNode = dynamic_cast<TeamRadarNode*>(itemAt(event->pos()));
 	if(currentNode == 0)
 		return;
-	currentNode->getContextMenu().exec(event->globalPos());
 
 	if(HumanNode* human = dynamic_cast<HumanNode*>(currentNode))
 		currentHuman = human;
+
+	currentNode->getContextMenu().exec(event->globalPos());
 }
 
 void TeamRadarView::onAddDir()
@@ -396,10 +397,9 @@ TeamRadarView::~TeamRadarView() {
 void TeamRadarView::moveDeveloperTo(const QString& name, const QString& relativePath)
 {
 	QString absolutePath = toAbsolutePath(getRoot()->getName(), relativePath);
-	Humans::Iterator it = humans.find(name);
-	if(it != humans.end())
+	if(HumanNode* human = findDeveloper(name))
 	{
-		currentHuman = it.value();
+		currentHuman = human;
 		currentHuman->setWorkOn(absolutePath);
 	}
 }
@@ -500,4 +500,10 @@ void TeamRadarView::onChat()
 
 bool TeamRadarView::humanExists(const QString& name) {
 	return humans.contains(name);
+}
+
+HumanNode* TeamRadarView::findDeveloper(const QString& name)
+{
+	Humans::Iterator it = humans.find(name);
+	return it != humans.end() ? it.value() : 0;
 }

@@ -37,6 +37,7 @@ private slots:
 	void onDownload();
 	void onConnectedToServer(bool connected);
 	void onEventDownloaded(const TeamRadarEvent& event);
+	void onChatMessage(const QString& peerName, const QString& content);
 
 private:
 	void play(int row);
