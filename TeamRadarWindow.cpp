@@ -19,16 +19,19 @@ TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
 	peerManager = PeerManager::getInstance();
     ui.setupUi(this);
 
+	// load settings
 	setting = MySetting<Setting>::getInstance();
 	ui.leServerAddress->setText (setting->getServerAddress());
 	ui.sbPort         ->setValue(setting->getServerPort());
 	ui.leUserName->setText(setting->getUserName().isEmpty() ? 
 											guessUserName() : setting->getUserName());
 
-	QPixmap pixmap = QPixmap(getUserName() + ".png").scaled(128, 128);
-	ui.labelImage->setPixmap(pixmap);
-	setColor(setting->getColor("DefaultDeveloperColor"));
+	QPixmap pixmap = QPixmap(setting->getPhotoFilePath(getUserName())).scaled(128, 128);   // photo
+	if(!pixmap.isNull())
+		ui.labelImage->setPixmap(pixmap);
+	setColor(setting->getColor("DefaultDeveloperColor"));            // color
 
+	// model
 	model = peerManager->getPeerModel();
 	model->setFilter(tr("Name <> \"%1\"").arg(setting->getUserName()));  // no myself
 	model->setSort(model->ONLINE, Qt::DescendingOrder);   // "true" before "false"
@@ -52,22 +55,23 @@ TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
     connect(ui.btImage, SIGNAL(clicked()),  this, SLOT(onSetImage()));
 	connect(ui.btColor, SIGNAL(clicked()),  this, SLOT(onSetColor()));
 
-	peerManager->refreshUserList();
+	peerManager->refreshUserList();   // actively fetch user list
 }
 
 void TeamRadarWindow::accept()
 {
-	// save photo file
-	QString imageFileName = getUserName() + ".png";
-	ui.labelImage->pixmap()->save(imageFileName);
-
+	// save settings
 	setting->setServerAddress(ui.leServerAddress->text());
 	setting->setServerPort(ui.sbPort->value());
 	setting->setUserName(getUserName());
 	setting->setColor("DefaultDeveloperColor", color);
 
+	QString photoPath = setting->getPhotoFilePath(getUserName());
+	ui.labelImage->pixmap()->save(photoPath);  // save photo file
+
+	// save my photo and color info in the db
 	DeveloperInfo userInfo = model->getUserInfo(getUserName());
-	userInfo.image = imageFileName;
+	userInfo.image = photoPath;
 	userInfo.color = color;
 	model->updateUser(userInfo);
 
@@ -78,9 +82,9 @@ void TeamRadarWindow::accept()
 	QDialog::accept();
 }
 
+// search the environmental variables for user name
 QString TeamRadarWindow::guessUserName() const
 {
-	// search environmental variables for user name
 	QStringList envVariables;
 	envVariables << "USERNAME.*" << "USER.*" << "USERDOMAIN.*"
 				 << "HOSTNAME.*" << "DOMAINNAME.*";
@@ -107,10 +111,8 @@ void TeamRadarWindow::onSetImage()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Choose Image"), ".",
                                                     "Images (*.png *.jpg *.bmp *.ico)");
-    if(fileName.isEmpty())
-        return;
-
-	ui.labelImage->setPixmap(QPixmap(fileName).scaled(128, 128));
+    if(!fileName.isEmpty())
+		ui.labelImage->setPixmap(QPixmap(fileName).scaled(128, 128));
 }
 
 void TeamRadarWindow::registerPhoto()

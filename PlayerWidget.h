@@ -15,7 +15,8 @@ class PlayerWidget : public QWidget
 	Q_OBJECT
 
 public:
-	PlayerWidget(QWidget *parent = 0);
+	PlayerWidget(QWidget* parent = 0);
+	~PlayerWidget();
 
 protected:
 	virtual void closeEvent(QCloseEvent*);
