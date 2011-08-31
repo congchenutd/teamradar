@@ -15,6 +15,8 @@ public:
 	QString getServerAddress() const;
 	quint16 getServerPort()    const;
 	QString getUserName()      const;
+	QString getPhotoFilePath(const QString& userName) const;
+	QString getChatHistoryPath() const;
 
 	void setServerAddress(const QString& address);
 	void setServerPort(quint16 port);

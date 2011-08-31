@@ -5,6 +5,9 @@ Setting::Setting(const QString& fileName) : MySetting<Setting>(fileName)
 {
 	if(QFile(this->fileName).size() == 0)   // no setting
 		loadDefaults();
+
+	QDir::current().mkdir(value("PhotoPath").toString());
+	QDir::current().mkdir(value("ChatHistoryPath").toString());
 }
 
 // shadow colors are the complement colors of the text or the scene
@@ -18,6 +21,8 @@ void Setting::loadDefaults()
 	setValue("AfterImageDuration", 20);
 	setValue("IconSet", "IconSet1");
 	setValue("DefaultDeveloperImage", ":/Images/Head_Male.png");
+	setValue("PhotoPath",       "./Photos");
+	setValue("ChatHistoryPath", "./ChatHistory");
 
 	setValue("FilteredDirs",  "Debug;Release;Temp;Tmp;Lib;libs");
 	setValue("FilteredFiles", "obj;tmp;dll;pdb;o;ilk;idb");
@@ -88,4 +93,12 @@ QString Setting::getUserName() const {
 
 void Setting::setUserName(const QString& name) {
 	setValue("UserName", name);
+}
+
+QString Setting::getPhotoFilePath(const QString& userName) const {
+	return value("PhotoPath").toString() + "/" + userName + ".png";
+}
+
+QString Setting::getChatHistoryPath() const {
+	return value("ChatHistoryPath").toString();
 }

@@ -13,6 +13,7 @@
 #include "Connection.h"
 #include "MessageCollector.h"
 #include "RequestEventsDlg.h"
+#include "ChatWindow.h"
 
 PlayerWidget::PlayerWidget(QWidget *parent) :
 	QWidget(parent)
@@ -22,13 +23,6 @@ PlayerWidget::PlayerWidget(QWidget *parent) :
 	online = false;
 	playing = false;
 	peerManager = PeerManager::getInstance();
-
-	//peerManager->setDeveloperColor("Carl", Qt::black);
-	//peerManager->setDeveloperColor("Mike", Qt::darkBlue);
-	//peerManager->setDeveloperColor("Jane", Qt::darkMagenta);
-	//peerManager->setImage("Carl", ":/Images/Head_Boss.png");
-	//peerManager->setImage("Mike", ":/Images/Head_Male.png");
-	//peerManager->setImage("Jane", ":/Images/Head_Female.png");
 
 	model = new QStandardItemModel(this);
 	model->setColumnCount(4);
@@ -67,12 +61,12 @@ PlayerWidget::PlayerWidget(QWidget *parent) :
 	connect(ui.tvPlaylist,  SIGNAL(clicked      (QModelIndex)), this, SLOT(onPlaylistClicked(QModelIndex)));
 	connect(ui.tvPlaylist,  SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onPlaylistCoubleClicked(QModelIndex)));
 
-	connect(Receiver::getInstance(), SIGNAL(chatMessage(QString, QString)), this, SLOT(onChatMessage(QString, QString)));
-	connect(Connection::      getInstance(), SIGNAL(connectionStatusChanged(bool)), this, SLOT(onConnectedToServer(bool)));
 	connect(MessageCollector::getInstance(), SIGNAL(localEvent(TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
-	connect(PeerManager::     getInstance(), SIGNAL(userOnline(TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
-	connect(Receiver::        getInstance(), SIGNAL(newEvent  (TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
-	connect(Receiver::        getInstance(), SIGNAL(eventsResponse(TeamRadarEvent)), this, SLOT(onEventDownloaded(TeamRadarEvent)));
+	connect(Connection:: getInstance(), SIGNAL(connectionStatusChanged(bool)),  this, SLOT(onConnectedToServer(bool)));
+	connect(peerManager,                SIGNAL(userOnline    (TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
+	connect(Receiver::   getInstance(), SIGNAL(newEvent      (TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
+	connect(Receiver::   getInstance(), SIGNAL(eventsResponse(TeamRadarEvent)), this, SLOT(onEventDownloaded(TeamRadarEvent)));
+	connect(Receiver::   getInstance(), SIGNAL(chatMessage(QString, QString)),  this, SLOT(onChatMessage(QString, QString)));
 }
 
 void PlayerWidget::onShowPlaylist(bool show)
@@ -234,8 +228,10 @@ void PlayerWidget::selectRow(int row)
 	ui.slider->setValue(row);
 }
 
-void PlayerWidget::closeEvent(QCloseEvent*) {
+void PlayerWidget::closeEvent(QCloseEvent*)
+{
 	ui.graphicsView->save("SavedGraph.graph");
+	ChatWindow::saveAllHistory();
 }
 
 void PlayerWidget::resizeEvent(QResizeEvent*) {
@@ -278,7 +274,14 @@ void PlayerWidget::onEventDownloaded(const TeamRadarEvent& event)
 	model->sort(DateTime);
 }
 
+// received a chat message from peerName
 void PlayerWidget::onChatMessage(const QString& peerName, const QString& content) {
 	if(HumanNode* human = ui.graphicsView->findDeveloper(peerName))
 		human->chat(content);
+}
+
+PlayerWidget::~PlayerWidget()
+{
+	ChatWindow::saveAllHistory();
+	ChatWindow::closeAllWindows();
 }

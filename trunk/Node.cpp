@@ -461,6 +461,8 @@ QMenu& HumanNode::getContextMenu() const
 	menu.addAction(view->actionWorkOn);
 	menu.addAction(view->actionDel);
 	menu.addAction(view->actionChat);
+	view->actionChat->setEnabled(
+		Setting::getInstance()->getUserName() != getName());  // not myself
 	return menu;
 }
 
@@ -659,7 +661,10 @@ void HumanNode::chat(const QString& content)
 {
 	ChatWindow* chatWindow = ChatWindow::getChatWindow(getName());
 	if(chatWindow != 0)
+	{
 		chatWindow->addPeerConversation(content);
+		chatWindow->show();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////

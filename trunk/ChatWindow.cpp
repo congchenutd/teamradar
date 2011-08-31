@@ -1,10 +1,12 @@
 #include "ChatWindow.h"
 #include "Connection.h"
 #include "RecipientsDlg.h"
+#include "Setting.h"
 #include <QDateTime>
 #include <QGraphicsScene>
 #include <QFile>
 #include <QTextStream>
+#include <QScrollBar>
 
 ChatWindow::ChatWindow(const QString& name, QWidget *parent)
 	: QDialog(parent), peerName(name), peerReplied(true), meReplied(true)
@@ -13,24 +15,25 @@ ChatWindow::ChatWindow(const QString& name, QWidget *parent)
 	ui.leInput->setFocus();
 	ui.leInput->grabKeyboard();
 	setWindowTitle("Chat with " + name);
-	setWindowFlags(Qt::WindowStaysOnTopHint);
+	setWindowFlags(Qt::WindowStaysOnTopHint);   // use show() instead of exec()
 
 	connect(ui.leInput,          SIGNAL(returnPressed()), this, SLOT(onInput()));
+	connect(ui.btSend,           SIGNAL(clicked()),       this, SLOT(onInput()));
 	connect(ui.btMoreRecipients, SIGNAL(clicked()),       this, SLOT(onRecipients()));
 
 	chatWindows.insert(name, this);
 	if(ui.teHistory->toPlainText().isEmpty())
-		loadHistory(historyPath);
+		loadHistory();
 }
 
+// when the user hits enter or clicks the send button
 void ChatWindow::onInput()
 {
-	if(peerReplied)
+	if(peerReplied)    // my first message
 		ui.teHistory->append("\r\nMe (" + QDateTime::currentDateTime().toString() + "):");
 	ui.teHistory->append(ui.leInput->text());
-//	emit messageSent(ui.leInput->text());
-	recipients << peerName;
-	Sender::getInstance()->sendChat(recipients, ui.leInput->text());
+	recipients << peerName;  // add the peer to the recipients
+	Sender::getInstance()->sendChat(recipients, ui.leInput->text());  // send
 	ui.leInput->clear();
 	recipients.clear();
 	peerReplied = false;
@@ -38,45 +41,54 @@ void ChatWindow::onInput()
 	accept();
 }
 
+// received a message
 void ChatWindow::addPeerConversation(const QString& line)
 {
-	if(meReplied)
+	if(line.isEmpty())
+		return;
+	
+	if(meReplied)   // peer's first message
 		ui.teHistory->append("\r\n" + peerName + " (" + QDateTime::currentDateTime().toString() + "): ");
 	ui.teHistory->append(line);
+//	ui.teHistory->verticalScrollBar()->setValue(
+//			ui.teHistory->verticalScrollBar()->maximum());   // scroll to the bottom
 	peerReplied = true;
 	meReplied   = false;
-	if(!isVisible())
-		show();
 }
 
-void ChatWindow::loadHistory(const QString& path)
+void ChatWindow::show() {
+	if(!isVisible())   // reuse the window
+		QDialog::show();
+}
+
+void ChatWindow::loadHistory()
 {
+	QString path = Setting::getInstance()->getChatHistoryPath();
 	QFile file(path + "/" + peerName + ".txt");
 	if(file.open(QFile::ReadOnly))
 	{
 		QTextStream is(&file);
-		QString history;
-		is >> history;
 		ui.teHistory->clear();
-		ui.teHistory->append(history);
+		ui.teHistory->append(is.readAll());
 	}
 }
 
+// singletons
 ChatWindow* ChatWindow::getChatWindow(const QString& name) {
 	return chatWindows.contains(name) ? chatWindows[name] : new ChatWindow(name);
 }
 
-void ChatWindow::saveAllHistory(const QString& path)
-{
-	setHistoryPath(path);
+// save all windows' history
+void ChatWindow::saveAllHistory() {
 	foreach(ChatWindow* chat, chatWindows)
-		chat->saveHistory(path);
+		chat->saveHistory();
 }
 
-void ChatWindow::saveHistory(const QString& path)
+void ChatWindow::saveHistory()
 {
+	QString path = Setting::getInstance()->getChatHistoryPath();
 	QFile file(path + "/" + peerName + ".txt");
-	if(file.open(QFile::WriteOnly))
+	if(file.open(QFile::WriteOnly | QFile::Truncate))
 	{
 		QTextStream os(&file);
 		os << ui.teHistory->toPlainText();
@@ -90,6 +102,9 @@ void ChatWindow::onRecipients()
 		recipients = dlg.getRecipients();
 }
 
-QString ChatWindow::historyPath = ".";
+void ChatWindow::closeAllWindows() {
+	foreach(ChatWindow* window, chatWindows)
+		window->accept();
+}
 
 QMap<QString, ChatWindow*> ChatWindow::chatWindows;

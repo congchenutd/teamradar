@@ -17,10 +17,8 @@ class PeerManager : public QObject
 
 public:
 	static PeerManager* getInstance();
-	void    setImage(const QString& userName, const QString& imagePath);
 	QString getImage(const QString& userName) const;
 	QColor getDeveloperColor(const QString& userName);
-	void   setDeveloperColor(const QString& userName, const QColor& color);
 	void   refreshUserList();                            // ask the server for online user list
 	PeerModel* getPeerModel() const { return model; }    // the underlying model
 

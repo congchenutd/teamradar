@@ -34,31 +34,6 @@ QColor PeerManager::getDeveloperColor(const QString& userName) {
 	return model->getUserInfo(userName).color;
 }
 
-void PeerManager::setImage(const QString& userName, const QString& imagePath)
-{
-	// copy image to local
-	QString fileName = userName + "." + QFileInfo(imagePath).suffix();
-	if(fileName != imagePath)
-	{
-		QFile::remove(fileName);
-		QFile::copy(imagePath, fileName);
-	}
-
-	// update the db
-	DeveloperInfo userInfo = model->getUserInfo(userName);
-	userInfo.image = fileName;
-	model->updateUser(userInfo);
-	model->select();
-}
-
-void PeerManager::setDeveloperColor(const QString& userName, const QColor& color)
-{
-	DeveloperInfo userInfo = model->getUserInfo(userName);
-	userInfo.color = color;
-	model->updateUser(userInfo);
-	model->select();
-}
-
 void PeerManager::refreshUserList() {
 	Sender::getInstance()->sendUserListRequest();
 }
@@ -95,16 +70,25 @@ void PeerManager::setUserOnline(const QString& name, bool online)
 void PeerManager::onPhotoResponse(const QString& fileName, const QByteArray& photoData)
 {
 	// save photo file
-	QFile file(fileName);
+	QString userName = QFileInfo(fileName).baseName();
+	QString filePath = Setting::getInstance()->getPhotoFilePath(userName);
+	QFile file(filePath);
 	if(file.open(QFile::WriteOnly | QFile::Truncate))
 		file.write(photoData);
 
-	QString userName = QFileInfo(fileName).baseName();
-	setImage(userName, fileName);
+	// update the db
+	DeveloperInfo userInfo = model->getUserInfo(userName);
+	userInfo.image = filePath;
+	model->updateUser(userInfo);
+	model->select();
 }
 
-void PeerManager::onColorResponse(const QString& userName, const QByteArray& color) {
-	setDeveloperColor(userName, QString(color));
+void PeerManager::onColorResponse(const QString& userName, const QByteArray& color)
+{
+	DeveloperInfo userInfo = model->getUserInfo(userName);
+	userInfo.color = QString(color);
+	model->updateUser(userInfo);
+	model->select();
 }
 
 void PeerManager::onEvent(const TeamRadarEvent& event)
