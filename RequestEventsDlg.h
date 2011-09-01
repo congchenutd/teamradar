@@ -7,12 +7,17 @@
 
 class RequestEventsDlg : public QDialog
 {
+	Q_OBJECT
+
 public:
 	RequestEventsDlg(QWidget* parent = 0);
 	QStringList getUserList()  const;
 	QStringList getEventList() const;
 	QDateTime   getStartTime() const;
 	QDateTime   getEndTime()   const;
+
+private slots:
+	void onTimeSpan(const QDateTime& start, const QDateTime& end);
 
 private:
 	void initModels();

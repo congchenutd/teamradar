@@ -8,8 +8,6 @@
 #include "TeamRadarEvent.h"
 
 // Parses the message header & body from Connection
-// Headers accepted: GREETING, PHOTO_RESPONSE, USERLIST_RESPONSE, EVENT
-//					 COLOR_RESPONSE
 // Format of packet: header#size#body
 // Format of body:
 //		GREETING: [OK, CONNECTED]/[WRONG_USER]
@@ -18,6 +16,7 @@
 //		EVENT: user#event#[parameters]#time
 //			Format of parameters: parameter1#parameter2#...
 //		COLOR_RESPONSE: [username#color]/[empty]
+//		TIMESPAN_RESPONSE: start#end
 
 class Receiver : public QObject
 {
@@ -32,7 +31,8 @@ public:
 		UserListResponse,
 		ColorResponse,
 		EventsResponse,
-		Chat
+		Chat,
+		TimeSpanResponse
 	} DataType;
 
 public:
@@ -49,6 +49,7 @@ signals:
 	void colorResponse(const QString& targetUser, const QByteArray& color);
 	void eventsResponse(const TeamRadarEvent& event);
 	void chatMessage(const QString& peerName, const QString& content);
+	void timespan(const QDateTime& start, const QDateTime& end);
 
 private:
 	void parseGreeting(const QByteArray& buffer);
@@ -58,6 +59,7 @@ private:
 	void parseColor   (const QByteArray& buffer);
 	void parseEvents  (const QByteArray& buffer);
 	void parseChat    (const QByteArray& buffer);
+	void parseTimeSpan(const QByteArray& buffer);
 
 private:
 	static Receiver* instance;
@@ -121,8 +123,6 @@ private:
 	Receiver*  receiver;
 };
 
-// Sends headers: REQUEST_USERLIST, REQEUST_PHOTO, REGISTER_PHOTO, EVENT, 
-//				  REGISTER_COLOR, REQUEST_COLOR, CHAT
 // Format of packet: header#size#body
 // Does not need to send my user name, because the server knows who I am
 // Format of body:
@@ -139,6 +139,7 @@ private:
 //			time span: start time;end time
 //		CHAT: recipients#content
 //			recipients = name1;name2;...
+//		REQUEST_TIMESPAN: [empty]
 
 class Sender : public QObject
 {
@@ -154,6 +155,7 @@ public:
 	void sendEventRequest(const QStringList& users, const QDateTime& startTime, 
 						  const QDateTime& endTime, const QStringList& eventTypes);
 	void sendChat(const QStringList& recipients, const QString& content);
+	void sendTimeSpanRequest();
 
 private:
 	static Sender* instance;
