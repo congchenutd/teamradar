@@ -25,7 +25,6 @@ private:
 private:
 	Ui::RequestEventsDlgClass ui;
 	QStandardItemModel usersModel;
-	QStandardItemModel eventsModel;
 
 	enum {NAME, IMAGE, ONLINE, SELECTED};
 };

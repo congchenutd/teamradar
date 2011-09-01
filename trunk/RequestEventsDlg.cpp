@@ -29,16 +29,6 @@ RequestEventsDlg::RequestEventsDlg(QWidget* parent) : QDialog(parent)
 	ui.tvUsers->resizeRowsToContents();
 	ui.tvUsers->resizeColumnsToContents();
 
-	// event types
-	ImageColorBoolProxy* eventsProxy = new ImageColorBoolProxy(this);
-	eventsProxy->setColumnType(1, ImageColorBoolProxy::BoolColumn);
-	eventsProxy->setSourceModel(&eventsModel);
-
-	ui.tvEventTypes->setModel(eventsProxy);
-	ImageColorBoolDelegate* eventsDelegate = new ImageColorBoolDelegate(eventsProxy, ui.tvEventTypes);
-	eventsDelegate->setEditTrigger(QEvent::MouseButtonPress);
-	ui.tvEventTypes->setItemDelegate(eventsDelegate);
-
 	// fetch time span from the server
 	ui.dtStart->setDisplayFormat(Setting::dateTimeFormat);
 	ui.dtEnd  ->setDisplayFormat(Setting::dateTimeFormat);
@@ -64,17 +54,6 @@ void RequestEventsDlg::initModels()
 		usersModel.setData(usersModel.index(row, ONLINE), peersModel.data(peersModel.index(row, ONLINE)));
 		usersModel.setData(usersModel.index(row, SELECTED), true);
 	}
-
-	eventsModel.setColumnCount(2);
-	eventsModel.setHeaderData(0, Qt::Horizontal, "Name");
-	eventsModel.setHeaderData(1, Qt::Horizontal, "Selected");
-	eventsModel.insertRows(0, 4);
-	eventsModel.setData(eventsModel.index(0, 0), "SAVE");
-	eventsModel.setData(eventsModel.index(1, 0), "MODE");
-	eventsModel.setData(eventsModel.index(2, 0), "SCM_COMMIT");
-	eventsModel.setData(eventsModel.index(3, 0), "CHAT");
-	for(int row=0; row<eventsModel.rowCount(); ++row)
-		eventsModel.setData(eventsModel.index(row, 1), true);
 }
 
 QStringList RequestEventsDlg::getUserList() const
@@ -93,12 +72,14 @@ QStringList RequestEventsDlg::getEventList() const
 {
 	QStringList result;
 	result << "CONNECTED" << "DISCONNECTED" << "OPENPROJECT";   // default ones
-	for(int row=0; row<eventsModel.rowCount(); ++row)
-	{
-		bool selected = eventsModel.data(eventsModel.index(row, 1)).toBool();
-		if(selected)
-			result << eventsModel.data(eventsModel.index(row, 0)).toString();
-	}
+	if(ui.checkSave->isChecked())
+		result << "SAVE";
+	if(ui.checkMode->isChecked())
+		result << "MODE";
+	if(ui.checkSCM->isChecked())
+		result << "SCM_COMMIT";
+	if(ui.checkChat->isChecked())
+		result << "CHAT";
 	return result;
 }
 
