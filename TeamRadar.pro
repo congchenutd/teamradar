@@ -10,6 +10,7 @@ OTHER_FILES += TeamRadar.pluginspec
 include(../../qtcreatorplugin.pri)
 include(../../plugins/coreplugin/coreplugin.pri)
 include(../../plugins/projectexplorer/projectexplorer.pri)
+include(../../plugins/vcsbase/vcsbase.pri)
 
 # Input
 HEADERS += ChatWindow.h \
