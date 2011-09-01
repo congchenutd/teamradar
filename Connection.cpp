@@ -364,8 +364,9 @@ void Sender::sendEventRequest(const QStringList& users, const QDateTime& startTi
 	if(connection->isReadyForUse())
 		connection->send("REQUEST_EVENTS", 
 			QList<QByteArray>() << users.join(QString(Connection::Delimiter2)).toUtf8()
-								<< startTime.toString().toUtf8() + "-" + endTime.toString().toUtf8()
-								<< eventTypes.join(QString(Connection::Delimiter2)).toUtf8());
+								<< eventTypes.join(QString(Connection::Delimiter2)).toUtf8()
+								<< startTime.toString(Setting::dateTimeFormat).toUtf8() + Connection::Delimiter2 + 
+								   endTime  .toString(Setting::dateTimeFormat).toUtf8());
 }
 
 void Sender::sendChat(const QStringList& recipients, const QString& content) {

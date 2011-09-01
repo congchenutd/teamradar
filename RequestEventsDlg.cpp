@@ -39,7 +39,7 @@ RequestEventsDlg::RequestEventsDlg(QWidget* parent) : QDialog(parent)
 	ui.tvEventTypes->setItemDelegate(eventsDelegate);
 
 	// time span
-	ui.dtStart->setDateTime(QDateTime::currentDateTime());
+	ui.dtStart->setDateTime(QDateTime(QDate(1900, 1, 1)));
 	ui.dtEnd  ->setDateTime(QDateTime::currentDateTime());
 }
 
@@ -63,9 +63,11 @@ void RequestEventsDlg::initModels()
 	eventsModel.setColumnCount(2);
 	eventsModel.setHeaderData(0, Qt::Horizontal, "Name");
 	eventsModel.setHeaderData(1, Qt::Horizontal, "Selected");
-	eventsModel.insertRows(0, 2);
+	eventsModel.insertRows(0, 4);
 	eventsModel.setData(eventsModel.index(0, 0), "SAVE");
 	eventsModel.setData(eventsModel.index(1, 0), "MODE");
+	eventsModel.setData(eventsModel.index(2, 0), "SCM_COMMIT");
+	eventsModel.setData(eventsModel.index(3, 0), "CHAT");
 	for(int row=0; row<eventsModel.rowCount(); ++row)
 		eventsModel.setData(eventsModel.index(row, 1), true);
 }
@@ -85,6 +87,7 @@ QStringList RequestEventsDlg::getUserList() const
 QStringList RequestEventsDlg::getEventList() const
 {
 	QStringList result;
+	result << "CONNECTED" << "DISCONNECTED" << "OPENPROJECT";   // default ones
 	for(int row=0; row<eventsModel.rowCount(); ++row)
 	{
 		bool selected = eventsModel.data(eventsModel.index(row, 1)).toBool();

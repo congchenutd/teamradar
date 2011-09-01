@@ -21,3 +21,9 @@ Server					Client
 	<- Request_Events (UserList, TimeSpan, EventTypes)
 	-> Events_Response
 
+	<- Request_TimeSpan
+	-> TimeSpan_Response
+
+	<- Chat
+	-> Chat
+

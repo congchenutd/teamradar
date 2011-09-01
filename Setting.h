@@ -24,6 +24,9 @@ public:
 
 private:
     void loadDefaults();
+
+public:
+	static const QString dateTimeFormat;
 };
 
 #endif // Setting_h__

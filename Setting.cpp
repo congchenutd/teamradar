@@ -102,3 +102,5 @@ QString Setting::getPhotoFilePath(const QString& userName) const {
 QString Setting::getChatHistoryPath() const {
 	return value("ChatHistoryPath").toString();
 }
+
+const QString Setting::dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
