@@ -5,6 +5,9 @@
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectexplorer.h>
 #include <coreplugin/filemanager.h>
+#include <vcsbase/vcsplugin.h>
+#include <vcsbase/corelistener.h>
+#include <vcsbase/vcsbasesubmiteditor.h>
 
 MessageCollector::MessageCollector()
 {
@@ -15,9 +18,9 @@ MessageCollector::MessageCollector()
 	projectExplorer = ProjectExplorer::ProjectExplorerPlugin::instance();
 
 	connect(projectExplorer, SIGNAL(currentProjectChanged(ProjectExplorer::Project*)), this, SLOT(onOpenProject(ProjectExplorer::Project*)));
-	connect(editorManager,   SIGNAL(currentEditorChanged(Core::IEditor*)),   this, SLOT(onCurrentChanged(Core::IEditor*)));
+	connect(editorManager,   SIGNAL(currentEditorChanged(Core::IEditor*)),   this, SLOT(onCurrentFileChanged(Core::IEditor*)));
 	connect(editorManager,   SIGNAL(editorCreated(Core::IEditor*, QString)), this, SLOT(onOpenFile(Core::IEditor*)));
-	connect(editorManager,   SIGNAL(editorsClosed(QList<Core::IEditor*>)),   this, SLOT(onCloseFiles(QList<Core::IEditor*>)));
+	connect(editorManager,   SIGNAL(editorAboutToClose(Core::IEditor*)), this, SLOT(onEditorAboutToClose(Core::IEditor*)));
 	connect(modeManager,     SIGNAL(currentModeChanged(Core::IMode*, Core::IMode*)), this, SLOT(onChangeMode(Core::IMode*, Core::IMode*)));
 }
 
@@ -38,14 +41,11 @@ void MessageCollector::onChangeFile() {
 	}
 }
 
-void MessageCollector::onCloseFiles(QList<Core::IEditor*> editors) {
-	foreach(Core::IEditor* editor, editors) {
-		sendEvent("CLOSE", editor->file()->fileName());
-	}
-}
-
-void MessageCollector::onCurrentChanged(Core::IEditor* editor) {
-	currentEditor = editor;
+void MessageCollector::onCurrentFileChanged(Core::IEditor* editor)
+{
+	// skip vcs editors, because they will save and close some tmp files
+	if(qobject_cast<VCSBase::VCSBaseSubmitEditor*>(editor) == 0)
+		currentEditor = editor;
 }
 
 void MessageCollector::onChangeMode(Core::IMode* mode, Core::IMode* oldMode)
@@ -63,6 +63,20 @@ void MessageCollector::sendEvent(const QString& event, const QString& parameters
 void MessageCollector::onOpenProject(ProjectExplorer::Project* project) {
 	if(project != 0)
 		sendEvent("OPENPROJECT", project->projectDirectory());
+}
+
+// capture version control's submit event
+// FIXME: now it just captures the closing of the submission editor, 
+// which does not guarantee that the submission is successfully committed
+// (the user may close the editor without committing)
+void MessageCollector::onEditorAboutToClose(Core::IEditor* editor)
+{
+	VCSBase::VCSBaseSubmitEditor* submitEditor = qobject_cast<VCSBase::VCSBaseSubmitEditor*>(editor);
+	if(submitEditor == 0)
+		return;
+	QStringList files = submitEditor->checkedFiles();
+	foreach(QString fileName, files)
+		sendEvent("SCM_COMMIT", fileName);
 }
 
 MessageCollector* MessageCollector::instance = 0;

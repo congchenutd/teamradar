@@ -17,6 +17,7 @@
 // Captures signals from IDE, and notifies the player and the server
 
 struct TeamRadarEvent;
+class VCSBaseSubmitEditor;
 
 class MessageCollector : public QObject
 {
@@ -27,12 +28,12 @@ public:
 	static MessageCollector* getInstance();
 
 private slots:
-	void onCurrentChanged(Core::IEditor *editor);
+	void onCurrentFileChanged(Core::IEditor *editor);
 	void onOpenFile  (Core::IEditor* editor);
 	void onChangeFile();
-	void onCloseFiles(QList<Core::IEditor*>);
 	void onChangeMode(Core::IMode* mode, Core::IMode* oldMode);
 	void onOpenProject(ProjectExplorer::Project* project);
+	void onEditorAboutToClose(Core::IEditor* editor);
 
 signals:
 	void localEvent(const TeamRadarEvent& event);
