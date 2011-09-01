@@ -264,7 +264,7 @@ void PlayerWidget::onEventDownloaded(const TeamRadarEvent& event)
 
 	int lastRow = model->rowCount();
 	model->insertRow(lastRow);
-	model->setData(model->index(lastRow, 0), event.time);
+	model->setData(model->index(lastRow, 0), event.time.toString(Setting::dateTimeFormat));
 	model->setData(model->index(lastRow, 1), event.userName);
 	model->setData(model->index(lastRow, 2), event.eventType);
 	model->setData(model->index(lastRow, 3), event.parameters);

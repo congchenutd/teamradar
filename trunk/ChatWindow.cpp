@@ -30,7 +30,8 @@ ChatWindow::ChatWindow(const QString& name, QWidget *parent)
 void ChatWindow::onInput()
 {
 	if(peerReplied)    // my first message
-		ui.teHistory->append("\r\nMe (" + QDateTime::currentDateTime().toString() + "):");
+		ui.teHistory->append("\r\nMe (" + 
+			QDateTime::currentDateTime().toString(Setting::dateTimeFormat) + "):");
 	ui.teHistory->append(ui.leInput->text());
 	recipients << peerName;  // add the peer to the recipients
 	Sender::getInstance()->sendChat(recipients, ui.leInput->text());  // send
@@ -48,7 +49,8 @@ void ChatWindow::addPeerConversation(const QString& line)
 		return;
 	
 	if(meReplied)   // peer's first message
-		ui.teHistory->append("\r\n" + peerName + " (" + QDateTime::currentDateTime().toString() + "): ");
+		ui.teHistory->append("\r\n" + peerName + " (" + 
+			QDateTime::currentDateTime().toString(Setting::dateTimeFormat) + "): ");
 	ui.teHistory->append(line);
 //	ui.teHistory->verticalScrollBar()->setValue(
 //			ui.teHistory->verticalScrollBar()->maximum());   // scroll to the bottom

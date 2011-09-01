@@ -135,8 +135,8 @@ private:
 //		REQUEST_COLOR: target user name
 //		REQUEST_EVENTS: user list#time span#event types
 //			user list: name1;name2;...
-//			time span: start time - end time
 //			event types: type1;type2;...
+//			time span: start time;end time
 //		CHAT: recipients#content
 //			recipients = name1;name2;...
 
