@@ -1,6 +1,7 @@
 #include "RequestEventsDlg.h"
 #include "ImageColorBoolModel.h"
 #include "ImageColorBoolDelegate.h"
+#include "Connection.h"
 #include <QSqlQueryModel>
 
 RequestEventsDlg::RequestEventsDlg(QWidget* parent) : QDialog(parent)
@@ -38,9 +39,13 @@ RequestEventsDlg::RequestEventsDlg(QWidget* parent) : QDialog(parent)
 	eventsDelegate->setEditTrigger(QEvent::MouseButtonPress);
 	ui.tvEventTypes->setItemDelegate(eventsDelegate);
 
-	// time span
-	ui.dtStart->setDateTime(QDateTime(QDate(1900, 1, 1)));
+	// fetch time span from the server
+	ui.dtStart->setDisplayFormat(Setting::dateTimeFormat);
+	ui.dtEnd  ->setDisplayFormat(Setting::dateTimeFormat);
+	ui.dtStart->setDateTime(QDateTime::currentDateTime());
 	ui.dtEnd  ->setDateTime(QDateTime::currentDateTime());
+	connect(Receiver::getInstance(), SIGNAL(timespan(QDateTime, QDateTime)), this, SLOT(onTimeSpan(QDateTime, QDateTime)));
+	Sender::getInstance()->sendTimeSpanRequest();
 }
 
 void RequestEventsDlg::initModels()
@@ -103,4 +108,10 @@ QDateTime RequestEventsDlg::getStartTime() const {
 
 QDateTime RequestEventsDlg::getEndTime() const {
 	return ui.dtEnd->dateTime();
+}
+
+void RequestEventsDlg::onTimeSpan(const QDateTime& start, const QDateTime& end)
+{
+	ui.dtStart->setDateTime(start);
+	ui.dtEnd  ->setDateTime(end);
 }

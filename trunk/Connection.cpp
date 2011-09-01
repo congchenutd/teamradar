@@ -222,6 +222,8 @@ Receiver::DataType Receiver::guessDataType(const QByteArray& header)
 		return ColorResponse;
 	if(header.startsWith("CHAT"))
 		return Chat;
+	if(header.startsWith("TIMESPAN_RESPONSE"))
+		return TimeSpanResponse;
 	return Undefined;
 }
 
@@ -249,6 +251,9 @@ void Receiver::processData(Receiver::DataType dataType, const QByteArray& buffer
 		break;
 	case Chat:
 		parseChat(buffer);
+		break;
+	case TimeSpanResponse:
+		parseTimeSpan(buffer);
 		break;
 	default:
 		break;
@@ -299,9 +304,8 @@ void Receiver::parseColor(const QByteArray& buffer)
 void Receiver::parseEvents(const QByteArray& buffer)
 {
 	QList<QByteArray> sections = buffer.split(Connection::Delimiter1);
-	if(sections.size() != 4)
-		return;
-	emit eventsResponse(TeamRadarEvent(sections[0], sections[1], sections[2], sections[3]));
+	if(sections.size() == 4)
+		emit eventsResponse(TeamRadarEvent(sections[0], sections[1], sections[2], sections[3]));
 }
 
 void Receiver::parseChat(const QByteArray& buffer)
@@ -313,6 +317,14 @@ void Receiver::parseChat(const QByteArray& buffer)
 		QString content = buffer.right(buffer.length() - seperator - 1);
 		emit chatMessage(peerName, content);
 	}
+}
+
+void Receiver::parseTimeSpan(const QByteArray& buffer)
+{
+	QList<QByteArray> sections = buffer.split(Connection::Delimiter1);
+	if(sections.size() == 2)
+		emit timespan(QDateTime::fromString(sections[0], Setting::dateTimeFormat), 
+					  QDateTime::fromString(sections[1], Setting::dateTimeFormat));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -373,4 +385,9 @@ void Sender::sendChat(const QStringList& recipients, const QString& content) {
 	if(connection->isReadyForUse())
 		connection->send("CHAT", QList<QByteArray>() << recipients.join(QString(Connection::Delimiter2)).toUtf8()
 													 << content.toUtf8());
+}
+
+void Sender::sendTimeSpanRequest() {
+	if(connection->isReadyForUse())
+		connection->send("REQUEST_TIMESPAN");
 }

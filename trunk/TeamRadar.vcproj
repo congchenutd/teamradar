@@ -138,7 +138,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-Zm200 -w34100 -w34189"
 				Optimization="2"
-				AdditionalIncludeDirectories="C:\Users\cxc094020\Program\ImageColorBoolModel;c:\Qt\4.7.3\include\QtCore;c:\Qt\4.7.3\include\QtNetwork;c:\Qt\4.7.3\include\QtGui;c:\Qt\4.7.3\include\QtSql;c:\Qt\4.7.3\include;..\..\libs;&quot;c:\Users\cxc094020\Program\qt-creator-2.2.0-src\tools&quot;;..\..\plugins;..\..\libs\3rdparty\botan\build;..\coreplugin;c:\Qt\4.7.3\include\ActiveQt;release;.;&quot;c:\Qt\4.7.3\mkspecs\win32-msvc2008&quot;"
+				AdditionalIncludeDirectories="&quot;c:\Qt\4.7.3\include\QtCore&quot;,&quot;c:\Qt\4.7.3\include\QtNetwork&quot;,&quot;c:\Qt\4.7.3\include\QtGui&quot;,&quot;c:\Qt\4.7.3\include\QtSql&quot;,&quot;c:\Qt\4.7.3\include&quot;,&quot;..\..\libs&quot;,&quot;c:\Users\cxc094020\Program\qt-creator-2.2.0-src\tools&quot;,&quot;..\..\plugins&quot;,&quot;..\..\libs\3rdparty\botan\build&quot;,&quot;..\coreplugin&quot;,&quot;c:\Qt\4.7.3\include\ActiveQt&quot;,&quot;release&quot;,&quot;.&quot;,c:\Qt\4.7.3\mkspecs\win32-msvc2008"
 				PreprocessorDefinitions="QT_NO_DEBUG,NDEBUG,_WINDOWS,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,IDE_LIBRARY_BASENAME=\&quot;lib\&quot;,QT_NO_CAST_TO_ASCII,QT_USE_FAST_OPERATOR_PLUS,QT_USE_FAST_CONCATENATION,_CRT_SECURE_NO_WARNINGS,QT_DLL,QT_NO_DEBUG,QT_PLUGIN,QT_SQL_LIB,QT_GUI_LIB,QT_NETWORK_LIB,QT_CORE_LIB,QT_HAVE_MMX,QT_HAVE_3DNOW,QT_HAVE_SSE,QT_HAVE_MMXEXT,QT_HAVE_SSE2,QT_THREAD_SUPPORT,NDEBUG"
 				GeneratePreprocessedFile="0"
 				ExceptionHandling="1"
@@ -612,6 +612,28 @@
 			<File
 				RelativePath="RequestEventsDlg.h"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="MOC RequestEventsDlg.h"
+						CommandLine="C:\Qt\4.7.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DIDE_LIBRARY_BASENAME=\&quot;lib\&quot; -DWITH_TESTS -DQT_NO_CAST_TO_ASCII -DQT_USE_FAST_OPERATOR_PLUS -DQT_USE_FAST_CONCATENATION -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_PLUGIN -DQT_TESTLIB_LIB -DQT_SQL_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;c:\Qt\4.7.3\include\QtCore&quot; -I&quot;c:\Qt\4.7.3\include\QtNetwork&quot; -I&quot;c:\Qt\4.7.3\include\QtGui&quot; -I&quot;c:\Qt\4.7.3\include\QtSql&quot; -I&quot;c:\Qt\4.7.3\include\QtTest&quot; -I&quot;c:\Qt\4.7.3\include&quot; -I&quot;..\..\libs&quot; -I&quot;c:\Users\cxc094020\Program\qt-creator-2.2.0-src\tools&quot; -I&quot;..\..\plugins&quot; -I&quot;..\..\libs\3rdparty\botan\build&quot; -I&quot;..\coreplugin&quot; -I&quot;c:\Qt\4.7.3\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -Ic:\Qt\4.7.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 RequestEventsDlg.h -o debug\moc_RequestEventsDlg.cpp&#x0D;&#x0A;"
+						AdditionalDependencies="C:\Qt\4.7.3\bin\moc.exe;RequestEventsDlg.h"
+						Outputs="debug\moc_RequestEventsDlg.cpp"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="MOC RequestEventsDlg.h"
+						CommandLine="C:\Qt\4.7.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DIDE_LIBRARY_BASENAME=\&quot;lib\&quot; -DQT_NO_CAST_TO_ASCII -DQT_USE_FAST_OPERATOR_PLUS -DQT_USE_FAST_CONCATENATION -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_NO_DEBUG -DQT_PLUGIN -DQT_SQL_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;c:\Qt\4.7.3\include\QtCore&quot; -I&quot;c:\Qt\4.7.3\include\QtNetwork&quot; -I&quot;c:\Qt\4.7.3\include\QtGui&quot; -I&quot;c:\Qt\4.7.3\include\QtSql&quot; -I&quot;c:\Qt\4.7.3\include&quot; -I&quot;..\..\libs&quot; -I&quot;c:\Users\cxc094020\Program\qt-creator-2.2.0-src\tools&quot; -I&quot;..\..\plugins&quot; -I&quot;..\..\libs\3rdparty\botan\build&quot; -I&quot;..\coreplugin&quot; -I&quot;c:\Qt\4.7.3\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -Ic:\Qt\4.7.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 RequestEventsDlg.h -o release\moc_RequestEventsDlg.cpp&#x0D;&#x0A;"
+						AdditionalDependencies="C:\Qt\4.7.3\bin\moc.exe;RequestEventsDlg.h"
+						Outputs="release\moc_RequestEventsDlg.cpp"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Setting.h"
@@ -710,18 +732,6 @@
 			UniqueIdentifier="{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}"
 			>
 			<File
-				RelativePath="debug\moc_ChatWindow.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="release\moc_ChatWindow.cpp"
 				>
 				<FileConfiguration
@@ -734,7 +744,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\moc_Connection.cpp"
+				RelativePath="debug\moc_ChatWindow.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -758,7 +768,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\moc_Engine.cpp"
+				RelativePath="debug\moc_Connection.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -782,7 +792,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\moc_LightTrail.cpp"
+				RelativePath="debug\moc_Engine.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -798,6 +808,18 @@
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="debug\moc_LightTrail.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -830,18 +852,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\moc_Node.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="release\moc_Node.cpp"
 				>
 				<FileConfiguration
@@ -854,7 +864,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\moc_PeerManager.cpp"
+				RelativePath="debug\moc_Node.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -878,7 +888,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\moc_PeerModel.cpp"
+				RelativePath="debug\moc_PeerManager.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -894,6 +904,18 @@
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="debug\moc_PeerModel.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -926,18 +948,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\moc_RecipientsDlg.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="release\moc_RecipientsDlg.cpp"
 				>
 				<FileConfiguration
@@ -950,7 +960,31 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\moc_TeamRadarPlugin.cpp"
+				RelativePath="debug\moc_RecipientsDlg.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="release\moc_RequestEventsDlg.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="debug\moc_RequestEventsDlg.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -974,7 +1008,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\moc_TeamRadarView.cpp"
+				RelativePath="debug\moc_TeamRadarPlugin.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -990,6 +1024,18 @@
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="debug\moc_TeamRadarView.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -1022,10 +1068,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\qrc_Resources.cpp"
+				RelativePath="release\qrc_Resources.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -1034,10 +1080,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\qrc_Resources.cpp"
+				RelativePath="debug\qrc_Resources.cpp"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
