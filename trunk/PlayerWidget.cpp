@@ -246,10 +246,13 @@ void PlayerWidget::onEvent(const TeamRadarEvent& event) {
 void PlayerWidget::onDownload()
 {
 	RequestEventsDlg dlg(this);
-	if(dlg.exec() == QDialog::Accepted) {
+	if(dlg.exec() == QDialog::Accepted)
 		Sender::getInstance()->sendEventRequest(dlg.getUserList(), 
-			dlg.getStartTime(), dlg.getEndTime(), dlg.getEventList());
-	}
+												dlg.getEventList(),
+												dlg.getStartTime(), 
+												dlg.getEndTime(),
+												dlg.getPhases(),
+												dlg.getFuzziness());
 }
 
 void PlayerWidget::onConnectedToServer(bool connected) {

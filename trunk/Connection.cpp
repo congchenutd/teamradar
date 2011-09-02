@@ -371,14 +371,19 @@ void Sender::sendColorRequest(const QString& targetUser) {
 		connection->send("REQUEST_COLOR", targetUser.toUtf8());
 }
 
-void Sender::sendEventRequest(const QStringList& users, const QDateTime& startTime, 
-							  const QDateTime& endTime, const QStringList& eventTypes) {
+void Sender::sendEventRequest(const QStringList& users, const QStringList& eventTypes,
+							  const QDateTime& startTime, const QDateTime& endTime,
+							  const QStringList& phases, int fuzziness)
+{
 	if(connection->isReadyForUse())
 		connection->send("REQUEST_EVENTS", 
 			QList<QByteArray>() << users.join(QString(Connection::Delimiter2)).toUtf8()
 								<< eventTypes.join(QString(Connection::Delimiter2)).toUtf8()
 								<< startTime.toString(Setting::dateTimeFormat).toUtf8() + Connection::Delimiter2 + 
-								   endTime  .toString(Setting::dateTimeFormat).toUtf8());
+								   endTime  .toString(Setting::dateTimeFormat).toUtf8()
+							    << phases.join(QString(Connection::Delimiter2)).toUtf8()
+								<< QByteArray::number(fuzziness)
+		);
 }
 
 void Sender::sendChat(const QStringList& recipients, const QString& content) {

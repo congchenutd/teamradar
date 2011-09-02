@@ -15,6 +15,8 @@ public:
 	QStringList getEventList() const;
 	QDateTime   getStartTime() const;
 	QDateTime   getEndTime()   const;
+	QStringList getPhases()    const;
+	int         getFuzziness() const;
 
 private slots:
 	void onTimeSpan(const QDateTime& start, const QDateTime& end);

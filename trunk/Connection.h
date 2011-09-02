@@ -133,10 +133,12 @@ private:
 //			Format of parameters: parameter1#parameter2#...
 //		REGISTER_COLOR: color
 //		REQUEST_COLOR: target user name
-//		REQUEST_EVENTS: user list#time span#event types
+//		REQUEST_EVENTS: user list#event types#time span#phases#fuzziness
 //			user list: name1;name2;...
 //			event types: type1;type2;...
 //			time span: start time;end time
+//			phases: phase1;phase2;...
+//			fuzziness: an integer for percentage
 //		CHAT: recipients#content
 //			recipients = name1;name2;...
 //		REQUEST_TIMESPAN: [empty]
@@ -152,8 +154,9 @@ public:
 	void sendColorRegistration(const QColor& color);
 	void sendPhotoRequest(const QString& targetUser);
 	void sendColorRequest(const QString& targetUser);
-	void sendEventRequest(const QStringList& users, const QDateTime& startTime, 
-						  const QDateTime& endTime, const QStringList& eventTypes);
+	void sendEventRequest(const QStringList& users, const QStringList& eventTypes,
+						  const QDateTime& startTime, const QDateTime& endTime, 
+						  const QStringList& phases, int fuzziness);
 	void sendChat(const QStringList& recipients, const QString& content);
 	void sendTimeSpanRequest();
 
