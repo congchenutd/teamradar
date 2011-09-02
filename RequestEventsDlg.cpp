@@ -60,11 +60,8 @@ QStringList RequestEventsDlg::getUserList() const
 {
 	QStringList result;
 	for(int row=0; row<usersModel.rowCount(); ++row)
-	{
-		bool selected = usersModel.data(usersModel.index(row, SELECTED)).toBool();
-		if(selected)
-			result << usersModel.data(usersModel.index(row, NAME)).toString();
-	}
+		if(usersModel.data(usersModel.index(row, SELECTED)).toBool())           // if selected
+			result << usersModel.data(usersModel.index(row, NAME)).toString();  // add name
 	return result;
 }
 
@@ -95,4 +92,24 @@ void RequestEventsDlg::onTimeSpan(const QDateTime& start, const QDateTime& end)
 {
 	ui.dtStart->setDateTime(start);
 	ui.dtEnd  ->setDateTime(end);
+}
+
+QStringList RequestEventsDlg::getPhases() const
+{
+	QStringList result;
+	if(ui.checkProject->isChecked())
+		result << "Project";
+	if(ui.checkPrototyping->isChecked())
+		result << "Prototyping";
+	if(ui.checkCoding->isChecked())
+		result << "Coding";
+	if(ui.checkTesting->isChecked())
+		result << "Teseting";
+	if(ui.checkDeployment->isChecked())
+		result << "Deployment";
+	return result;
+}
+
+int RequestEventsDlg::getFuzziness() const {
+	return ui.sliderFuzziness->value() * 10;   // percentage
 }
