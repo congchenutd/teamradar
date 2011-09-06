@@ -147,8 +147,8 @@ TeamRadarNode* TeamRadarView::createNode(bool isDir, const QString& name, TeamRa
 		node = new DirNode(owner, name);
 	else
 	{
-		QTime time;
-		time.start();
+//		QTime time;
+//		time.start();
 		node = new FileNode(owner, name);
 //		int msec = time.elapsed();
 //		qDebug() << "-----------------------------------------------------" << name << ": " << msec;
