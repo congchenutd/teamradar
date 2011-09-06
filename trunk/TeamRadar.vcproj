@@ -45,7 +45,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-Zm200 -w34100 -w34189"
 				Optimization="4"
-				AdditionalIncludeDirectories="&quot;c:\Qt\4.7.4\include\QtCore&quot;,&quot;c:\Qt\4.7.4\include\QtNetwork&quot;,&quot;c:\Qt\4.7.4\include\QtGui&quot;,&quot;c:\Qt\4.7.4\include\QtSql&quot;,&quot;c:\Qt\4.7.4\include\QtTest&quot;,&quot;c:\Qt\4.7.4\include&quot;,&quot;..\..\libs&quot;,&quot;c:\Users\cxc094020\Program\qt-creator-2.3.0-src\tools&quot;,&quot;..\..\plugins&quot;,&quot;..\..\libs\3rdparty\botan\build&quot;,&quot;..\coreplugin&quot;,&quot;c:\Qt\4.7.4\include\ActiveQt&quot;,&quot;debug&quot;,&quot;.&quot;,c:\Qt\4.7.4\mkspecs\win32-msvc2008"
+				AdditionalIncludeDirectories="C:\Users\cxc094020\Program\ImageColorBoolModel;c:\Qt\4.7.4\include\QtCore;c:\Qt\4.7.4\include\QtNetwork;c:\Qt\4.7.4\include\QtGui;c:\Qt\4.7.4\include\QtSql;c:\Qt\4.7.4\include\QtTest;c:\Qt\4.7.4\include;..\..\libs;&quot;c:\Users\cxc094020\Program\qt-creator-2.3.0-src\tools&quot;;..\..\plugins;..\..\libs\3rdparty\botan\build;..\coreplugin;c:\Qt\4.7.4\include\ActiveQt;debug;.;&quot;c:\Qt\4.7.4\mkspecs\win32-msvc2008&quot;"
 				PreprocessorDefinitions="_WINDOWS,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,IDE_LIBRARY_BASENAME=\&quot;lib\&quot;,WITH_TESTS,QT_NO_CAST_TO_ASCII,QT_USE_FAST_OPERATOR_PLUS,QT_USE_FAST_CONCATENATION,_CRT_SECURE_NO_WARNINGS,QT_DLL,QT_PLUGIN,QT_TESTLIB_LIB,QT_SQL_LIB,QT_GUI_LIB,QT_NETWORK_LIB,QT_CORE_LIB,QT_HAVE_MMX,QT_HAVE_3DNOW,QT_HAVE_SSE,QT_HAVE_MMXEXT,QT_HAVE_SSE2,QT_THREAD_SUPPORT"
 				GeneratePreprocessedFile="0"
 				ExceptionHandling="1"
@@ -732,18 +732,6 @@
 			UniqueIdentifier="{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}"
 			>
 			<File
-				RelativePath="release\moc_ChatWindow.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="debug\moc_ChatWindow.cpp"
 				>
 				<FileConfiguration
@@ -756,7 +744,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\moc_Connection.cpp"
+				RelativePath="release\moc_ChatWindow.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -780,7 +768,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\moc_Engine.cpp"
+				RelativePath="release\moc_Connection.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -804,7 +792,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\moc_LightTrail.cpp"
+				RelativePath="release\moc_Engine.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -820,6 +808,18 @@
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="release\moc_LightTrail.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -852,18 +852,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\moc_Node.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="debug\moc_Node.cpp"
 				>
 				<FileConfiguration
@@ -876,7 +864,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\moc_PeerManager.cpp"
+				RelativePath="release\moc_Node.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -900,7 +888,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\moc_PeerModel.cpp"
+				RelativePath="release\moc_PeerManager.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -916,6 +904,18 @@
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="release\moc_PeerModel.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -948,18 +948,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\moc_RecipientsDlg.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="debug\moc_RecipientsDlg.cpp"
 				>
 				<FileConfiguration
@@ -972,7 +960,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\moc_RequestEventsDlg.cpp"
+				RelativePath="release\moc_RecipientsDlg.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -996,7 +984,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\moc_TeamRadarPlugin.cpp"
+				RelativePath="release\moc_RequestEventsDlg.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1020,7 +1008,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\moc_TeamRadarView.cpp"
+				RelativePath="release\moc_TeamRadarPlugin.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1036,6 +1024,18 @@
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="release\moc_TeamRadarView.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -1068,10 +1068,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\qrc_Resources.cpp"
+				RelativePath="debug\qrc_Resources.cpp"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -1080,10 +1080,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\qrc_Resources.cpp"
+				RelativePath="release\qrc_Resources.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
