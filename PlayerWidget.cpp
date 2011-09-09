@@ -174,7 +174,7 @@ void PlayerWidget::play(const TeamRadarEvent& event)
 	}
 	else if(event.eventType == "OPENPROJECT")
 	{
-		if(event.userName != Setting::getInstance()->getUserName())
+		if(event.userName != Setting::getInstance()->getUserName())  // must be local event
 			return;
 		Setting::getInstance()->setValue("RootPath", event.parameters);
 		reloadProject();
