@@ -185,7 +185,7 @@ void PlayerWidget::reloadProject()
 {
 	// load dir, and refresh users
 	ui.graphicsView->loadDir(Setting::getInstance()->value("RootPath").toString());
-	PeerManager::getInstance()->refreshUserList();
+//	PeerManager::getInstance()->refreshUserList();
 }
 
 void PlayerWidget::onPlaylistClicked(const QModelIndex& idx) {

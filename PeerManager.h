@@ -19,7 +19,6 @@ public:
 	static PeerManager* getInstance();
 	QString getImage(const QString& userName) const;
 	QColor getDeveloperColor(const QString& userName);
-	void   refreshUserList();                            // ask the server for online user list
 	PeerModel* getPeerModel() const { return model; }    // the underlying model
 
 signals:
@@ -31,6 +30,7 @@ private slots:
 	void onPhotoResponse(const QString& fileName, const QByteArray& photoData);
 	void onColorResponse(const QString& userName, const QByteArray& color);
 	void onEvent(const TeamRadarEvent& event);   // intercept CONNECTED/DISCONNECTED messages
+	void refreshUserList();                      // ask the server for online user list
 
 private:
 	PeerManager(QObject* parent = 0);
