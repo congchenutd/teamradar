@@ -48,12 +48,12 @@ void PeerModel::createTables()
 			   )");
 
 	// for RequestEventsDlg
-	query.exec("create table PeersTemp( \
-			   Name     varchar primary key, \
-			   Image    varchar, \
-			   Online   bool, \
-			   Selected bool \
-			   )");
+	//query.exec("create table PeersTemp( \
+	//		   Name     varchar primary key, \
+	//		   Image    varchar, \
+	//		   Online   bool, \
+	//		   Selected bool \
+	//		   )");
 }
 
 void PeerModel::makeAllOffline()

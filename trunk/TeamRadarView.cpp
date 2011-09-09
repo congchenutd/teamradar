@@ -248,10 +248,8 @@ TeamRadarNode* TeamRadarView::loadNodeFromXML(QXmlStreamReader& xml, TeamRadarNo
 	return node;
 }
 
-void TeamRadarView::moveCanvasBy(int x, int y)
-{
-	const QRectF rect = sceneRect();
-	scene()->setSceneRect(rect.x() - x, rect.y() - y, rect.width(), rect.height());
+void TeamRadarView::moveCanvasBy(int x, int y) {
+	scrollContentsBy(x / scaleFactor, y / scaleFactor);
 }
 
 void TeamRadarView::moveCanvasBy(const QPointF& vec) {

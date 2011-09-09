@@ -55,7 +55,7 @@ TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
     connect(ui.btImage, SIGNAL(clicked()),  this, SLOT(onSetImage()));
 	connect(ui.btColor, SIGNAL(clicked()),  this, SLOT(onSetColor()));
 
-	peerManager->refreshUserList();   // actively fetch user list
+//	peerManager->refreshUserList();   // actively fetch user list
 }
 
 void TeamRadarWindow::accept()
