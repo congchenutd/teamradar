@@ -19,7 +19,6 @@
 //		COLOR_RESPONSE: [username#color]/[empty]
 //		TIMESPAN_RESPONSE: start#end
 //		PROJECT_RESPONSE: projectName1#name2...
-
 class Receiver : public QObject
 {
 	Q_OBJECT
@@ -55,7 +54,7 @@ signals:
 	void eventsResponse(const TeamRadarEvent& event);
 	void chatMessage(const QString& peerName, const QString& content);
 	void timespan(const QDateTime& start, const QDateTime& end);
-	void projectsResponse(const QList<QByteArray>& list);
+	void projectsResponse(const QStringList& list);
 
 private:
 	void parseGreeting(const QByteArray& buffer);
@@ -130,6 +129,7 @@ private:
 	Receiver*  receiver;
 };
 
+
 // Format of packet: header#size#body
 // Does not need to send my user name, because the server knows who I am
 // Format of body:
@@ -151,7 +151,6 @@ private:
 //		REQUEST_TIMESPAN: [empty]
 //		REQUEST_PROJECTS: [empty]
 //		JOIN_PROJECT: projectname
-
 class Sender : public QObject
 {
 public:
@@ -164,7 +163,7 @@ public:
 	void sendPhotoRequest(const QString& targetUser);
 	void sendColorRequest(const QString& targetUser);
 	void sendEventRequest(const QStringList& users, const QStringList& eventTypes,
-						  const QDateTime& startTime, const QDateTime& endTime, 
+						  const QDateTime& startTime, const QDateTime& endTime,
 						  const QStringList& phases, int fuzziness);
 	void sendChat(const QStringList& recipients, const QString& content);
 	void sendTimeSpanRequest();

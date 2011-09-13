@@ -36,8 +36,12 @@ void MessageCollector::onOpenFile(Core::IEditor* editor) {
 }
 
 void MessageCollector::onChangeFile() {
-	if(currentEditor != 0) {
-		sendEvent("SAVE", currentEditor->file()->fileName());
+	if(currentEditor != 0)
+	{
+		QString filePath = currentEditor->file()->fileName();
+		QString projectPath = Setting::getInstance()->value("RootPath").toString();
+		filePath.remove(projectPath);
+		sendEvent("SAVE", filePath.right(filePath.length() - 1));   // remove '/'
 	}
 }
 

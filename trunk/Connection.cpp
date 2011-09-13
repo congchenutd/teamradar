@@ -4,6 +4,7 @@
 #include <QHostAddress>
 #include <QFile>
 #include <QFileInfo>
+#include <QTimerEvent>
 
 Connection::Connection(QObject* parent) : QTcpSocket(parent)
 {
@@ -11,7 +12,7 @@ Connection::Connection(QObject* parent) : QTcpSocket(parent)
 	dataType = Receiver::Undefined;
 	numBytes = -1;
 	transferTimerID = 0;
-	userName = tr("Unknown");
+	userName = Setting::getInstance()->getUserName();
 	receiver = Receiver::getInstance();
 
 	connect(this, SIGNAL(readyRead()),    this, SLOT(onReadyRead()));
@@ -163,7 +164,7 @@ void Connection::onDisconnected()
 	emit connectionStatusChanged(false);
 
 	 // reconnect
-	Setting* setting = MySetting<Setting>::getInstance();
+	Setting* setting = Setting::getInstance();
 	connectToHost(setting->getServerAddress(), setting->getServerPort());
 }
 
@@ -300,12 +301,12 @@ void Receiver::parseTimeSpan(const QByteArray& buffer)
 {
 	QList<QByteArray> sections = buffer.split(Connection::Delimiter1);
 	if(sections.size() == 2)
-		emit timespan(QDateTime::fromString(sections[0], Setting::dateTimeFormat), 
+		emit timespan(QDateTime::fromString(sections[0], Setting::dateTimeFormat),
 					  QDateTime::fromString(sections[1], Setting::dateTimeFormat));
 }
 
 void Receiver::parseProjects(const QByteArray& buffer) {
-	emit projectsResponse(buffer.split(Connection::Delimiter1));
+	emit projectsResponse(QString(buffer).split(Connection::Delimiter1));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -357,12 +358,12 @@ void Sender::sendEventRequest(const QStringList& users, const QStringList& event
 							  const QStringList& phases, int fuzziness)
 {
 	if(connection->isReadyForUse())
-		connection->send("REQUEST_EVENTS", 
+		connection->send("REQUEST_EVENTS",
 			QList<QByteArray>() << users.join(QString(Connection::Delimiter2)).toUtf8()
 								<< eventTypes.join(QString(Connection::Delimiter2)).toUtf8()
-								<< startTime.toString(Setting::dateTimeFormat).toUtf8() + Connection::Delimiter2 + 
+								<< startTime.toString(Setting::dateTimeFormat).toUtf8() + Connection::Delimiter2 +
 								   endTime  .toString(Setting::dateTimeFormat).toUtf8()
-							    << phases.join(QString(Connection::Delimiter2)).toUtf8()
+								<< phases.join(QString(Connection::Delimiter2)).toUtf8()
 								<< QByteArray::number(fuzziness)
 		);
 }
