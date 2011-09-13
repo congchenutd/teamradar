@@ -118,7 +118,7 @@ void TeamRadarView::loadDir(const QString& dirPath, int maxLevel)
 {
 	clear();
 	setRoot(createNode(true, dirPath, 0));  // create root first
-	expandNode(getRoot(), maxLevel);
+//	expandNode(getRoot(), maxLevel);
 	centerTree();
 }
 
@@ -129,12 +129,12 @@ void TeamRadarView::createNodesFromFS(const QString& path, TeamRadarNode* owner,
 		return;
 	QFileInfoList files = QDir(path).entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
 	foreach(QFileInfo info, files)
-		if(info.isDir() && !isFilteredDir(info.baseName()))
+		if(info.isDir() && !isFilteredDir(info.baseName()))  // valid dir, recursive
 		{
 			TeamRadarNode* node = createNode(true, info.filePath(), owner);
 			createNodesFromFS(info.filePath(), node, maxLevel);
 		}
-		else if(!isFilteredFile(info.baseName())) {
+		else if(!isFilteredFile(info.baseName())) {          // valid file
 			createNode(false, info.filePath(), owner);
 		}
 }

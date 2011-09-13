@@ -25,12 +25,14 @@ signals:
 	void userOnline(const TeamRadarEvent& event);
 
 // handle server messages
+public slots:
+	void refreshUserList();                      // ask the server for online user list
+
 private slots:
 	void onUserList(const QList<QByteArray>& list);
 	void onPhotoResponse(const QString& fileName, const QByteArray& photoData);
 	void onColorResponse(const QString& userName, const QByteArray& color);
 	void onEvent(const TeamRadarEvent& event);   // intercept CONNECTED/DISCONNECTED messages
-	void refreshUserList();                      // ask the server for online user list
 
 private:
 	PeerManager(QObject* parent = 0);

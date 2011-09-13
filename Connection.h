@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QTime>
 #include <QStringList>
+#include <QMap>
 #include "TeamRadarEvent.h"
 
 // Parses the message header & body from Connection
@@ -17,6 +18,7 @@
 //			Format of parameters: parameter1#parameter2#...
 //		COLOR_RESPONSE: [username#color]/[empty]
 //		TIMESPAN_RESPONSE: start#end
+//		PROJECT_RESPONSE: projectName1#name2...
 
 class Receiver : public QObject
 {
@@ -32,8 +34,11 @@ public:
 		ColorResponse,
 		EventsResponse,
 		Chat,
-		TimeSpanResponse
+		TimeSpanResponse,
+		ProjectsResponse
 	} DataType;
+
+	typedef void(Receiver::*Parser)(const QByteArray& buffer);
 
 public:
 	static Receiver* getInstance();
@@ -50,6 +55,7 @@ signals:
 	void eventsResponse(const TeamRadarEvent& event);
 	void chatMessage(const QString& peerName, const QString& content);
 	void timespan(const QDateTime& start, const QDateTime& end);
+	void projectsResponse(const QList<QByteArray>& list);
 
 private:
 	void parseGreeting(const QByteArray& buffer);
@@ -60,11 +66,12 @@ private:
 	void parseEvents  (const QByteArray& buffer);
 	void parseChat    (const QByteArray& buffer);
 	void parseTimeSpan(const QByteArray& buffer);
+	void parseProjects(const QByteArray& buffer);
 
 private:
 	static Receiver* instance;
-	int eventCount;
-	int eventsReceived;
+	QMap<QString, DataType> dataTypes;
+	QMap<DataType, Parser>  parsers;
 };
 
 
@@ -142,6 +149,8 @@ private:
 //		CHAT: recipients#content
 //			recipients = name1;name2;...
 //		REQUEST_TIMESPAN: [empty]
+//		REQUEST_PROJECTS: [empty]
+//		JOIN_PROJECT: projectname
 
 class Sender : public QObject
 {
@@ -159,6 +168,8 @@ public:
 						  const QStringList& phases, int fuzziness);
 	void sendChat(const QStringList& recipients, const QString& content);
 	void sendTimeSpanRequest();
+	void sendProjectsRequest();
+	void sendJoinProject(const QString& projectName);
 
 private:
 	static Sender* instance;

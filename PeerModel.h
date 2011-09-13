@@ -41,12 +41,4 @@ public:
 	enum {NAME, COLOR, IMAGE, ONLINE, RECEIVE};
 };
 
-
-class Test : public QObject
-{
-Q_OBJECT
-signals:
-	void foo();
-};
-
 #endif
