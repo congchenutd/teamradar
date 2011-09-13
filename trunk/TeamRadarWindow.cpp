@@ -117,7 +117,7 @@ void TeamRadarWindow::onSetImage()
 
 void TeamRadarWindow::registerPhoto()
 {
-	QFile file(getUserName() + ".png");
+	QFile file(setting->getPhotoFilePath(getUserName()));
 	if(!file.open(QFile::ReadOnly))
 		return;
 

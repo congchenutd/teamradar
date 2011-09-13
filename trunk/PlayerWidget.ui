@@ -150,17 +150,6 @@
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QPushButton" name="btShowChat">
-            <property name="icon">
-             <iconset resource="Resources.qrc">
-              <normaloff>:/Images/Chat.png</normaloff>:/Images/Chat.png</iconset>
-            </property>
-            <property name="checkable">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
          </layout>
         </widget>
        </item>

@@ -178,14 +178,14 @@ void PlayerWidget::play(const TeamRadarEvent& event)
 			return;
 		Setting::getInstance()->setValue("RootPath", event.parameters);
 		reloadProject();
+		Sender::getInstance()->sendJoinProject(QFileInfo(event.parameters).baseName());
 	}
 }
 
 void PlayerWidget::reloadProject()
 {
-	// load dir, and refresh users
 	ui.graphicsView->loadDir(Setting::getInstance()->value("RootPath").toString());
-//	PeerManager::getInstance()->refreshUserList();
+	peerManager->refreshUserList();
 }
 
 void PlayerWidget::onPlaylistClicked(const QModelIndex& idx) {

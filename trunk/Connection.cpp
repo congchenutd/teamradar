@@ -59,7 +59,7 @@ bool Connection::readHeader()
 	return true;
 }
 
-// read all available data to buffer
+// read all available data to buffer until (including) the separator
 int Connection::readDataIntoBuffer(int maxSize)
 {
 	if (maxSize > MaxBufferSize)
@@ -203,61 +203,38 @@ Receiver* Receiver::getInstance()
 
 Receiver::Receiver()
 {
-	eventCount = eventsReceived = 0;
+	dataTypes.insert("GREETING",          Greeting);
+	dataTypes.insert("EVENT_RESPONSE",    EventsResponse);
+	dataTypes.insert("EVENT",             Event);
+	dataTypes.insert("PHOTO_RESPONSE",    PhotoResponse);
+	dataTypes.insert("USERLIST_RESPONSE", UserListResponse);
+	dataTypes.insert("COLOR_RESPONSE",    ColorResponse);
+	dataTypes.insert("CHAT",              Chat);
+	dataTypes.insert("TIMESPAN_RESPONSE", TimeSpanResponse);
+	dataTypes.insert("PROJECTS_RESPONSE", ProjectsResponse);
+
+	parsers.insert(Greeting,         &Receiver::parseGreeting);
+	parsers.insert(EventsResponse,   &Receiver::parseEvents);
+	parsers.insert(Event,            &Receiver::parseEvent);
+	parsers.insert(UserListResponse, &Receiver::parseUserList);
+	parsers.insert(PhotoResponse,    &Receiver::parsePhoto);
+	parsers.insert(ColorResponse,    &Receiver::parseColor);
+	parsers.insert(Chat,             &Receiver::parseChat);
+	parsers.insert(TimeSpanResponse, &Receiver::parseTimeSpan);
+	parsers.insert(ProjectsResponse, &Receiver::parseProjects);
 }
 
-Receiver::DataType Receiver::guessDataType(const QByteArray& header)
+Receiver::DataType Receiver::guessDataType(const QByteArray& h)
 {
-	if(header.startsWith("GREETING"))
-		return Greeting;
-	if(header.startsWith("EVENT_RESPONSE"))  // startsWith is not greedy!!
-		return EventsResponse;               // put long prefix first
-	if(header.startsWith("EVENT"))
-		return Event;
-	if(header.startsWith("PHOTO_RESPONSE"))
-		return PhotoResponse;
-	if(header.startsWith("USERLIST_RESPONSE"))
-		return UserListResponse;
-	if(header.startsWith("COLOR_RESPONSE"))
-		return ColorResponse;
-	if(header.startsWith("CHAT"))
-		return Chat;
-	if(header.startsWith("TIMESPAN_RESPONSE"))
-		return TimeSpanResponse;
-	return Undefined;
+	QByteArray header = h;
+	if(header.endsWith('#'))
+		header.chop(1);
+	return dataTypes.contains(header) ? dataTypes[header] : Undefined;
 }
 
-void Receiver::processData(Receiver::DataType dataType, const QByteArray& buffer)
-{
-	switch(dataType)
-	{
-	case Greeting:
-		parseGreeting(buffer);
-		break;
-	case Event:
-		parseEvent(buffer);
-		break;
-	case PhotoResponse:
-		parsePhoto(buffer);
-		break;
-	case UserListResponse:
-		parseUserList(buffer);
-		break;
-	case ColorResponse:
-		parseColor(buffer);
-		break;
-	case EventsResponse:
-		parseEvents(buffer);
-		break;
-	case Chat:
-		parseChat(buffer);
-		break;
-	case TimeSpanResponse:
-		parseTimeSpan(buffer);
-		break;
-	default:
-		break;
-	}
+void Receiver::processData(Receiver::DataType dataType, const QByteArray& buffer) {
+	if(dataType != Undefined)
+		(this->*parsers[dataType])(buffer);
 }
 
 void Receiver::parseGreeting(const QByteArray& buffer)
@@ -325,6 +302,10 @@ void Receiver::parseTimeSpan(const QByteArray& buffer)
 	if(sections.size() == 2)
 		emit timespan(QDateTime::fromString(sections[0], Setting::dateTimeFormat), 
 					  QDateTime::fromString(sections[1], Setting::dateTimeFormat));
+}
+
+void Receiver::parseProjects(const QByteArray& buffer) {
+	emit projectsResponse(buffer.split(Connection::Delimiter1));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -395,4 +376,14 @@ void Sender::sendChat(const QStringList& recipients, const QString& content) {
 void Sender::sendTimeSpanRequest() {
 	if(connection->isReadyForUse())
 		connection->send("REQUEST_TIMESPAN");
+}
+
+void Sender::sendProjectsRequest() {
+	if(connection->isReadyForUse())
+		connection->send("REQUEST_PROJECTS");
+}
+
+void Sender::sendJoinProject(const QString& projectName) {
+	if(connection->isReadyForUse())
+		connection->send("JOIN_PROJECT", projectName.toUtf8());
 }
