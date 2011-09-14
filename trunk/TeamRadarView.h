@@ -56,6 +56,7 @@ protected:
 	void mousePressEvent  (QMouseEvent* event);
 	void mouseReleaseEvent(QMouseEvent* event);
 	void closeEvent(QCloseEvent*);
+	bool viewportEvent(QEvent *event);
 
 private:
 	void resetScale();
