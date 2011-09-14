@@ -1,5 +1,6 @@
 #include "Utility.h"
 #include "Setting.h"
+#include "Connection.h"
 #include <math.h>
 #include <QFile>
 #include <QFileInfo>

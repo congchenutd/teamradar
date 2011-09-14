@@ -1,6 +1,6 @@
 #include "RecipientsDlg.h"
-#include "ImageColorBoolModel.h"
-#include "ImageColorBoolDelegate.h"
+#include "../../../../ImageColorBoolModel/ImageColorBoolModel.h"
+#include "../../../../ImageColorBoolModel/ImageColorBoolDelegate.h"
 #include "Setting.h"
 #include <QTableView>
 #include <QDialogButtonBox>
@@ -27,7 +27,6 @@ RecipientsDlg::RecipientsDlg(const QString& peerName, QWidget* parent) : QDialog
 		model.setData(model.index(row, ONLINE), peersModel.data(peersModel.index(row, ONLINE)));
 		model.setData(model.index(row, SELECTED), name == peerName);
 	}
-
 
 	// view
 	QTableView* tableView = new QTableView(this);

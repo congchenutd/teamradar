@@ -1,8 +1,8 @@
 #ifndef PEER_MODEL_H
 #define PEER_MODEL_H
 
-#include "ImageColorBoolModel.h"
 #include <QSqlTableModel>
+#include <QColor>
 
 struct DeveloperInfo
 {

@@ -22,7 +22,6 @@ class TeamRadarView : public QGraphicsView
 
 public:
 	TeamRadarView(QWidget *parent = 0);
-	virtual ~TeamRadarView();
 	void itemMoved();                                         // start layouting
 	void loadDir(const QString& dirPath, int maxLevel = 0);   // load the whole view
 	void open(const QString& fileName);                       // open graph file
@@ -56,6 +55,7 @@ protected:
 	void mouseMoveEvent   (QMouseEvent* event);
 	void mousePressEvent  (QMouseEvent* event);
 	void mouseReleaseEvent(QMouseEvent* event);
+	void closeEvent(QCloseEvent*);
 
 private:
 	void resetScale();

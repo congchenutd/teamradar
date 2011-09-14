@@ -1,12 +1,12 @@
 #include "ChatWindow.h"
 #include "Connection.h"
-#include "RecipientsDlg.h"
 #include "Setting.h"
 #include <QDateTime>
 #include <QGraphicsScene>
 #include <QFile>
 #include <QTextStream>
 #include <QScrollBar>
+#include "RecipientsDlg.h"
 
 ChatWindow::ChatWindow(const QString& name, QWidget *parent)
 	: QDialog(parent), peerName(name), peerReplied(true), meReplied(true)
