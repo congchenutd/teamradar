@@ -185,7 +185,7 @@ void PlayerWidget::play(const TeamRadarEvent& event)
 void PlayerWidget::reloadProject()
 {
 	ui.graphicsView->loadDir(Setting::getInstance()->value("RootPath").toString());
-	peerManager->refreshUserList();
+//	peerManager->refreshUserList();
 }
 
 void PlayerWidget::onPlaylistClicked(const QModelIndex& idx) {

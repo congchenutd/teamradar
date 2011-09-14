@@ -5,6 +5,7 @@
 #include "PeerModel.h"
 #include "TeamRadarEvent.h"
 #include "ImageColorBoolDelegate.h"
+#include "ImageColorBoolModel.h"
 #include <QHostAddress>
 #include <QtGui/QTextEdit>
 #include <QtGui/QVBoxLayout>
