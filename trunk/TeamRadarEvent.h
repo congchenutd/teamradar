@@ -6,10 +6,10 @@
 
 struct TeamRadarEvent
 {
-	TeamRadarEvent::TeamRadarEvent(const QString& name, 
-								   const QString& event, 
-								   const QString& para = QString(), 
-								   const QString& t = QString())
+	TeamRadarEvent(const QString& name,
+				   const QString& event,
+				   const QString& para = QString(),
+				   const QString& t = QString())
 		: userName(name), eventType(event), parameters(para) {
 		time = t.isEmpty() ? QDateTime::currentDateTime() 
 						   : QDateTime::fromString(t, Setting::dateTimeFormat);

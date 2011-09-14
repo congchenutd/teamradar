@@ -388,10 +388,6 @@ void TeamRadarView::onWorkOn()
 	setCursor(Qt::PointingHandCursor);  // wait the user for picking the target
 }
 
-TeamRadarView::~TeamRadarView() {
-	clear();
-}
-
 void TeamRadarView::moveDeveloperTo(const QString& name, const QString& relativePath)
 {
 	QString absolutePath = toAbsolutePath(getRoot()->getName(), relativePath);
@@ -504,4 +500,8 @@ HumanNode* TeamRadarView::findDeveloper(const QString& name)
 {
 	Humans::Iterator it = humans.find(name);
 	return it != humans.end() ? it.value() : 0;
+}
+
+void TeamRadarView::closeEvent(QCloseEvent*) {
+	clear();
 }

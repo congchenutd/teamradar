@@ -116,7 +116,7 @@ bool Connection::hasEnoughData()
 		numBytes = getDataLength();
 
 	// wait for data
-	if(bytesAvailable() < numBytes || numBytes <= 0)
+	if(bytesAvailable() < numBytes/* || numBytes <= 0*/)
 	{
 		transferTimerID = startTimer(TransferTimeout);
 		return false;
@@ -170,6 +170,7 @@ void Connection::onDisconnected()
 
 void Connection::send(const QByteArray& header, const QByteArray& body)
 {
+//	QByteArray b = body.isEmpty() ? "P" : body;
 	QByteArray message(header);
 	if(!header.endsWith(Delimiter1))
 		message.append(Delimiter1);
@@ -305,8 +306,12 @@ void Receiver::parseTimeSpan(const QByteArray& buffer)
 					  QDateTime::fromString(sections[1], Setting::dateTimeFormat));
 }
 
-void Receiver::parseProjects(const QByteArray& buffer) {
-	emit projectsResponse(QString(buffer).split(Connection::Delimiter1));
+void Receiver::parseProjects(const QByteArray& buffer)
+{
+	if(!buffer.isEmpty())
+		emit projectsResponse(QString(buffer).split(Connection::Delimiter1));
+	else
+		emit projectsResponse(QStringList());
 }
 
 //////////////////////////////////////////////////////////////////////////

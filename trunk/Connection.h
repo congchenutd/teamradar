@@ -89,7 +89,7 @@ public:
 	void setUserName(const QString& name) { userName = name; }
 	void setReadyForUse();
 
-	void send(const QByteArray& header, const QByteArray& body = QByteArray("P"));
+	void send(const QByteArray& header, const QByteArray& body = QByteArray());
 	void send(const QByteArray& header, const QList<QByteArray>& bodies);
 
 protected:

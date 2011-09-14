@@ -25,10 +25,8 @@ signals:
 	void userOnline(const TeamRadarEvent& event);
 
 // handle server messages
-public slots:
-	void refreshUserList();                      // ask the server for online user list
-
 private slots:
+	void refreshUserList();                      // ask the server for online user list
 	void onUserList(const QList<QByteArray>& list);
 	void onPhotoResponse(const QString& fileName, const QByteArray& photoData);
 	void onColorResponse(const QString& userName, const QByteArray& color);
