@@ -2,11 +2,11 @@
 #include "Setting.h"
 #include "Connection.h"
 #include "PeerModel.h"
+#include <QFileInfo>
 
 PeerManager::PeerManager(QObject *parent) : QObject(parent)
 {
 	model = new PeerModel(this);
-//	model->setEditStrategy(QSqlTableModel::OnManualSubmit);
 	model->setTable("Peers");
 	model->select();
 
