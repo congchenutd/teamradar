@@ -118,42 +118,41 @@ void TeamRadarView::scaleBy(qreal scaleFactor)
 void TeamRadarView::loadDir(const QString& dirPath, int maxLevel)
 {
 	clear();
-	setRoot(createNode(true, dirPath, 0));  // create root first
+	setRoot(createNode(dirPath, 0));  // create root first
 //	expandNode(getRoot(), maxLevel);
 	centerTree();
 }
 
 // a recursive function for expansion
-void TeamRadarView::createNodesFromFS(const QString& path, TeamRadarNode* owner, int maxLevel)
+void TeamRadarView::createNodesFromFS(const QString& name, TeamRadarNode* owner, int maxLevel)
 {
 	if(owner->getLevel() >= maxLevel)
 		return;
-	QFileInfoList files = QDir(path).entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+
+	QFileInfoList files = QDir(toAbsolutePath(name)).entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
 	foreach(QFileInfo info, files)
+	{
+		QString relativePath = toRelativePath(info.filePath());
 		if(info.isDir() && !isFilteredDir(info.baseName()))  // valid dir, recursive
 		{
-			TeamRadarNode* node = createNode(true, info.filePath(), owner);
+			TeamRadarNode* node = createNode(relativePath, owner);
 			createNodesFromFS(info.filePath(), node, maxLevel);
 		}
 		else if(!isFilteredFile(info.baseName())) {          // valid file
-			createNode(false, info.filePath(), owner);
+			createNode(relativePath, owner);
 		}
+	}
 }
 
 // a factory
-TeamRadarNode* TeamRadarView::createNode(bool isDir, const QString& name, TeamRadarNode* owner)
+TeamRadarNode* TeamRadarView::createNode(const QString& name, TeamRadarNode* owner)
 {
 	TeamRadarNode* node;
-	if(isDir)
+	if(QFileInfo(toAbsolutePath(name)).isDir())
 		node = new DirNode(owner, name);
 	else
-	{
-//		QTime time;
-//		time.start();
 		node = new FileNode(owner, name);
-//		int msec = time.elapsed();
-//		qDebug() << "-----------------------------------------------------" << name << ": " << msec;
-	}
+
 	scene()->addItem(node);
 	if(owner != 0)
 		scene()->addItem(new TreeEdge(owner, node));   // add link to owner
@@ -240,7 +239,7 @@ TeamRadarNode* TeamRadarView::loadNodeFromXML(QXmlStreamReader& xml, TeamRadarNo
 	int x        = xml.attributes().value("x")    .toString().toInt();
 	int y        = xml.attributes().value("y")    .toString().toInt();
 	bool pinned  = xml.attributes().value("pinned") == "yes";
-	TeamRadarNode* node = createNode(isDir, name, parent);
+	TeamRadarNode* node = createNode(name, parent);
 	node->setPos(x, y);
 	node->setPinned(pinned);
 
@@ -250,7 +249,8 @@ TeamRadarNode* TeamRadarView::loadNodeFromXML(QXmlStreamReader& xml, TeamRadarNo
 }
 
 void TeamRadarView::moveCanvasBy(int x, int y) {
-	scrollContentsBy(x / scaleFactor, y / scaleFactor);
+	const QRectF rect = sceneRect();
+	scene()->setSceneRect(rect.x() - x, rect.y() - y, rect.width(), rect.height());
 }
 
 void TeamRadarView::moveCanvasBy(const QPointF& vec) {
@@ -319,7 +319,7 @@ void TeamRadarView::onAddDir()
 	QString name = QInputDialog::getText(this, tr("Add Dir"), tr("Dir Name"));
 	if(!name.isEmpty())
 	{
-		createNode(true, currentNode->getName() + "/" + name, currentNode);
+		createNode(currentNode->getName() + "/" + name, currentNode);
 		// otherwise may end up selecting multiple nodes, and drag them together
 		currentNode->setSelected(false);
 	}
@@ -330,7 +330,7 @@ void TeamRadarView::onAddFile()
 	QString name = QInputDialog::getText(this, tr("Add File"), tr("File Name"));
 	if(!name.isEmpty())
 	{
-		createNode(false, currentNode->getName() + "/" + name, currentNode);
+		createNode(currentNode->getName() + "/" + name, currentNode);
 		// otherwise may end up selecting multiple nodes, and drag them together
 		currentNode->setSelected(false);
 	}
@@ -391,11 +391,12 @@ void TeamRadarView::onWorkOn()
 
 void TeamRadarView::moveDeveloperTo(const QString& name, const QString& relativePath)
 {
-	QString absolutePath = toAbsolutePath(getRoot()->getName(), relativePath);
+//	QString absolutePath = toAbsolutePath(getRoot()->getName(), relativePath);
 	if(HumanNode* human = findDeveloper(name))
 	{
 		currentHuman = human;
-		currentHuman->setWorkOn(absolutePath);
+//		currentHuman->setWorkOn(absolutePath);
+		currentHuman->setWorkOn(relativePath);
 	}
 }
 
