@@ -175,7 +175,7 @@ protected:
 	virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value);
 
 private:
-	TeamRadarNode* findOwner(TeamRadarNode* start, bool expandable = true);   // find the node it works on
+	TeamRadarNode* findOwner(TeamRadarNode* parent, const QString& path, bool expandable = true);   // find the node it works on
 	void leaveAfterimage();
 	void detachFromOwner();
 

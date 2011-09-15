@@ -470,9 +470,9 @@ QMenu& HumanNode::getContextMenu() const
 // expand the target node if expandable == true
 void HumanNode::updateOwner(bool expandable)
 {
-	detachFromOwner();                                 // leave original owner
-	owner = findOwner(view->getRoot(), expandable);    // move to new owner
-	if(owner != 0)
+	detachFromOwner();                                       // leave the original owner
+	owner = findOwner(view->getRoot(), workOn, expandable);  // find a new owner
+	if(owner != 0)                                           // connect to the new owner
 	{
 		scene()->addItem(new HumanEdge(owner, this));
 		owner->loosenEdgeToOwner();
@@ -482,30 +482,26 @@ void HumanNode::updateOwner(bool expandable)
 	}
 }
 
-// starting from "start", find the node this works on
+// starting from "start", find the node it works on
 // expand the node if expandable is true
-TeamRadarNode* HumanNode::findOwner(TeamRadarNode* start, bool expandable)
+TeamRadarNode* HumanNode::findOwner(TeamRadarNode* parent, const QString& path, bool expandable)
 {
-	// find the max matching node in the FS
-	QFileInfo matchingPath = start->findMatchingPath(workOn);
-	if(matchingPath.filePath().isEmpty())    // no such file
-		return start;
-
-	TeamRadarNode* child = start->findChild(matchingPath.filePath());
-	if(child == 0)      // not expanded
+	QString firstSection = getFirstSection(path);
+	TeamRadarNode* child = parent->findChild(firstSection);
+	if(child == 0)    // not expanded
 	{
-		if(expandable)
-		{
-			child = view->createNode(matchingPath.isDir(), matchingPath.filePath(), start);
-			child->randomize();
-		}
-		else
-			return start;
+		if(!expandable)
+			return parent;
+
+		child = view->createNode(firstSection, parent);
+		child->randomize();
 	}
-	if(matchingPath.isDir())
-		return findOwner(child, expandable);     // recursive
-	else
+	
+	if(firstSection == path)   // last section
 		return child;
+	QString rest = path;
+	rest.remove(firstSection + '/');
+	return findOwner(child, rest, expandable);
 }
 
 Nodes HumanNode::getPushers() const

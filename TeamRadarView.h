@@ -39,7 +39,7 @@ public:
 	void centerTree(TeamRadarNode* node = 0);                 // center to node
 	const Humans& getHumans() const { return humans; }
 	void setEffectsEnabled(bool enable);
-	TeamRadarNode* createNode(bool isDir, const QString& name, TeamRadarNode* owner);     // factory
+	TeamRadarNode* createNode(const QString& name, TeamRadarNode* owner);     // factory
 	bool humanExists(const QString& name);
 
 	void addDeveloper(const QString& name, const QString& image);
@@ -62,7 +62,7 @@ private:
 	void resetScale();
 	void scaleBy(qreal scaleFactor);
 	void scaleTo(qreal scaleFactor);
-	void  createNodesFromFS(const QString& path, TeamRadarNode* owner, int maxLevel);  // recursive
+	void  createNodesFromFS(const QString& name, TeamRadarNode* owner, int maxLevel);  // recursive
 	void  saveNodeToXML(QXmlStreamWriter& xml, const TeamRadarNode* node);
 	TeamRadarNode* loadNodeFromXML(QXmlStreamReader& xml, TeamRadarNode* parent, bool isDir);
 	void moveCanvasBy(int x, int y);
