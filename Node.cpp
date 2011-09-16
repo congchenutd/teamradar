@@ -487,17 +487,19 @@ void HumanNode::updateOwner(bool expandable)
 TeamRadarNode* HumanNode::findOwner(TeamRadarNode* parent, const QString& path, bool expandable)
 {
 	QString firstSection = getFirstSection(path);
+	bool atLastSection = (firstSection == path); 
 	TeamRadarNode* child = parent->findChild(firstSection);
 	if(child == 0)    // not expanded
 	{
 		if(!expandable)
 			return parent;
 
-		child = view->createNode(firstSection, parent);
+		// only the last section in the path is a file
+		child = view->createNode(!atLastSection, firstSection, parent);
 		child->randomize();
 	}
 	
-	if(firstSection == path)   // last section
+	if(atLastSection)   // last section
 		return child;
 	QString rest = path;
 	rest.remove(firstSection + '/');

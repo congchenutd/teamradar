@@ -1,11 +1,11 @@
-#include "TeamRadarWindow.h"
+#include "TeamRadarDlg.h"
 #include "Connection.h"
 #include "Setting.h"
 #include "PeerManager.h"
 #include "PeerModel.h"
 #include "TeamRadarEvent.h"
 #include "ImageColorBoolDelegate.h"
-#include "ImageColorBoolModel.h"
+#include "ImageColorBoolProxy.h"
 #include <QHostAddress>
 #include <QtGui/QTextEdit>
 #include <QtGui/QVBoxLayout>
@@ -14,8 +14,11 @@
 #include <QColorDialog>
 #include <QSqlQuery>
 #include <QSortFilterProxyModel>
+#include <QContextMenuEvent>
+#include <QMenu>
+#include <QMessageBox>
 
-TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
+TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QDialog(parent)
 {
 	peerManager = PeerManager::getInstance();
     ui.setupUi(this);
@@ -59,7 +62,7 @@ TeamRadarWindow::TeamRadarWindow(QWidget *parent) : QDialog(parent)
 //	peerManager->refreshUserList();   // actively fetch user list
 }
 
-void TeamRadarWindow::accept()
+void TeamRadarDlg::accept()
 {
 	// save settings
 	setting->setServerAddress(ui.leServerAddress->text());
@@ -84,7 +87,7 @@ void TeamRadarWindow::accept()
 }
 
 // search the environmental variables for user name
-QString TeamRadarWindow::guessUserName() const
+QString TeamRadarDlg::guessUserName() const
 {
 	QStringList envVariables;
 	envVariables << "USERNAME.*" << "USER.*" << "USERDOMAIN.*"
@@ -108,7 +111,7 @@ QString TeamRadarWindow::guessUserName() const
 	return result.isEmpty() ? "Unknown" : result;
 }
 
-void TeamRadarWindow::onSetImage()
+void TeamRadarDlg::onSetImage()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Choose Image"), ".",
                                                     "Images (*.png *.jpg *.bmp *.ico)");
@@ -116,7 +119,7 @@ void TeamRadarWindow::onSetImage()
 		ui.labelImage->setPixmap(QPixmap(fileName).scaled(128, 128));
 }
 
-void TeamRadarWindow::registerPhoto()
+void TeamRadarDlg::registerPhoto()
 {
 	QFile file(setting->getPhotoFilePath(getUserName()));
 	if(!file.open(QFile::ReadOnly))
@@ -126,21 +129,21 @@ void TeamRadarWindow::registerPhoto()
 	Sender::getInstance()->sendPhotoRegistration("png", data);
 }
 
-void TeamRadarWindow::resizeTable()
+void TeamRadarDlg::resizeTable()
 {
 	ui.tvPeers->resizeRowsToContents();
 	ui.tvPeers->resizeColumnsToContents();
 }
 
-void TeamRadarWindow::onSetColor() {
+void TeamRadarDlg::onSetColor() {
 	setColor(QColorDialog::getColor(color));
 }
 
-QString TeamRadarWindow::getUserName() const {
+QString TeamRadarDlg::getUserName() const {
 	return ui.leUserName->text();
 }
 
-void TeamRadarWindow::setColor(const QColor& clr)
+void TeamRadarDlg::setColor(const QColor& clr)
 {
 	if(clr.isValid())
 	{
@@ -151,6 +154,32 @@ void TeamRadarWindow::setColor(const QColor& clr)
 	}
 }
 
-void TeamRadarWindow::registerColor() {
+void TeamRadarDlg::registerColor() {
 	Sender::getInstance()->sendColorRegistration(color);
+}
+
+void TeamRadarDlg::contextMenuEvent(QContextMenuEvent* event)
+{
+	QModelIndexList idxes = ui.tvPeers->selectionModel()->selectedRows();
+	if(idxes.isEmpty())
+		return;
+
+	QAction* actionDelete = new QAction("Delete", this);
+	connect(actionDelete, SIGNAL(triggered()), this, SLOT(onDelete()));
+	QMenu menu(this);
+	menu.addAction(actionDelete);
+	menu.exec(event->globalPos());
+}
+
+void TeamRadarDlg::onDelete()
+{
+	QModelIndexList idxes = ui.tvPeers->selectionModel()->selectedRows();
+	if(idxes.isEmpty())
+		return;
+
+	if(QMessageBox::warning(this, tr("Warning"), tr("Really delete this entry?"), 
+		QMessageBox::Yes | QMessageBox::No)	== QMessageBox::No)
+		return;
+
+	model->removeRow(idxes.front().row());
 }

@@ -12,6 +12,8 @@ include(../../plugins/coreplugin/coreplugin.pri)
 include(../../plugins/projectexplorer/projectexplorer.pri)
 include(../../plugins/vcsbase/vcsbase.pri)
 
+INCLUDEPATH += ../../../../ImageColorBoolModel/
+
 # Input
 HEADERS += ChatWindow.h \
            Connection.h \
@@ -32,8 +34,10 @@ HEADERS += ChatWindow.h \
            TeamRadarEvent.h \
            TeamRadarPlugin.h \
            TeamRadarView.h \
-           TeamRadarWindow.h \
-           Utility.h
+           TeamRadarDlg.h \
+           Utility.h \
+		   ../../../../ImageColorBoolModel/ImageColorBoolDelegate.h \
+		   ../../../../ImageColorBoolModel/ImageColorBoolProxy.h
 FORMS += ChatWindow.ui PlayerWidget.ui RequestEventsDlg.ui TeamRadarDlg.ui
 SOURCES += ChatWindow.cpp \
            Connection.cpp \
@@ -52,6 +56,8 @@ SOURCES += ChatWindow.cpp \
            Setting.cpp \
            TeamRadarPlugin.cpp \
            TeamRadarView.cpp \
-           TeamRadarWindow.cpp \
-           Utility.cpp
+           TeamRadarDlg.cpp \
+           Utility.cpp \
+		   ../../../../ImageColorBoolModel/ImageColorBoolDelegate.cpp \
+		   ../../../../ImageColorBoolModel/ImageColorBoolProxy.cpp
 RESOURCES += Resources.qrc

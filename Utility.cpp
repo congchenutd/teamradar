@@ -17,9 +17,12 @@ QPointF generateHeavenPos(int distance, double angle)
 
 QString toAbsolutePath(const QString& relativePath)
 {
+	QString rootPath = Setting::getInstance()->getRootPath();
+	if(relativePath == rootPath)
+		return relativePath;
+
 	if(QFileInfo(relativePath).isAbsolute())
 		return relativePath;
-	QString rootPath = Setting::getInstance()->value("RootPath").toString();
 	return rootPath + '/' + relativePath;
 }
 
@@ -43,7 +46,7 @@ QString toRelativePath(const QString& absolutePath)
 		return absolutePath;
 
 	QString result = absolutePath;
-	QString rootPath = Setting::getInstance()->value("RootPath").toString();
+	QString rootPath = Setting::getInstance()->getRootPath();
 	result.remove(rootPath);
 	return result.right(result.length() - 1);   // remove the first '/'
 }

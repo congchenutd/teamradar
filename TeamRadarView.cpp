@@ -118,7 +118,7 @@ void TeamRadarView::scaleBy(qreal scaleFactor)
 void TeamRadarView::loadDir(const QString& dirPath, int maxLevel)
 {
 	clear();
-	setRoot(createNode(dirPath, 0));  // create root first
+	setRoot(createNode(true, dirPath, 0));  // create root first
 //	expandNode(getRoot(), maxLevel);
 	centerTree();
 }
@@ -135,20 +135,20 @@ void TeamRadarView::createNodesFromFS(const QString& name, TeamRadarNode* owner,
 		QString relativePath = toRelativePath(info.filePath());
 		if(info.isDir() && !isFilteredDir(info.baseName()))  // valid dir, recursive
 		{
-			TeamRadarNode* node = createNode(relativePath, owner);
+			TeamRadarNode* node = createNode(true, relativePath, owner);
 			createNodesFromFS(info.filePath(), node, maxLevel);
 		}
 		else if(!isFilteredFile(info.baseName())) {          // valid file
-			createNode(relativePath, owner);
+			createNode(false, relativePath, owner);
 		}
 	}
 }
 
 // a factory
-TeamRadarNode* TeamRadarView::createNode(const QString& name, TeamRadarNode* owner)
+TeamRadarNode* TeamRadarView::createNode(bool isDir, const QString& name, TeamRadarNode* owner)
 {
 	TeamRadarNode* node;
-	if(QFileInfo(toAbsolutePath(name)).isDir())
+	if(isDir)
 		node = new DirNode(owner, name);
 	else
 		node = new FileNode(owner, name);
@@ -239,7 +239,7 @@ TeamRadarNode* TeamRadarView::loadNodeFromXML(QXmlStreamReader& xml, TeamRadarNo
 	int x        = xml.attributes().value("x")    .toString().toInt();
 	int y        = xml.attributes().value("y")    .toString().toInt();
 	bool pinned  = xml.attributes().value("pinned") == "yes";
-	TeamRadarNode* node = createNode(name, parent);
+	TeamRadarNode* node = createNode(isDir, name, parent);
 	node->setPos(x, y);
 	node->setPinned(pinned);
 
@@ -319,7 +319,7 @@ void TeamRadarView::onAddDir()
 	QString name = QInputDialog::getText(this, tr("Add Dir"), tr("Dir Name"));
 	if(!name.isEmpty())
 	{
-		createNode(currentNode->getName() + "/" + name, currentNode);
+		createNode(true, currentNode->getName() + "/" + name, currentNode);
 		// otherwise may end up selecting multiple nodes, and drag them together
 		currentNode->setSelected(false);
 	}
@@ -330,7 +330,7 @@ void TeamRadarView::onAddFile()
 	QString name = QInputDialog::getText(this, tr("Add File"), tr("File Name"));
 	if(!name.isEmpty())
 	{
-		createNode(currentNode->getName() + "/" + name, currentNode);
+		createNode(false, currentNode->getName() + "/" + name, currentNode);
 		// otherwise may end up selecting multiple nodes, and drag them together
 		currentNode->setSelected(false);
 	}

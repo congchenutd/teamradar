@@ -4,7 +4,7 @@
 #include <extensionsystem/iplugin.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/inavigationwidgetfactory.h> 
-#include "TeamRadarWindow.h"
+#include "TeamRadarDlg.h"
 #include "TeamRadarView.h"
 
 namespace Core {

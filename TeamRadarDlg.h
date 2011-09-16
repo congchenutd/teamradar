@@ -11,18 +11,22 @@ class Setting;
 class PeerManager;
 class PeerModel;
 
-class TeamRadarWindow : public QDialog
+class TeamRadarDlg : public QDialog
 {
     Q_OBJECT
 
 public:
-    TeamRadarWindow(QWidget *parent = 0);
+    TeamRadarDlg(QWidget *parent = 0);
     void accept();
+
+protected:
+	void contextMenuEvent(QContextMenuEvent*);
 
 private slots:
     void onSetImage();
 	void onSetColor();
 	void resizeTable();
+	void onDelete();
 
 private:
 	QString guessUserName() const;
