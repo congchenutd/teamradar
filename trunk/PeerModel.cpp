@@ -1,5 +1,5 @@
 #include "PeerModel.h"
-#include "TeamRadarWindow.h"
+#include "TeamRadarDlg.h"
 #include "PeerManager.h"
 #include <QSqlDatabase>
 #include <QMessageBox>

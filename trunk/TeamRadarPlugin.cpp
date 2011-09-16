@@ -1,5 +1,5 @@
 #include "TeamRadarPlugin.h"
-#include "TeamRadarWindow.h"
+#include "TeamRadarDlg.h"
 #include "MessageCollector.h"
 #include "TeamRadarView.h"
 #include "Connection.h"
@@ -76,7 +76,7 @@ bool TeamRadarPlugin::initialize(const QStringList &arguments, QString *error_me
 
 void TeamRadarPlugin::onTeamRadarOption()
 {
-    TeamRadarWindow dlg(0);
+    TeamRadarDlg dlg(0);
 	dlg.exec();
 }
 

@@ -7,20 +7,21 @@ class Setting : public MySetting<Setting>
 {
 public:
 	Setting(const QString& fileName);
-	QColor getColor(const QString& section) const;
-	void   setColor(const QString& section, const QColor& color);
-	QColor getExtensionColor(const QString& fileName) const;
-	void   setExtensionColor(const QString& extension, const QColor& color);
-
+	QColor  getColor(const QString& section) const;
+	QColor  getExtensionColor(const QString& fileName) const;
 	QString getServerAddress() const;
 	quint16 getServerPort()    const;
 	QString getUserName()      const;
 	QString getPhotoFilePath(const QString& userName) const;
 	QString getChatHistoryPath() const;
+	QString getRootPath() const;
 
 	void setServerAddress(const QString& address);
 	void setServerPort(quint16 port);
 	void setUserName(const QString& name);
+	void setColor(const QString& section, const QColor& color);
+	void setExtensionColor(const QString& extension, const QColor& color);
+	void setRootPath(const QString& path);
 
 private:
     void loadDefaults();

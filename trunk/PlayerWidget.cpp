@@ -104,7 +104,7 @@ void PlayerWidget::onLoad()
 	if(!file.open(QFile::ReadOnly))
 		return;
 
-	ui.graphicsView->loadDir(Setting::getInstance()->value("RootPath").toString(), 0);
+	ui.graphicsView->loadDir(Setting::getInstance()->getRootPath(), 0);
 	model->removeRows(0, model->rowCount());
 	
 	QTextStream is(&file);
@@ -176,7 +176,8 @@ void PlayerWidget::play(const TeamRadarEvent& event)
 	{
 		if(event.userName != Setting::getInstance()->getUserName())  // must be local event
 			return;
-		Setting::getInstance()->setValue("RootPath", event.parameters);
+		Setting::getInstance()->setRootPath(event.parameters);
+
 		reloadProject();
 		Sender::getInstance()->sendJoinProject(QFileInfo(event.parameters).baseName());
 	}
@@ -184,7 +185,7 @@ void PlayerWidget::play(const TeamRadarEvent& event)
 
 void PlayerWidget::reloadProject()
 {
-	ui.graphicsView->loadDir(Setting::getInstance()->value("RootPath").toString());
+	ui.graphicsView->loadDir(Setting::getInstance()->getRootPath());
 //	peerManager->refreshUserList();
 }
 
@@ -287,4 +288,8 @@ PlayerWidget::~PlayerWidget()
 {
 	ChatWindow::saveAllHistory();
 	ChatWindow::closeAllWindows();
+}
+
+void PlayerWidget::showEvent(QShowEvent*) {
+	peerManager->refreshUserList();
 }

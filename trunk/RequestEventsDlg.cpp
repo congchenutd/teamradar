@@ -1,5 +1,5 @@
 #include "RequestEventsDlg.h"
-#include "ImageColorBoolModel.h"
+#include "ImageColorBoolProxy.h"
 #include "ImageColorBoolDelegate.h"
 #include "Connection.h"
 #include <QSqlQueryModel>

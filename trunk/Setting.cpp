@@ -16,7 +16,7 @@ void Setting::loadDefaults()
 	setServerAddress("127.0.0.1");
 	setServerPort(12345);
 
-	setValue("RootPath", QDir::currentPath());
+	setRootPath(QDir::currentPath());
 	setValue("UseEffects", false);   // fancy visual effects: blur, shadow
 	setValue("AfterImageDuration", 20);
 	setValue("IconSet", "IconSet1");
@@ -102,5 +102,14 @@ QString Setting::getPhotoFilePath(const QString& userName) const {
 QString Setting::getChatHistoryPath() const {
 	return value("ChatHistoryPath").toString();
 }
+
+QString Setting::getRootPath() const {
+	return value("RootPath").toString();
+}
+
+void Setting::setRootPath(const QString& path) {
+	setValue("RootPath", path);
+}
+
 
 const QString Setting::dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
