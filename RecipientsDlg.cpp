@@ -1,5 +1,5 @@
 #include "RecipientsDlg.h"
-#include "../../../../ImageColorBoolModel/ImageColorBoolModel.h"
+#include "../../../../ImageColorBoolModel/ImageColorBoolProxy.h"
 #include "../../../../ImageColorBoolModel/ImageColorBoolDelegate.h"
 #include "Setting.h"
 #include <QTableView>
