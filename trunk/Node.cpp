@@ -529,8 +529,10 @@ void HumanNode::setWorkOn(const QString& filePath)
 	workOn = filePath;  // find new owner
 	updateOwner();
 	
+#if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
 	lightTrail = new LightTrail(this);   // start a new light trail
 	scene()->addItem(lightTrail);
+#endif
 }
 
 void HumanNode::leaveAfterimage()

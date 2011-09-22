@@ -23,7 +23,7 @@ class TeamRadarView : public QGraphicsView
 public:
 	TeamRadarView(QWidget *parent = 0);
 	void itemMoved();                                         // start layouting
-	void loadDir(const QString& dirPath, int maxLevel = 0);   // load the whole view
+	void loadDir(const QString& dirPath);                     // load the whole view
 	void open(const QString& fileName);                       // open graph file
 	void save(const QString& fileName);                       // save to graph
 	void setShowLabels(bool show);                            // all nodes show label

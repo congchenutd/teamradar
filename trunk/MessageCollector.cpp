@@ -54,15 +54,9 @@ void MessageCollector::onChangeMode(Core::IMode* mode, Core::IMode* oldMode)
 	sendEvent("MODE", mode->displayName());
 }
 
-void MessageCollector::sendEvent(const QString& event, const QString& parameters)
-{
-	emit localEvent(TeamRadarEvent(Setting::getInstance()->getUserName(), event, parameters));
-	Sender::getInstance()->sendEvent(event, parameters);
-}
-
 void MessageCollector::onOpenProject(ProjectExplorer::Project* project) {
 	if(project != 0)
-		sendEvent("OPENPROJECT", project->projectDirectory());
+		sendLocalEvent("OPENPROJECT", project->projectDirectory());
 }
 
 // capture version control's submit event
@@ -77,6 +71,20 @@ void MessageCollector::onEditorAboutToClose(Core::IEditor* editor)
 	QStringList files = submitEditor->checkedFiles();
 	foreach(QString fileName, files)
 		sendEvent("SCM_COMMIT", fileName);
+}
+
+void MessageCollector::sendEvent(const QString& event, const QString& parameters)
+{
+	sendLocalEvent (event, parameters);
+	sendRemoteEvent(event, parameters);
+}
+
+void MessageCollector::sendLocalEvent(const QString& event, const QString& parameters) {
+	emit localEvent(TeamRadarEvent(Setting::getInstance()->getUserName(), event, parameters));
+}
+
+void MessageCollector::sendRemoteEvent(const QString& event, const QString& parameters) {
+	Sender::getInstance()->sendEvent(event, parameters);
 }
 
 MessageCollector* MessageCollector::instance = 0;

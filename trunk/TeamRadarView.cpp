@@ -115,11 +115,10 @@ void TeamRadarView::scaleBy(qreal scaleFactor)
 	}
 }
 
-void TeamRadarView::loadDir(const QString& dirPath, int maxLevel)
+void TeamRadarView::loadDir(const QString& dirPath)
 {
 	clear();
 	setRoot(createNode(true, dirPath, 0));  // create root first
-//	expandNode(getRoot(), maxLevel);
 	centerTree();
 }
 

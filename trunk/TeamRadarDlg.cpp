@@ -58,8 +58,11 @@ TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QDialog(parent)
 	connect(model,      SIGNAL(selected()), this, SLOT(resizeTable()));
     connect(ui.btImage, SIGNAL(clicked()),  this, SLOT(onSetImage()));
 	connect(ui.btColor, SIGNAL(clicked()),  this, SLOT(onSetColor()));
-
-//	peerManager->refreshUserList();   // actively fetch user list
+	connect(ui.leServerAddress, SIGNAL(textEdited(QString)), this, SLOT(onShowHint()));
+	connect(ui.sbPort,          SIGNAL(valueChanged(int)),   this, SLOT(onShowHint()));
+	connect(Connection::getInstance(), SIGNAL(connectionStatusChanged(bool)), this, SLOT(onConnectedToServer(bool)));
+	
+	onConnectedToServer(Connection::getInstance()->isReadyForUse());   // init light
 }
 
 void TeamRadarDlg::accept()
@@ -81,7 +84,7 @@ void TeamRadarDlg::accept()
 
 	// send settings to the server
 	registerPhoto();
-	registerColor();
+	Sender::getInstance()->sendColorRegistration(color);
 
 	QDialog::accept();
 }
@@ -154,10 +157,6 @@ void TeamRadarDlg::setColor(const QColor& clr)
 	}
 }
 
-void TeamRadarDlg::registerColor() {
-	Sender::getInstance()->sendColorRegistration(color);
-}
-
 void TeamRadarDlg::contextMenuEvent(QContextMenuEvent* event)
 {
 	QModelIndexList idxes = ui.tvPeers->selectionModel()->selectedRows();
@@ -182,4 +181,13 @@ void TeamRadarDlg::onDelete()
 		return;
 
 	model->removeRow(idxes.front().row());
+}
+
+void TeamRadarDlg::onShowHint() {
+	ui.labelMessage->setText("Restart to activate!");
+}
+
+void TeamRadarDlg::onConnectedToServer(bool connected) {
+	ui.labelLight->setPixmap(connected ? QPixmap(":/Images/Green.png") 
+									   : QPixmap(":/Images/Red.png"));
 }

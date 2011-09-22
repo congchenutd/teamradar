@@ -49,15 +49,9 @@ bool Connection::readHeader()
 	}
 
 	dataType = receiver->guessDataType(buffer);  // guess payload type from header
-	if(dataType == Receiver::Undefined)
-	{
-		buffer.clear();
-		return false;
-	}
-
 	buffer.clear();
-	numBytes = getDataLength();
-	return true;
+	
+	return dataType != Receiver::Undefined;
 }
 
 // read all available data to buffer until (including) the separator
@@ -112,11 +106,11 @@ bool Connection::hasEnoughData()
 	}
 
 	// get length
-	if(numBytes <= 0)
+	if(numBytes < 0)
 		numBytes = getDataLength();
 
 	// wait for data
-	if(bytesAvailable() < numBytes/* || numBytes <= 0*/)
+	if(bytesAvailable() < numBytes)
 	{
 		transferTimerID = startTimer(TransferTimeout);
 		return false;
@@ -137,7 +131,7 @@ void Connection::processData()
 	receiver->processData(dataType, buffer);
 
 	dataType = Receiver::Undefined;
-	numBytes = 0;
+	numBytes = -1;
 	buffer.clear();
 }
 
