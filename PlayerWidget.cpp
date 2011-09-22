@@ -49,7 +49,8 @@ PlayerWidget::PlayerWidget(QWidget *parent) :
 	ui.splitter->setSizes(QList<int>() << height() * 0.7 << height() * 0.3);
 //	ui.graphicsView->open("SavedGraph.graph");
 	onOnline();
-	onConnectedToServer(Connection::getInstance()->isReadyForUse());
+	onConnectedToServer(Connection::getInstance()->isReadyForUse());  // init light
+	peerManager->refreshUserList();
 
 	connect(ui.btPlaylist,  SIGNAL(clicked(bool)), this, SLOT(onShowPlaylist(bool)));
 	connect(ui.btEffects,   SIGNAL(clicked(bool)), this, SLOT(onEffects(bool)));
@@ -104,7 +105,7 @@ void PlayerWidget::onLoad()
 	if(!file.open(QFile::ReadOnly))
 		return;
 
-	ui.graphicsView->loadDir(Setting::getInstance()->getRootPath(), 0);
+	ui.graphicsView->loadDir(Setting::getInstance()->getRootPath());
 	model->removeRows(0, model->rowCount());
 	
 	QTextStream is(&file);
@@ -172,21 +173,10 @@ void PlayerWidget::play(const TeamRadarEvent& event)
 	else if(event.eventType == "DISCONNECTED") {
 		ui.graphicsView->removeDeveloper(event.userName);
 	}
-	else if(event.eventType == "OPENPROJECT")
-	{
-		if(event.userName != Setting::getInstance()->getUserName())  // must be local event
-			return;
-		Setting::getInstance()->setRootPath(event.parameters);
-
-		reloadProject();
-		Sender::getInstance()->sendJoinProject(QFileInfo(event.parameters).baseName());
-	}
 }
 
-void PlayerWidget::reloadProject()
-{
+void PlayerWidget::reloadProject() {
 	ui.graphicsView->loadDir(Setting::getInstance()->getRootPath());
-//	peerManager->refreshUserList();
 }
 
 void PlayerWidget::onPlaylistClicked(const QModelIndex& idx) {
@@ -231,7 +221,7 @@ void PlayerWidget::selectRow(int row)
 
 void PlayerWidget::closeEvent(QCloseEvent*)
 {
-	ui.graphicsView->save("SavedGraph.graph");
+//	ui.graphicsView->save("SavedGraph.graph");
 	ChatWindow::saveAllHistory();
 }
 
@@ -288,8 +278,18 @@ PlayerWidget::~PlayerWidget()
 {
 	ChatWindow::saveAllHistory();
 	ChatWindow::closeAllWindows();
+	instance = 0;
 }
 
 void PlayerWidget::showEvent(QShowEvent*) {
-	peerManager->refreshUserList();
+//	peerManager->refreshUserList();
 }
+
+PlayerWidget* PlayerWidget::getInstance()
+{
+	if(instance == 0)
+		instance = new PlayerWidget;
+	return instance;
+}
+
+PlayerWidget* PlayerWidget::instance = 0;

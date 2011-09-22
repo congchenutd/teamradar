@@ -27,11 +27,12 @@ private slots:
 	void onSetColor();
 	void resizeTable();
 	void onDelete();
+	void onShowHint();
+	void onConnectedToServer(bool connected);
 
 private:
 	QString guessUserName() const;
 	void registerPhoto();
-	void registerColor();
 	QString getUserName() const;
 	void setColor(const QColor& color);
 

@@ -111,5 +111,4 @@ void Setting::setRootPath(const QString& path) {
 	setValue("RootPath", path);
 }
 
-
 const QString Setting::dateTimeFormat = "yyyy-MM-dd HH:mm:ss";

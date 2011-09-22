@@ -2,6 +2,7 @@
 #include "Setting.h"
 #include "Connection.h"
 #include "PeerModel.h"
+#include "PlayerWidget.h"
 #include <QFileInfo>
 
 PeerManager::PeerManager(QObject *parent) : QObject(parent)
@@ -99,4 +100,10 @@ void PeerManager::onEvent(const TeamRadarEvent& event)
 		setUserOnline(event.userName, true);
 	else if(event.eventType == "DISCONNECTED")
 		setUserOnline(event.userName, false);
+	else if(event.eventType == "OPENPROJECT")
+	{
+		Setting::getInstance()->setRootPath(event.parameters);
+		Sender::getInstance()->sendJoinProject(QFileInfo(event.parameters).baseName());
+		PlayerWidget::getInstance()->reloadProject();
+	}
 }

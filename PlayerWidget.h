@@ -17,6 +17,9 @@ class PlayerWidget : public QWidget
 public:
 	PlayerWidget(QWidget* parent = 0);
 	~PlayerWidget();
+	void reloadProject();
+
+	static PlayerWidget* getInstance();
 
 protected:
 	virtual void closeEvent(QCloseEvent*);
@@ -46,10 +49,11 @@ private:
 	void play(const TeamRadarEvent& event);
 	void stop();
 	void selectRow(int row);
-	void reloadProject();
 
 private:
 	enum {DateTime, UserName, EventType, Parameter};
+
+	static PlayerWidget* instance;
 
 	Ui::PlayerWidget ui;
 	QIcon playIcon;

@@ -88,7 +88,7 @@ Q_EXPORT_PLUGIN(TeamRadarPlugin)
 Core::NavigationView TeamRadarNavigationWidgetFactory::createWidget()
 {
 	Core::NavigationView view; 
-	view.widget = new PlayerWidget;
+	view.widget = PlayerWidget::getInstance();
 	return view;
 }
 
