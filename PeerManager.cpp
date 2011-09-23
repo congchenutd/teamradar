@@ -5,6 +5,10 @@
 #include "PlayerWidget.h"
 #include <QFileInfo>
 
+#if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
+#include "MessageCollector.h"
+#endif
+
 PeerManager::PeerManager(QObject *parent) : QObject(parent)
 {
 	model = new PeerModel(this);
@@ -15,8 +19,12 @@ PeerManager::PeerManager(QObject *parent) : QObject(parent)
 	connect(receiver, SIGNAL(userList(QList<QByteArray>)),        this, SLOT(onUserList(QList<QByteArray>)));
 	connect(receiver, SIGNAL(photoResponse(QString, QByteArray)), this, SLOT(onPhotoResponse(QString, QByteArray)));
 	connect(receiver, SIGNAL(colorResponse(QString, QByteArray)), this, SLOT(onColorResponse(QString, QByteArray)));
-	connect(receiver, SIGNAL(newEvent(TeamRadarEvent)),           this, SLOT(onEvent(TeamRadarEvent)));
+	connect(receiver,                        SIGNAL(newEvent(TeamRadarEvent)),   this, SLOT(onEvent(TeamRadarEvent)));
 	connect(Connection::getInstance(), SIGNAL(connectionStatusChanged(bool)), this, SLOT(refreshUserList()));
+
+#if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
+	connect(MessageCollector::getInstance(), SIGNAL(localEvent(TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
+#endif
 }
 
 PeerManager* PeerManager::getInstance()
@@ -37,8 +45,7 @@ QColor PeerManager::getDeveloperColor(const QString& userName) {
 }
 
 void PeerManager::refreshUserList() {
-	if(Connection::getInstance()->isReadyForUse())
-		Sender::getInstance()->sendUserListRequest();
+	Sender::getInstance()->sendUserListRequest();
 }
 
 // online user list
@@ -104,6 +111,10 @@ void PeerManager::onEvent(const TeamRadarEvent& event)
 	{
 		Setting::getInstance()->setRootPath(event.parameters);
 		Sender::getInstance()->sendJoinProject(QFileInfo(event.parameters).baseName());
+
+#if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
 		PlayerWidget::getInstance()->reloadProject();
+#endif
+
 	}
 }

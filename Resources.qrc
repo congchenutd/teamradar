@@ -1,24 +1,26 @@
 <RCC>
-  <qresource prefix="/">
-    <file>Images/Download.png</file>
-    <file>Images/Chat.png</file>
-    <file>Images/Green.png</file>
-    <file>Images/Red.png</file>
-    <file>Images/Head_Boss.png</file>
-    <file>Images/Head_Female.png</file>
-    <file>Images/Head_Male.png</file>
-    <file>Images/UserEdit.png</file>
-    <file>Images/Path.png</file>
-    <file>Images/Expand.png</file>
-    <file>Images/Label.png</file>
-    <file>Images/Open.png</file>
-    <file>Images/Save.png</file>
-    <file>Images/Options.png</file>
-    <file>Images/AddUser.png</file>
-    <file>Images/RemoveUser.png</file>
-    <file>Images/Connect.png</file>
-    <file>Images/Disconnect.png</file>
-    <file>Images/Design.png</file>
-    <file>Images/Shadow.png</file>
-  </qresource>
+    <qresource prefix="/">
+        <file>Images/Download.png</file>
+        <file>Images/Chat.png</file>
+        <file>Images/Green.png</file>
+        <file>Images/Red.png</file>
+        <file>Images/Head_Boss.png</file>
+        <file>Images/Head_Female.png</file>
+        <file>Images/Head_Male.png</file>
+        <file>Images/UserEdit.png</file>
+        <file>Images/Path.png</file>
+        <file>Images/Expand.png</file>
+        <file>Images/Label.png</file>
+        <file>Images/Open.png</file>
+        <file>Images/Save.png</file>
+        <file>Images/Options.png</file>
+        <file>Images/AddUser.png</file>
+        <file>Images/RemoveUser.png</file>
+        <file>Images/Connect.png</file>
+        <file>Images/Disconnect.png</file>
+        <file>Images/Design.png</file>
+        <file>Images/Shadow.png</file>
+        <file>Images/UnChecked.png</file>
+        <file>Images/Checked.png</file>
+    </qresource>
 </RCC>
