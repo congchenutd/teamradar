@@ -32,7 +32,9 @@ private slots:
 	void onUserList(const QList<QByteArray>& list);
 	void onPhotoResponse(const QString& fileName, const QByteArray& photoData);
 	void onColorResponse(const QString& userName, const QByteArray& color);
-	void onEvent(const TeamRadarEvent& event);   // intercept CONNECTED/DISCONNECTED messages
+
+	// handles CONNECTED, DISCONNECTED, OPENPROJECT messages
+	void onEvent(const TeamRadarEvent& event);
 
 private:
 	PeerManager(QObject* parent = 0);

@@ -37,8 +37,9 @@ TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QDialog(parent)
 
 	// model
 	model = peerManager->getPeerModel();
-	model->setFilter(tr("Name <> \"%1\"").arg(setting->getUserName()));  // no myself
-	model->setSort(model->ONLINE, Qt::DescendingOrder);   // "true" before "false"
+	
+	// no myself, "true" before "false"
+	model->setFilter(tr("Name <> \"%1\" order by Online Desc").arg(setting->getUserName()));
 
 	ImageColorBoolProxy* proxy = new ImageColorBoolProxy(this);
 	proxy->setColumnType(model->NAME,    ImageColorBoolProxy::NameColumn);
@@ -50,7 +51,10 @@ TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QDialog(parent)
 	proxy->setSourceModel(model);
 
 	ui.tvPeers->setModel(proxy);
-	ui.tvPeers->setItemDelegate(new ImageColorBoolDelegate(proxy, ui.tvPeers));
+	ImageColorBoolDelegate* delegate = new ImageColorBoolDelegate(proxy, ui.tvPeers);
+	delegate->setCheckedImage  (QPixmap(":/Images/Checked.png"));
+	delegate->setUncheckedImage(QPixmap(":/Images/Unchecked.png"));
+	ui.tvPeers->setItemDelegate(delegate);
 	ui.tvPeers->hideColumn(model->IMAGE);
 	ui.tvPeers->hideColumn(model->ONLINE);
 	resizeTable();
