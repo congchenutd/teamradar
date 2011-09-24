@@ -19,7 +19,10 @@
 #include "ModeTag.h"
 #include "Utility.h"
 #include "PeerManager.h"
+
+#if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
 #include "ChatWindow.h"
+#endif
 
 TeamRadarView* TeamRadarNode::view = 0;
 qreal TeamRadarNode::sensitivity = 0.1;
@@ -104,7 +107,7 @@ void TeamRadarNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QW
 	gradient.setColorAt(0.7, color);
 	gradient.setColorAt(1, color.darker(120));
 	painter->setBrush(gradient);
-        painter->setPen(QPen(color.darker()));
+		painter->setPen(QPen(color.darker()));
 	painter->drawEllipse(boundingRect());
 
 	// for debugging
@@ -377,7 +380,7 @@ int DirNode::directChildrenCount() const
 QMenu& DirNode::getContextMenu() const
 {
 	static QMenu menu;
-	
+
 	// no effect if already added, may move to an init function
 	menu.addAction(view->actionAddDir);
 	menu.addAction(view->actionAddFile);
@@ -487,7 +490,7 @@ void HumanNode::updateOwner(bool expandable)
 TeamRadarNode* HumanNode::findOwner(TeamRadarNode* parent, const QString& path, bool expandable)
 {
 	QString firstSection = getFirstSection(path);
-	bool atLastSection = (firstSection == path); 
+	bool atLastSection = (firstSection == path);
 	TeamRadarNode* child = parent->findChild(firstSection);
 	if(child == 0)    // not expanded
 	{
@@ -498,7 +501,7 @@ TeamRadarNode* HumanNode::findOwner(TeamRadarNode* parent, const QString& path, 
 		child = view->createNode(!atLastSection, firstSection, parent);
 		child->randomize();
 	}
-	
+
 	if(atLastSection)   // last section
 		return child;
 	QString rest = path;
@@ -525,10 +528,10 @@ void HumanNode::lightTrailDied(LightTrail* trail) {
 void HumanNode::setWorkOn(const QString& filePath)
 {
 	leaveAfterimage();
-	
+
 	workOn = filePath;  // find new owner
 	updateOwner();
-	
+
 #if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
 	lightTrail = new LightTrail(this);   // start a new light trail
 	scene()->addItem(lightTrail);
@@ -619,7 +622,7 @@ void HumanNode::setMode(const QString& mode)
 {
 	scene()->removeItem(modeTag);
 	delete modeTag;
-	
+
 	if(mode == "Welcome")
 		modeTag = new WelcomeModeTag(this);
 	else if(mode == "Edit")
@@ -659,12 +662,14 @@ void HumanNode::hideLabel()
 
 void HumanNode::chat(const QString& content)
 {
+#if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
 	ChatWindow* chatWindow = ChatWindow::getChatWindow(getName());
 	if(chatWindow != 0)
 	{
 		chatWindow->addPeerConversation(content);
 		chatWindow->show();
 	}
+#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////////

@@ -2,10 +2,10 @@
 #include "Setting.h"
 #include "Connection.h"
 #include "PeerModel.h"
-#include "PlayerWidget.h"
 #include <QFileInfo>
 
 #if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
+#include "PlayerWidget.h"
 #include "MessageCollector.h"
 #endif
 

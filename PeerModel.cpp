@@ -1,5 +1,4 @@
 #include "PeerModel.h"
-#include "TeamRadarDlg.h"
 #include "PeerManager.h"
 #include <QSqlDatabase>
 #include <QMessageBox>
@@ -13,7 +12,7 @@ DeveloperInfo::DeveloperInfo(const QString& n) : name(n), online(false), receive
 }
 
 //////////////////////////////////////////////////////////////////////////
-PeerModel::PeerModel(QObject *parent) : QSqlTableModel(parent) 
+PeerModel::PeerModel(QObject *parent) : QSqlTableModel(parent)
 {}
 
 bool PeerModel::select()
