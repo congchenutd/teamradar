@@ -19,7 +19,7 @@ PeerManager::PeerManager(QObject *parent) : QObject(parent)
 	connect(receiver, SIGNAL(userList(QList<QByteArray>)),        this, SLOT(onUserList(QList<QByteArray>)));
 	connect(receiver, SIGNAL(photoResponse(QString, QByteArray)), this, SLOT(onPhotoResponse(QString, QByteArray)));
 	connect(receiver, SIGNAL(colorResponse(QString, QByteArray)), this, SLOT(onColorResponse(QString, QByteArray)));
-	connect(receiver,                        SIGNAL(newEvent(TeamRadarEvent)),   this, SLOT(onEvent(TeamRadarEvent)));
+	connect(receiver, SIGNAL(newEvent(TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
 	connect(Connection::getInstance(), SIGNAL(connectionStatusChanged(bool)), this, SLOT(refreshUserList()));
 
 #if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
@@ -84,13 +84,19 @@ void PeerManager::onPhotoResponse(const QString& fileName, const QByteArray& pho
 	QString filePath = Setting::getInstance()->getPhotoFilePath(userName);
 	QFile file(filePath);
 	if(file.open(QFile::WriteOnly | QFile::Truncate))
+	{
 		file.write(photoData);
+		file.close();
+	}
 
 	// update the db
 	DeveloperInfo userInfo = model->getUserInfo(userName);
 	userInfo.image = filePath;
 	model->updateUser(userInfo);
 	model->select();
+
+	// ask the node to use the new photo
+	PlayerWidget::getInstance()->reloadPhoto(userName);
 }
 
 void PeerManager::onColorResponse(const QString& userName, const QByteArray& color)
@@ -107,14 +113,12 @@ void PeerManager::onEvent(const TeamRadarEvent& event)
 		setUserOnline(event.userName, true);
 	else if(event.eventType == "DISCONNECTED")
 		setUserOnline(event.userName, false);
-	else if(event.eventType == "OPENPROJECT")
+#if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)	
+	else if(event.eventType == "OPENPROJECT")  // must be local
 	{
 		Setting::getInstance()->setRootPath(event.parameters);
 		Sender::getInstance()->sendJoinProject(QFileInfo(event.parameters).baseName());
-
-#if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
 		PlayerWidget::getInstance()->reloadProject();
-#endif
-
 	}
+#endif
 }

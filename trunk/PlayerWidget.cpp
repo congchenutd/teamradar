@@ -50,7 +50,6 @@ PlayerWidget::PlayerWidget(QWidget *parent) :
 //	ui.graphicsView->open("SavedGraph.graph");
 	onOnline();
 	onConnectedToServer(Connection::getInstance()->isReadyForUse());  // init light
-	peerManager->refreshUserList();
 
 	connect(ui.btPlaylist,  SIGNAL(clicked(bool)), this, SLOT(onShowPlaylist(bool)));
 	connect(ui.btEffects,   SIGNAL(clicked(bool)), this, SLOT(onEffects(bool)));
@@ -281,8 +280,14 @@ PlayerWidget::~PlayerWidget()
 	instance = 0;
 }
 
-void PlayerWidget::showEvent(QShowEvent*) {
-//	peerManager->refreshUserList();
+void PlayerWidget::showEvent(QShowEvent*)
+{
+	static bool firstTime = true;
+	if(firstTime)
+	{
+		peerManager->refreshUserList();
+		firstTime = false;
+	}
 }
 
 PlayerWidget* PlayerWidget::getInstance()
@@ -290,6 +295,13 @@ PlayerWidget* PlayerWidget::getInstance()
 	if(instance == 0)
 		instance = new PlayerWidget;
 	return instance;
+}
+
+void PlayerWidget::reloadPhoto(const QString& developerName)
+{
+	HumanNode* human = ui.graphicsView->findDeveloper(developerName);
+	if(human != 0)
+		human->setImage(QImage(peerManager->getImage(developerName)));
 }
 
 PlayerWidget* PlayerWidget::instance = 0;

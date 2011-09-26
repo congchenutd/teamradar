@@ -156,6 +156,7 @@ public:
 	void showConflict(bool show);
 	void updateOwner(bool expandable = true);    // move to a new owner
 	void chat(const QString& content = QString());
+	void setImage(const QImage& img) { image = img; }
 
 	virtual void   setNewPos(const QPointF& p);
 	virtual QMenu& getContextMenu() const;
@@ -184,9 +185,12 @@ private slots:
 
 protected:
 	QImage image;
-	QString workOn;                            // file path it works on
+	QString workOn;                    // file path it works on
 	LightTrail* lightTrail;
 	ModeTag*    modeTag;
+	bool dying;
+
+	static const double oneSlice;
 };
 
 class AfterimageNode : public HumanNode
