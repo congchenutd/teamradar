@@ -10,7 +10,8 @@
 #include "MessageCollector.h"
 #endif
 
-PeerManager::PeerManager(QObject *parent) : QObject(parent)
+PeerManager::PeerManager(QObject *parent)
+	: QObject(parent), view(0)
 {
 	model = new PeerModel(this);
 	model->setTable("Peers");
@@ -97,7 +98,8 @@ void PeerManager::onPhotoResponse(const QString& fileName, const QByteArray& pho
 	model->select();
 
 	// ask the node to use the new photo
-	view->reloadDeveloperImage(userName, QImage(filePath));
+	if(view != 0)
+		view->reloadDeveloperImage(userName, QImage(filePath));
 }
 
 void PeerManager::onColorResponse(const QString& userName, const QByteArray& color)
