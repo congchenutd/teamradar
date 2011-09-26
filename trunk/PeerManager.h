@@ -10,6 +10,7 @@
 // Handles the status and configurations of peers
 class PeerModel;
 struct TeamRadarEvent;
+class TeamRadarView;
 
 class PeerManager : public QObject
 {
@@ -20,6 +21,7 @@ public:
 	QString getImage(const QString& userName) const;
 	QColor getDeveloperColor(const QString& userName);
 	PeerModel* getPeerModel() const { return model; }    // the underlying model
+	void setView(TeamRadarView* v) { view = v; }
 
 signals:
 	void userOnline(const TeamRadarEvent& event);
@@ -43,6 +45,7 @@ private:
 private:
 	static PeerManager* instance;
 	PeerModel* model;
+	TeamRadarView* view;
 };
 
 

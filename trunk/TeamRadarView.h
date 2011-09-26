@@ -47,6 +47,7 @@ public:
 	void removeDeveloper(const QString& name);
 	void setDeveloperMode(const QString& developerName, const QString& mode);
 	HumanNode* findDeveloper(const QString& name);
+	void reloadDeveloperImage(const QString& name, const QImage& image);
 
 protected:
 	void keyPressEvent(QKeyEvent*   event);

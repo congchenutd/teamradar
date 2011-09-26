@@ -2,6 +2,7 @@
 #include "Setting.h"
 #include "Connection.h"
 #include "PeerModel.h"
+#include "TeamRadarView.h"
 #include <QFileInfo>
 
 #if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
@@ -96,7 +97,7 @@ void PeerManager::onPhotoResponse(const QString& fileName, const QByteArray& pho
 	model->select();
 
 	// ask the node to use the new photo
-	PlayerWidget::getInstance()->reloadPhoto(userName);
+	view->reloadDeveloperImage(userName, QImage(filePath));
 }
 
 void PeerManager::onColorResponse(const QString& userName, const QByteArray& color)
