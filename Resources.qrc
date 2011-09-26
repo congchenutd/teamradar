@@ -22,5 +22,11 @@
         <file>Images/Shadow.png</file>
         <file>Images/UnChecked.png</file>
         <file>Images/Checked.png</file>
+        <file>Images/Debug.png</file>
+        <file>Images/Edit.png</file>
+        <file>Images/Help.png</file>
+        <file>Images/Projects.png</file>
+        <file>Images/Welcome.png</file>
+        <file>Images/Conflict.png</file>
     </qresource>
 </RCC>

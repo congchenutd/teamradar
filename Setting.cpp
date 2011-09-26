@@ -19,7 +19,6 @@ void Setting::loadDefaults()
 	setRootPath(QDir::currentPath());
 	setValue("UseEffects", false);   // fancy visual effects: blur, shadow
 	setValue("AfterImageDuration", 20);
-	setValue("IconSet", "IconSet1");
 	setValue("DefaultDeveloperImage", ":/Images/Head_Male.png");
 	setValue("PhotoPath",       "./Photos");
 	setValue("ChatHistoryPath", "./ChatHistory");

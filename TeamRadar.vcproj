@@ -732,18 +732,6 @@
 			UniqueIdentifier="{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}"
 			>
 			<File
-				RelativePath="release\moc_ChatWindow.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="debug\moc_ChatWindow.cpp"
 				>
 				<FileConfiguration
@@ -756,7 +744,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\moc_Connection.cpp"
+				RelativePath="release\moc_ChatWindow.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -780,7 +768,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\moc_Engine.cpp"
+				RelativePath="release\moc_Connection.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -804,7 +792,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\moc_LightTrail.cpp"
+				RelativePath="release\moc_Engine.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -820,6 +808,18 @@
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="release\moc_LightTrail.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -852,18 +852,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\moc_Node.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="debug\moc_Node.cpp"
 				>
 				<FileConfiguration
@@ -876,7 +864,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\moc_PeerManager.cpp"
+				RelativePath="release\moc_Node.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -900,7 +888,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\moc_PeerModel.cpp"
+				RelativePath="release\moc_PeerManager.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -916,6 +904,18 @@
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="release\moc_PeerModel.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -948,18 +948,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\moc_RecipientsDlg.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="debug\moc_RecipientsDlg.cpp"
 				>
 				<FileConfiguration
@@ -972,7 +960,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\moc_RequestEventsDlg.cpp"
+				RelativePath="release\moc_RecipientsDlg.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -996,7 +984,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\moc_TeamRadarDlg.cpp"
+				RelativePath="release\moc_RequestEventsDlg.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1020,7 +1008,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\moc_TeamRadarPlugin.cpp"
+				RelativePath="release\moc_TeamRadarDlg.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1036,6 +1024,18 @@
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="release\moc_TeamRadarPlugin.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -1068,10 +1068,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\qrc_Resources.cpp"
+				RelativePath="debug\qrc_Resources.cpp"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -1080,10 +1080,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\qrc_Resources.cpp"
+				RelativePath="release\qrc_Resources.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -1310,7 +1310,47 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\Images\Conflict.png"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="Images\Connect.png"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\Images\Debug.png"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1371,6 +1411,26 @@
 			</File>
 			<File
 				RelativePath="Images\Download.png"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\Images\Edit.png"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1490,6 +1550,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\Images\Help.png"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="Images\Label.png"
 				>
 				<FileConfiguration
@@ -1570,6 +1650,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\Images\Projects.png"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="Images\Red.png"
 				>
 				<FileConfiguration
@@ -1619,7 +1719,7 @@
 						Name="VCCustomBuildTool"
 						Description="Rcc&apos;ing $(InputFileName)..."
 						CommandLine="&quot;$(QTDIR)\bin\rcc.exe&quot; -name &quot;$(InputName)&quot; -no-compress &quot;$(InputPath)&quot; -o .\debug\qrc_$(InputName).cpp&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputPath);.\Images\Download.png;.\Images\Chat.png;.\Images\Green.png;.\Images\Red.png;.\Images\Head_Boss.png;.\Images\Head_Female.png;.\Images\Head_Male.png;.\Images\UserEdit.png;.\Images\Path.png;.\Images\Expand.png;.\Images\Label.png;.\Images\Open.png;.\Images\Save.png;.\Images\Options.png;.\Images\AddUser.png;.\Images\RemoveUser.png;.\Images\Connect.png;.\Images\Disconnect.png;.\Images\Design.png;.\Images\Shadow.png;.\Images\UnChecked.png;.\Images\Checked.png"
+						AdditionalDependencies="$(InputPath);.\Images\Download.png;.\Images\Chat.png;.\Images\Green.png;.\Images\Red.png;.\Images\Head_Boss.png;.\Images\Head_Female.png;.\Images\Head_Male.png;.\Images\UserEdit.png;.\Images\Path.png;.\Images\Expand.png;.\Images\Label.png;.\Images\Open.png;.\Images\Save.png;.\Images\Options.png;.\Images\AddUser.png;.\Images\RemoveUser.png;.\Images\Connect.png;.\Images\Disconnect.png;.\Images\Design.png;.\Images\Shadow.png;.\Images\UnChecked.png;.\Images\Checked.png;.\Images\Debug.png;.\Images\Edit.png;.\Images\Help.png;.\Images\Projects.png;.\Images\Welcome.png;.\Images\Conflict.png"
 						Outputs=".\debug\qrc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -1630,7 +1730,7 @@
 						Name="VCCustomBuildTool"
 						Description="Rcc&apos;ing $(InputFileName)..."
 						CommandLine="&quot;$(QTDIR)\bin\rcc.exe&quot; -name &quot;$(InputName)&quot; -no-compress &quot;$(InputPath)&quot; -o .\debug\qrc_$(InputName).cpp&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputPath);.\Images\Download.png;.\Images\Chat.png;.\Images\Green.png;.\Images\Red.png;.\Images\Head_Boss.png;.\Images\Head_Female.png;.\Images\Head_Male.png;.\Images\UserEdit.png;.\Images\Path.png;.\Images\Expand.png;.\Images\Label.png;.\Images\Open.png;.\Images\Save.png;.\Images\Options.png;.\Images\AddUser.png;.\Images\RemoveUser.png;.\Images\Connect.png;.\Images\Disconnect.png;.\Images\Design.png;.\Images\Shadow.png;.\Images\UnChecked.png;.\Images\Checked.png"
+						AdditionalDependencies="$(InputPath);.\Images\Download.png;.\Images\Chat.png;.\Images\Green.png;.\Images\Red.png;.\Images\Head_Boss.png;.\Images\Head_Female.png;.\Images\Head_Male.png;.\Images\UserEdit.png;.\Images\Path.png;.\Images\Expand.png;.\Images\Label.png;.\Images\Open.png;.\Images\Save.png;.\Images\Options.png;.\Images\AddUser.png;.\Images\RemoveUser.png;.\Images\Connect.png;.\Images\Disconnect.png;.\Images\Design.png;.\Images\Shadow.png;.\Images\UnChecked.png;.\Images\Checked.png;.\Images\Debug.png;.\Images\Edit.png;.\Images\Help.png;.\Images\Projects.png;.\Images\Welcome.png;.\Images\Conflict.png"
 						Outputs=".\debug\qrc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -1697,6 +1797,26 @@
 			</File>
 			<File
 				RelativePath="Images\UserEdit.png"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\Images\Welcome.png"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
