@@ -670,6 +670,8 @@ void HumanNode::chat(const QString& content)
 		chatWindow->show();
 	}
 #endif
+
+	Q_UNUSED(content)
 }
 
 //////////////////////////////////////////////////////////////////////////////////
