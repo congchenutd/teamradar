@@ -36,6 +36,7 @@ PlayerWidget::PlayerWidget(QWidget *parent) :
 	scene->setItemIndexMethod(QGraphicsScene::NoIndex);
 	scene->setSceneRect(-300, -300, 600, 600);
 	ui.graphicsView->setScene(scene);
+	peerManager->setView(ui.graphicsView);
 
 	ui.tvPlaylist->setModel(model);
 	playIcon  = style()->standardIcon(QStyle::SP_MediaPlay);
@@ -295,13 +296,6 @@ PlayerWidget* PlayerWidget::getInstance()
 	if(instance == 0)
 		instance = new PlayerWidget;
 	return instance;
-}
-
-void PlayerWidget::reloadPhoto(const QString& developerName)
-{
-	HumanNode* human = ui.graphicsView->findDeveloper(developerName);
-	if(human != 0)
-		human->setImage(QImage(peerManager->getImage(developerName)));
 }
 
 PlayerWidget* PlayerWidget::instance = 0;

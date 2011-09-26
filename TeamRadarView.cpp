@@ -538,3 +538,8 @@ bool TeamRadarView::viewportEvent(QEvent *event)
 	}
 	return QGraphicsView::viewportEvent(event);
 }
+
+void TeamRadarView::reloadDeveloperImage(const QString& name, const QImage& image) {
+	if(HumanNode* human = findDeveloper(name))
+		human->setImage(image);
+}
