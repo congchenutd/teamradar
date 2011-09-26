@@ -8,7 +8,8 @@
 #include <QPropertyAnimation>
 #include <QGraphicsDropShadowEffect>
 #include <QGraphicsWidget>
-#include <math.h>
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include "Edge.h"
 #include "Node.h"
 #include "TeamRadarView.h"
@@ -193,7 +194,7 @@ void TeamRadarNode::removeChildren()
 	{
 		child->removeEdgeToOwner();
 		child->removeChildren();   // recursively kill children
-		child->suicide();          // kill itself (human will update owner instead)
+		child->suicide();          // kill itself (instead, human will update owner)
 	}
 	view->itemMoved();
 }
@@ -294,6 +295,7 @@ void TeamRadarNode::removeEdgeToOwner()
 		scene()->removeItem(ownerEdge);
 		delete ownerEdge;
 	}
+	owner = 0;
 }
 
 QFileInfo TeamRadarNode::findMatchingPath(const QString& filePath)
@@ -432,7 +434,7 @@ QMenu & FileNode::getContextMenu() const
 
 //////////////////////////////////////////////////////////////////////
 HumanNode::HumanNode(const QString& name, const QImage& img, TeamRadarNode* owner)
-: TeamRadarNode(owner, name), image(img)
+: TeamRadarNode(owner, name), image(img), dying(false)
 {
 	setFlag(ItemIsMovable, false);
 	setColor(PeerManager::getInstance()->getDeveloperColor(name));
@@ -527,15 +529,14 @@ void HumanNode::lightTrailDied(LightTrail* trail) {
 
 void HumanNode::setWorkOn(const QString& filePath)
 {
-	leaveAfterimage();
-
-	workOn = filePath;  // find new owner
-	updateOwner();
-
 #if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
+	leaveAfterimage();
 	lightTrail = new LightTrail(this);   // start a new light trail
 	scene()->addItem(lightTrail);
 #endif
+
+	workOn = filePath;  // find new owner
+	updateOwner();
 }
 
 void HumanNode::leaveAfterimage()
@@ -557,7 +558,7 @@ void HumanNode::enterCanvas()
 	opacityAnimation->setEndValue(1.0);
 	opacityAnimation->start();
 
-	double theta = (qrand() % 20) * 0.314;   // randomize the angle
+	double theta = (qrand() % 100) * oneSlice;   // randomize the angle
 	QPropertyAnimation* posAnimation = new QPropertyAnimation(this, "pos", this);
 	posAnimation->setDuration(2000);
 	posAnimation->setStartValue(generateHeavenPos(1000, theta));
@@ -567,6 +568,10 @@ void HumanNode::enterCanvas()
 
 void HumanNode::leaveCanvas()
 {
+	if(dying)    // avoid multiple calling
+		return;
+
+	dying = true;
 	detachFromOwner();
 
 	QPropertyAnimation* opacityAnimation = new QPropertyAnimation(this, "opacity", this);
@@ -673,6 +678,8 @@ void HumanNode::chat(const QString& content)
 
 	Q_UNUSED(content)
 }
+
+const double HumanNode::oneSlice = M_PI / 50.0;  // 1/100 of a circle
 
 //////////////////////////////////////////////////////////////////////////////////
 int AfterimageNode::fadeOutDuration = 10000;

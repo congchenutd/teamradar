@@ -390,11 +390,9 @@ void TeamRadarView::onWorkOn()
 
 void TeamRadarView::moveDeveloperTo(const QString& name, const QString& relativePath)
 {
-//	QString absolutePath = toAbsolutePath(getRoot()->getName(), relativePath);
 	if(HumanNode* human = findDeveloper(name))
 	{
 		currentHuman = human;
-//		currentHuman->setWorkOn(absolutePath);
 		currentHuman->setWorkOn(relativePath);
 	}
 }

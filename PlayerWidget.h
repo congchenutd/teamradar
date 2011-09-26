@@ -18,6 +18,7 @@ public:
 	PlayerWidget(QWidget* parent = 0);
 	~PlayerWidget();
 	void reloadProject();
+	void reloadPhoto(const QString& developerName);
 
 	static PlayerWidget* getInstance();
 

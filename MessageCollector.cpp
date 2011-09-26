@@ -54,6 +54,9 @@ void MessageCollector::onChangeMode(Core::IMode* mode, Core::IMode* oldMode)
 	sendEvent("MODE", mode->displayName());
 }
 
+// The reason I split sendEvent() into local and remote is because  
+// OPENPROJECT event contains absolute path, while the server needs relative path
+// PeerManager::onEvent() will capture this event, convert the path, and send it to the server
 void MessageCollector::onOpenProject(ProjectExplorer::Project* project) {
 	if(project != 0)
 		sendLocalEvent("OPENPROJECT", project->projectDirectory());
