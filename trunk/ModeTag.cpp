@@ -25,6 +25,5 @@ void ModeTag::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*
 }
 
 QImage ModeTag::getImage() {
-	return QImage("./Images/" + 
-		Setting::getInstance()->value("IconSet").toString() + "/" + getName() + ".png");
+	return QImage(":/Images/" + getName() + ".png");
 }
