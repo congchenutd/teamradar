@@ -732,18 +732,6 @@
 			UniqueIdentifier="{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}"
 			>
 			<File
-				RelativePath="debug\moc_ChatWindow.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="release\moc_ChatWindow.cpp"
 				>
 				<FileConfiguration
@@ -756,7 +744,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\moc_Connection.cpp"
+				RelativePath="debug\moc_ChatWindow.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -780,7 +768,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\moc_Engine.cpp"
+				RelativePath="debug\moc_Connection.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -804,7 +792,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\moc_LightTrail.cpp"
+				RelativePath="debug\moc_Engine.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -820,6 +808,18 @@
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="debug\moc_LightTrail.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -852,18 +852,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\moc_Node.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="release\moc_Node.cpp"
 				>
 				<FileConfiguration
@@ -876,7 +864,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\moc_PeerManager.cpp"
+				RelativePath="debug\moc_Node.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -900,7 +888,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\moc_PeerModel.cpp"
+				RelativePath="debug\moc_PeerManager.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -916,6 +904,18 @@
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="debug\moc_PeerModel.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -948,18 +948,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\moc_RecipientsDlg.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="release\moc_RecipientsDlg.cpp"
 				>
 				<FileConfiguration
@@ -972,7 +960,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\moc_RequestEventsDlg.cpp"
+				RelativePath="debug\moc_RecipientsDlg.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -996,7 +984,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\moc_TeamRadarDlg.cpp"
+				RelativePath="debug\moc_RequestEventsDlg.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1020,7 +1008,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\moc_TeamRadarPlugin.cpp"
+				RelativePath="debug\moc_TeamRadarDlg.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1036,6 +1024,18 @@
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="debug\moc_TeamRadarPlugin.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -1068,10 +1068,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="debug\qrc_Resources.cpp"
+				RelativePath="release\qrc_Resources.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -1080,10 +1080,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="release\qrc_Resources.cpp"
+				RelativePath="debug\qrc_Resources.cpp"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
