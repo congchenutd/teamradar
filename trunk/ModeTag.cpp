@@ -1,6 +1,7 @@
 #include "ModeTag.h"
 #include "Node.h"
 #include "Setting.h"
+#include <QMessageBox>
 #include <QPainter>
 
 ModeTag::ModeTag(TeamRadarNode* n) : QGraphicsObject(n), node(n)
