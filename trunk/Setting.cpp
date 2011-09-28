@@ -13,25 +13,38 @@ Setting::Setting(const QString& fileName) : MySetting<Setting>(fileName)
 // shadow colors are the complement colors of the text or the scene
 void Setting::loadDefaults()
 {
+	// server
 	setServerAddress("127.0.0.1");
 	setServerPort(12345);
 
+	// client
 	setRootPath(QDir::currentPath());
 	setValue("UseEffects", false);   // fancy visual effects: blur, shadow
 	setValue("AfterImageDuration", 20);
 	setValue("DefaultDeveloperImage", ":/Images/Head_Male.png");
 	setValue("PhotoPath",       "./Photos");
 	setValue("ChatHistoryPath", "./ChatHistory");
+	setFontSize(10);
 
+	// the threshold for the engine to converge
+#if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
+	setThreshold(0.1);
+#else
+	setThreshold(1.0);
+#endif
+
+	// filter trash files/dirs
 	setValue("FilteredDirs",  "Debug;Release;Temp;Tmp;Lib;libs");
 	setValue("FilteredFiles", "obj;tmp;dll;pdb;o;ilk;idb");
 
+	// colors
 	setColor("EdgeColor",             QColor(Qt::black));
 	setColor("BackgroundColor",       QColor(Qt::white));   // scene color
 	setColor("DefaultDirColor",       QColor(255, 205, 5));
 	setColor("DefaultFileColor",      QColor(Qt::darkGray));
 	setColor("DefaultDeveloperColor", QColor(Qt::gray));
 
+	// extension colors
 	setExtensionColor("h",    QColor(40, 166, 198));
 	setExtensionColor("hpp",  QColor(40, 166, 198));
 
@@ -111,3 +124,21 @@ void Setting::setRootPath(const QString& path) {
 }
 
 const QString Setting::dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+
+qreal Setting::getThreshold() const {
+	return value("LayoutThreshold").toReal();
+}
+
+void Setting::setThreshold(qreal sensitivity) {
+	setValue("LayoutThreshold", sensitivity);
+}
+
+void Setting::setFontSize(int size) {
+	setValue("FontSize", size);
+}
+
+int Setting::getFontSize() const {
+	return value("FontSize").toInt();
+}
+
+

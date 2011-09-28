@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include "Node.h"
 #include "TeamRadarView.h"
+#include "Setting.h"
 #include <math.h>
 #include <QQueue>
 #include <QMessageBox>
@@ -21,7 +22,7 @@ void Engine::start() {
 	{
 		timerID = startTimer(10);
 //		time.start();
-        }
+	}
 }
 
 void Engine::stop()
@@ -56,7 +57,7 @@ void Engine::pull(TeamRadarNode* node, qreal& xvel, qreal& yvel)
 void Engine::calculateForces(TeamRadarNode* node)
 {
 	// ignore root, grabbed, and pinned node
-	if (node->getOwner() == 0 || view->scene()->mouseGrabberItem() == node || node->isPinned()) {
+	if(node->getOwner() == 0 || view->scene()->mouseGrabberItem() == node || node->isPinned()) {
 		node->setNewPos(node->pos());
 		return;
 	}
@@ -67,7 +68,8 @@ void Engine::calculateForces(TeamRadarNode* node)
 	pull(node, xvel, yvel);
 
 	// ignore slight move
-	if(qAbs(xvel) < TeamRadarNode::getSensitivity() && qAbs(yvel) < TeamRadarNode::getSensitivity())
+	qreal sensitivity = Setting::getInstance()->getThreshold();
+	if(qAbs(xvel) < sensitivity && qAbs(yvel) < sensitivity)
 		xvel = yvel = 0;
 	node->setNewPos(node->pos() + QPointF(xvel, yvel));
 }
