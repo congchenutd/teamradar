@@ -74,8 +74,6 @@ public:
 	virtual QPainterPath shape() const;
 	virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
-	static void  setSensitivity(qreal s)    { sensitivity = s; }
-	static qreal getSensitivity()           { return sensitivity; }
 	static void  setGraph(TeamRadarView* v) { view = v; }
 
 protected:
@@ -93,7 +91,6 @@ public:
 
 protected:
 	static TeamRadarView* view;
-	static qreal sensitivity;    // for lay-out algorithm to converge
 	Edges   edges;
 	QPointF newPos;     // buffer before change, so that we can detect convergence
 	QString name;       // path for file/dir node, name for human

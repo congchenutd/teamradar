@@ -21,8 +21,11 @@ QPainterPath ModeTag::shape() const
 	return path;
 }
 
-void ModeTag::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) {
-	painter->drawImage(boundingRect(), getImage());
+void ModeTag::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
+{
+	QImage image = getImage();
+	if(!image.isNull())
+		painter->drawImage(boundingRect(), image);
 }
 
 QImage ModeTag::getImage() {

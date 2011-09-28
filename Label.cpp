@@ -16,7 +16,7 @@
 
 Label::Label(TeamRadarNode *n) : node(n)
 {
-	font.setPointSize(12);
+	font.setPointSize(Setting::getInstance()->getFontSize());
 	text = QFileInfo(node->getName()).fileName();
 	hide();
 	setEffectsEnabled(Setting::getInstance()->value("UseEffects").toBool());

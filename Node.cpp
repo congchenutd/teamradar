@@ -26,7 +26,6 @@
 #endif
 
 TeamRadarView* TeamRadarNode::view = 0;
-qreal TeamRadarNode::sensitivity = 0.1;
 
 TeamRadarNode::TeamRadarNode(TeamRadarNode* owner, const QString& nm, int level) : name(nm)
 {
@@ -295,7 +294,6 @@ void TeamRadarNode::removeEdgeToOwner()
 		scene()->removeItem(ownerEdge);
 		delete ownerEdge;
 	}
-	owner = 0;
 }
 
 QFileInfo TeamRadarNode::findMatchingPath(const QString& filePath)
@@ -529,11 +527,11 @@ void HumanNode::lightTrailDied(LightTrail* trail) {
 
 void HumanNode::setWorkOn(const QString& filePath)
 {
-#if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
+//#if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
 	leaveAfterimage();
 	lightTrail = new LightTrail(this);   // start a new light trail
 	scene()->addItem(lightTrail);
-#endif
+//#endif
 
 	workOn = filePath;  // find new owner
 	updateOwner();
@@ -597,6 +595,7 @@ void HumanNode::detachFromOwner()
 		getOwner()->detectConflict();
 		hideLabel();
 		view->itemMoved();
+		owner = 0;
 	}
 }
 

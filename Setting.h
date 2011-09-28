@@ -15,6 +15,8 @@ public:
 	QString getPhotoFilePath(const QString& userName) const;
 	QString getChatHistoryPath() const;
 	QString getRootPath() const;
+	qreal   getThreshold() const;
+	int     getFontSize() const;
 
 	void setServerAddress(const QString& address);
 	void setServerPort(quint16 port);
@@ -22,6 +24,8 @@ public:
 	void setColor(const QString& section, const QColor& color);
 	void setExtensionColor(const QString& extension, const QColor& color);
 	void setRootPath(const QString& path);
+	void setThreshold(qreal sensitivity);
+	void setFontSize(int size);
 
 private:
     void loadDefaults();

@@ -501,8 +501,10 @@ HumanNode* TeamRadarView::findDeveloper(const QString& name)
 	return it != humans.end() ? it.value() : 0;
 }
 
-void TeamRadarView::closeEvent(QCloseEvent*) {
-	clear();
+void TeamRadarView::closeEvent(QCloseEvent*)
+{
+//	engine->stop();
+//	clear();
 }
 
 bool TeamRadarView::viewportEvent(QEvent *event)
