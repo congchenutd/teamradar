@@ -17,6 +17,8 @@ public:
 	QString getRootPath() const;
 	qreal   getThreshold() const;
 	int     getFontSize() const;
+	bool    showLightTrail() const;
+	bool    showAfterImage() const;
 
 	void setServerAddress(const QString& address);
 	void setServerPort(quint16 port);
@@ -26,6 +28,8 @@ public:
 	void setRootPath(const QString& path);
 	void setThreshold(qreal sensitivity);
 	void setFontSize(int size);
+	void setShowLightTrail(bool show);
+	void setShowAfterImage(bool show);
 
 private:
     void loadDefaults();
