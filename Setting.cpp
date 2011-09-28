@@ -29,8 +29,12 @@ void Setting::loadDefaults()
 	// the threshold for the engine to converge
 #if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
 	setThreshold(0.1);
+	setShowLightTrail(true);
+	setShowAfterImage(true);
 #else
 	setThreshold(1.0);
+	setShowLightTrail(false);
+	setShowAfterImage(false);
 #endif
 
 	// filter trash files/dirs
@@ -139,6 +143,22 @@ void Setting::setFontSize(int size) {
 
 int Setting::getFontSize() const {
 	return value("FontSize").toInt();
+}
+
+bool Setting::showLightTrail() const {
+	return value("LightTrail").toBool();
+}
+
+bool Setting::showAfterImage() const {
+	return value("AfterImage").toBool();
+}
+
+void Setting::setShowLightTrail(bool show) {
+	setValue("LightTrail", show);
+}
+
+void Setting::setShowAfterImage(bool show) {
+	setValue("AfterImage", show);
 }
 
 

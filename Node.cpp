@@ -527,11 +527,12 @@ void HumanNode::lightTrailDied(LightTrail* trail) {
 
 void HumanNode::setWorkOn(const QString& filePath)
 {
-//#if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
-	leaveAfterimage();
-	lightTrail = new LightTrail(this);   // start a new light trail
-	scene()->addItem(lightTrail);
-//#endif
+	if(Setting::getInstance()->showLightTrail())
+	{
+		leaveAfterimage();
+		lightTrail = new LightTrail(this);   // start a new light trail
+		scene()->addItem(lightTrail);
+	}
 
 	workOn = filePath;  // find new owner
 	updateOwner();
@@ -539,11 +540,14 @@ void HumanNode::setWorkOn(const QString& filePath)
 
 void HumanNode::leaveAfterimage()
 {
-	AfterimageNode* afterimage = new AfterimageNode(getName() + "'s afterimage", image, owner);
-	scene()->addItem(afterimage);
-	if(owner != 0)
-		scene()->addItem(new HumanEdge(owner, afterimage, 3));
-	afterimage->setPos(pos());
+	if(Setting::getInstance()->showAfterImage())
+	{
+		AfterimageNode* afterimage = new AfterimageNode(getName() + "'s afterimage", image, owner);
+		scene()->addItem(afterimage);
+		if(owner != 0)
+			scene()->addItem(new HumanEdge(owner, afterimage, 3));
+		afterimage->setPos(pos());
+	}
 }
 
 void HumanNode::enterCanvas()
