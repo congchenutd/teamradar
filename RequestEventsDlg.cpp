@@ -1,12 +1,15 @@
 #include "RequestEventsDlg.h"
-#include "ImageColorBoolProxy.h"
-#include "ImageColorBoolDelegate.h"
+#include "../ImageColorBoolModel/ImageColorBoolProxy.h"
+#include "../ImageColorBoolModel/ImageColorBoolDelegate.h"
 #include "Connection.h"
 #include <QSqlQueryModel>
 
 RequestEventsDlg::RequestEventsDlg(QWidget* parent) : QDialog(parent)
 {
 	ui.setupUi(this);
+#if defined(Q_WS_SIMULATOR) || defined(Q_OS_SYMBIAN)
+	showMaximized();
+#endif
 	
 	initModels();
 
@@ -14,20 +17,20 @@ RequestEventsDlg::RequestEventsDlg(QWidget* parent) : QDialog(parent)
 	ImageColorBoolProxy* usersProxy = new ImageColorBoolProxy(this);
 	usersProxy->setColumnType(NAME,     ImageColorBoolProxy::NameColumn);
 	usersProxy->setColumnType(IMAGE,    ImageColorBoolProxy::ImageColumn);
-	usersProxy->setColumnType(ONLINE,   ImageColorBoolProxy::BoolColumn);
 	usersProxy->setColumnType(SELECTED, ImageColorBoolProxy::BoolColumn);
 	usersProxy->setImageColumn(IMAGE);
-	usersProxy->setGrayImageBy(ONLINE);
 	usersProxy->setSourceModel(&usersModel);
 
 	ui.tvUsers->setModel(usersProxy);
-	ImageColorBoolDelegate* uersDelegate = new ImageColorBoolDelegate(usersProxy, ui.tvUsers);
-	uersDelegate->setEditTrigger(QEvent::MouseButtonPress);
-	ui.tvUsers->setItemDelegate(uersDelegate);
+	ImageColorBoolDelegate* usersDelegate = new ImageColorBoolDelegate(usersProxy, ui.tvUsers);
+	usersDelegate->setEditTrigger(QEvent::MouseButtonPress);
+	usersDelegate->setCheckedImage  (QPixmap(":/Images/Checked.png"));
+	usersDelegate->setUncheckedImage(QPixmap(":/Images/Unchecked.png"));
+	ui.tvUsers->setItemDelegate(usersDelegate);
 	ui.tvUsers->hideColumn(IMAGE);
-	ui.tvUsers->hideColumn(ONLINE);
 	ui.tvUsers->resizeRowsToContents();
 	ui.tvUsers->resizeColumnsToContents();
+	ui.tvUsers->horizontalHeader()->setStretchLastSection(true);
 
 	// fetch time span from the server
 	ui.dtStart->setDisplayFormat(Setting::dateTimeFormat);
@@ -36,14 +39,17 @@ RequestEventsDlg::RequestEventsDlg(QWidget* parent) : QDialog(parent)
 	ui.dtEnd  ->setDateTime(QDateTime::currentDateTime());
 	connect(Receiver::getInstance(), SIGNAL(timespan(QDateTime, QDateTime)), this, SLOT(onTimeSpan(QDateTime, QDateTime)));
 	Sender::getInstance()->sendTimeSpanRequest();
+
+	connect(ui.sliderFuzziness, SIGNAL(valueChanged(int)), this, SLOT(onFussiness(int)));
 }
 
 void RequestEventsDlg::initModels()
 {
+	// Receive will be displayed as Selected
 	QSqlQueryModel peersModel;
-	peersModel.setQuery("select Name, Image, Online, Receive from Peers");
+	peersModel.setQuery("select Name, Image, Receive from Peers");
 
-	usersModel.setColumnCount(4);
+	usersModel.setColumnCount(3);
 	usersModel.setHeaderData(NAME,     Qt::Horizontal, "Name");
 	usersModel.setHeaderData(SELECTED, Qt::Horizontal, "Selected");
 	usersModel.insertRows(0, peersModel.rowCount());
@@ -51,7 +57,6 @@ void RequestEventsDlg::initModels()
 	{
 		usersModel.setData(usersModel.index(row, NAME),   peersModel.data(peersModel.index(row, NAME)));
 		usersModel.setData(usersModel.index(row, IMAGE),  peersModel.data(peersModel.index(row, IMAGE)));
-		usersModel.setData(usersModel.index(row, ONLINE), peersModel.data(peersModel.index(row, ONLINE)));
 		usersModel.setData(usersModel.index(row, SELECTED), true);
 	}
 }
@@ -112,4 +117,8 @@ QStringList RequestEventsDlg::getPhases() const
 
 int RequestEventsDlg::getFuzziness() const {
 	return ui.sliderFuzziness->value() * 10;   // percentage
+}
+
+void RequestEventsDlg::onFussiness(int value) {
+	ui.labelFuzziness->setText(tr("Phase division fuzziness = %1%").arg(value * 10));
 }
