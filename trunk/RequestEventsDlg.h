@@ -20,6 +20,7 @@ public:
 
 private slots:
 	void onTimeSpan(const QDateTime& start, const QDateTime& end);
+	void onFussiness(int value);
 
 private:
 	void initModels();
@@ -28,7 +29,7 @@ private:
 	Ui::RequestEventsDlgClass ui;
 	QStandardItemModel usersModel;
 
-	enum {NAME, IMAGE, ONLINE, SELECTED};
+	enum {NAME, IMAGE, SELECTED};
 };
 
 
