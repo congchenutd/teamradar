@@ -18,19 +18,21 @@
 PlayerWidget::PlayerWidget(QWidget *parent) :
 	QWidget(parent)
 {
+	// models
 	currentRow = -1;
 	speed = 1.0;
 	online = false;
 	playing = false;
 	peerManager = PeerManager::getInstance();
 
-	model = new QStandardItemModel(this);
-	model->setColumnCount(4);
-	model->setHeaderData(DateTime,  Qt::Horizontal, tr("Time"));
-	model->setHeaderData(UserName,  Qt::Horizontal, tr("User"));
-	model->setHeaderData(EventType, Qt::Horizontal, tr("Event"));
-	model->setHeaderData(Parameter, Qt::Horizontal, tr("Parameter"));
+	modelPlaylist = new QStandardItemModel(this);
+	modelPlaylist->setColumnCount(4);
+	modelPlaylist->setHeaderData(DateTime,  Qt::Horizontal, tr("Time"));
+	modelPlaylist->setHeaderData(UserName,  Qt::Horizontal, tr("User"));
+	modelPlaylist->setHeaderData(EventType, Qt::Horizontal, tr("Event"));
+	modelPlaylist->setHeaderData(Parameter, Qt::Horizontal, tr("Parameter"));
 
+	// views
 	ui.setupUi(this);
 	QGraphicsScene *scene = new QGraphicsScene(this);
 	scene->setItemIndexMethod(QGraphicsScene::NoIndex);
@@ -38,7 +40,7 @@ PlayerWidget::PlayerWidget(QWidget *parent) :
 	ui.graphicsView->setScene(scene);
 	peerManager->setView(ui.graphicsView);
 
-	ui.tvPlaylist->setModel(model);
+	ui.tvPlaylist->setModel(modelPlaylist);
 	playIcon  = style()->standardIcon(QStyle::SP_MediaPlay);
 	pauseIcon = style()->standardIcon(QStyle::SP_MediaPause);
 	ui.btPlayPause->setIcon(playIcon);
@@ -52,6 +54,7 @@ PlayerWidget::PlayerWidget(QWidget *parent) :
 	onOnline();
 	onConnectedToServer(Connection::getInstance()->isReadyForUse());  // init light
 
+	// signals
 	connect(ui.btPlaylist,  SIGNAL(clicked(bool)), this, SLOT(onShowPlaylist(bool)));
 	connect(ui.btEffects,   SIGNAL(clicked(bool)), this, SLOT(onEffects(bool)));
 	connect(ui.btPlayPause, SIGNAL(clicked()),     this, SLOT(onPlayPause()));
@@ -106,7 +109,7 @@ void PlayerWidget::onLoad()
 		return;
 
 	ui.graphicsView->loadDir(Setting::getInstance()->getRootPath());
-	model->removeRows(0, model->rowCount());
+	modelPlaylist->removeRows(0, modelPlaylist->rowCount());
 	
 	QTextStream is(&file);
 	while(!is.atEnd())
@@ -114,15 +117,15 @@ void PlayerWidget::onLoad()
 		QStringList sections = is.readLine().split("#");
 		if(sections.size() == 4)
 		{
-			int lastRow = model->rowCount();
-			model->insertRow(lastRow);
+			int lastRow = modelPlaylist->rowCount();
+			modelPlaylist->insertRow(lastRow);
 			for(int i=0; i<4; ++i)
-				model->setData(model->index(lastRow, i), sections[i]);
+				modelPlaylist->setData(modelPlaylist->index(lastRow, i), sections[i]);
 		}
 	}
 	ui.tvPlaylist->resizeColumnsToContents();
-	ui.slider->setMaximum(model->rowCount() - 1);
-	model->sort(DateTime);
+	ui.slider->setMaximum(modelPlaylist->rowCount() - 1);
+	modelPlaylist->sort(DateTime);
 }
 
 void PlayerWidget::onSpeed(double speed) {
@@ -138,10 +141,10 @@ void PlayerWidget::play()
 
 	// ready for the next
 	int nextRow = currentRow + 1;
-	if(nextRow < model->rowCount())
+	if(nextRow < modelPlaylist->rowCount())
 	{
-		QDateTime thisTime = model->data(model->index(currentRow, DateTime)).toDateTime();
-		QDateTime nextTime = model->data(model->index(nextRow,    DateTime)).toDateTime();
+		QDateTime thisTime = modelPlaylist->data(modelPlaylist->index(currentRow, DateTime)).toDateTime();
+		QDateTime nextTime = modelPlaylist->data(modelPlaylist->index(nextRow,    DateTime)).toDateTime();
 		int duration = thisTime.secsTo(nextTime);
 		QTimer::singleShot(duration * 1000 / speed, this, SLOT(play()));
 	}
@@ -153,9 +156,9 @@ void PlayerWidget::play(int row)
 {
 	currentRow = row;
 	selectRow(row);
-	play(TeamRadarEvent(model->data(model->index(row, UserName)) .toString(),
-						model->data(model->index(row, EventType)).toString(),
-						model->data(model->index(row, Parameter)).toString()));
+	play(TeamRadarEvent(modelPlaylist->data(modelPlaylist->index(row, UserName)) .toString(),
+						modelPlaylist->data(modelPlaylist->index(row, EventType)).toString(),
+						modelPlaylist->data(modelPlaylist->index(row, Parameter)).toString()));
 }
 
 void PlayerWidget::play(const TeamRadarEvent& event)
@@ -238,12 +241,15 @@ void PlayerWidget::onDownload()
 {
 	RequestEventsDlg dlg(this);
 	if(dlg.exec() == QDialog::Accepted)
-		Sender::getInstance()->sendEventRequest(dlg.getUserList(), 
+	{
+		modelPlaylist->removeRows(0, modelPlaylist->rowCount());   // remove current, request new
+		Sender::getInstance()->sendEventRequest(dlg.getUserList(),
 												dlg.getEventList(),
 												dlg.getStartTime(), 
 												dlg.getEndTime(),
 												dlg.getPhases(),
 												dlg.getFuzziness());
+	}
 }
 
 void PlayerWidget::onConnectedToServer(bool connected) {
@@ -256,16 +262,16 @@ void PlayerWidget::onEventDownloaded(const TeamRadarEvent& event)
 	if(online)    // for offline only
 		return;
 
-	int lastRow = model->rowCount();
-	model->insertRow(lastRow);
-	model->setData(model->index(lastRow, 0), event.time.toString(Setting::dateTimeFormat));
-	model->setData(model->index(lastRow, 1), event.userName);
-	model->setData(model->index(lastRow, 2), event.eventType);
-	model->setData(model->index(lastRow, 3), event.parameters);
+	int lastRow = modelPlaylist->rowCount();
+	modelPlaylist->insertRow(lastRow);
+	modelPlaylist->setData(modelPlaylist->index(lastRow, 0), event.time.toString(Setting::dateTimeFormat));
+	modelPlaylist->setData(modelPlaylist->index(lastRow, 1), event.userName);
+	modelPlaylist->setData(modelPlaylist->index(lastRow, 2), event.eventType);
+	modelPlaylist->setData(modelPlaylist->index(lastRow, 3), event.parameters);
 
 	ui.tvPlaylist->resizeColumnsToContents();
-	ui.slider->setMaximum(model->rowCount() - 1);
-	model->sort(DateTime);
+	ui.slider->setMaximum(modelPlaylist->rowCount() - 1);
+	modelPlaylist->sort(DateTime);
 }
 
 // received a chat message from peerName

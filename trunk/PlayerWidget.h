@@ -58,7 +58,7 @@ private:
 	Ui::PlayerWidget ui;
 	QIcon playIcon;
 	QIcon pauseIcon;
-	QStandardItemModel* model;
+	QStandardItemModel* modelPlaylist;
 	double speed;
 	int    currentRow;
 	bool   online;

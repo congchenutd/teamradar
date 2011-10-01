@@ -11,6 +11,7 @@
 class PeerModel;
 struct TeamRadarEvent;
 class TeamRadarView;
+class QSqlTableModel;
 
 class PeerManager : public QObject
 {
@@ -20,7 +21,8 @@ public:
 	static PeerManager* getInstance();
 	QString getImage(const QString& userName) const;
 	QColor getDeveloperColor(const QString& userName);
-	PeerModel* getPeerModel() const { return model; }    // the underlying model
+	PeerModel*      getPeerModel()     const { return modelOnline; }  // the underlying models
+	QSqlTableModel* getAllPeersModel() const { return modelAll; }
 	void setView(TeamRadarView* v) { view = v; }
 
 signals:
@@ -28,14 +30,15 @@ signals:
 
 // handle server messages
 public slots:
-	void refreshUserList();                      // ask the server for online user list
+	void refreshUserList();      // ask the server for online user, and all users list
 
 private slots:
 	void onUserList(const QList<QByteArray>& list);
+	void onAllUsers(const QList<QByteArray>& list);
 	void onPhotoResponse(const QString& fileName, const QByteArray& photoData);
 	void onColorResponse(const QString& userName, const QByteArray& color);
 
-	// handles CONNECTED, DISCONNECTED, OPENPROJECT messages
+	// handles CONNECTED, DISCONNECTED, JOINTED messages
 	void onEvent(const TeamRadarEvent& event);
 
 private:
@@ -44,7 +47,8 @@ private:
 
 private:
 	static PeerManager* instance;
-	PeerModel* model;
+	PeerModel*      modelOnline;   // online users
+	QSqlTableModel* modelAll;      // all logged users
 	TeamRadarView* view;
 };
 

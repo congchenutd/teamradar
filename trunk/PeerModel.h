@@ -27,7 +27,6 @@ public:
 	static void makeAllOffline();
 	static bool userExists(const QString& name);
 	static void updateUser(const DeveloperInfo& info);
-	static void addUser   (const DeveloperInfo& info);
 	static DeveloperInfo getUserInfo(const QString& name);
 	static bool isBlocked(const QString& name);
 

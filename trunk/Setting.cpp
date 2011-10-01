@@ -26,13 +26,13 @@ void Setting::loadDefaults()
 	setValue("ChatHistoryPath", "./ChatHistory");
 	setFontSize(10);
 
-	// the threshold for the engine to converge
+	// parameters for the engine
 #if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
-	setThreshold(0.1);
+	setEngineSubtlety(10);
 	setShowLightTrail(true);
 	setShowAfterImage(true);
 #else
-	setThreshold(1.0);
+	setEngineSubtlety(1);
 	setShowLightTrail(false);
 	setShowAfterImage(false);
 #endif
@@ -130,11 +130,7 @@ void Setting::setRootPath(const QString& path) {
 const QString Setting::dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
 
 qreal Setting::getThreshold() const {
-	return value("LayoutThreshold").toReal();
-}
-
-void Setting::setThreshold(qreal sensitivity) {
-	setValue("LayoutThreshold", sensitivity);
+	return 1.0 / getEngineSubtlety();   // 0.1~1
 }
 
 void Setting::setFontSize(int size) {
@@ -161,4 +157,15 @@ void Setting::setShowAfterImage(bool show) {
 	setValue("AfterImage", show);
 }
 
+int Setting::getEngineRate() const {
+	return getEngineSubtlety() * 10;   // 10~100 msecs
+}
+
+int Setting::getEngineSubtlety() const {
+	return value("EngineSubtlety").toInt();   // 1~10
+}
+
+void Setting::setEngineSubtlety(int subtlety) {
+	setValue("EngineSubtlety", subtlety);
+}
 

@@ -3,8 +3,8 @@
 
 #include <QDialog>
 #include "ui_RequestEventsDlg.h"
-#include <QStandardItemModel>
 
+class QSqlTableModel;
 class RequestEventsDlg : public QDialog
 {
 	Q_OBJECT
@@ -27,9 +27,9 @@ private:
 
 private:
 	Ui::RequestEventsDlgClass ui;
-	QStandardItemModel usersModel;
+	QSqlTableModel* allUsersModel;
 
-	enum {NAME, IMAGE, SELECTED};
+	enum {NAME, IMAGE, SELECTED};   // for users list
 };
 
 
