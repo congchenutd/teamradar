@@ -25,6 +25,7 @@ void Setting::loadDefaults()
 	setValue("PhotoPath",       "./Photos");
 	setValue("ChatHistoryPath", "./ChatHistory");
 	setFontSize(10);
+	setValue("PartitionFuzziness", 100);
 
 	// parameters for the engine
 #if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
@@ -37,7 +38,7 @@ void Setting::loadDefaults()
 	setShowAfterImage(false);
 #endif
 
-	// filter trash files/dirs
+	// filtered trash files/dirs
 	setValue("FilteredDirs",  "Debug;Release;Temp;Tmp;Lib;libs");
 	setValue("FilteredFiles", "obj;tmp;dll;pdb;o;ilk;idb");
 

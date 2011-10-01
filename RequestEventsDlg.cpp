@@ -33,6 +33,8 @@ RequestEventsDlg::RequestEventsDlg(QWidget* parent) : QDialog(parent)
 	ui.tvUsers->resizeColumnsToContents();
 	ui.tvUsers->horizontalHeader()->setStretchLastSection(true);
 
+	onFussiness(Setting::getInstance()->value("PartitionFuzziness").toInt());
+
 	// fetch time span from the server
 	ui.dtStart->setDisplayFormat(Setting::dateTimeFormat);
 	ui.dtEnd  ->setDisplayFormat(Setting::dateTimeFormat);
@@ -102,6 +104,14 @@ int RequestEventsDlg::getFuzziness() const {
 	return ui.sliderFuzziness->value() * 10;   // percentage
 }
 
-void RequestEventsDlg::onFussiness(int value) {
-	ui.labelFuzziness->setText(tr("Division fuzziness = %1%").arg(value * 10));
+void RequestEventsDlg::onFussiness(int value)
+{
+	ui.sliderFuzziness->setValue(value);
+	ui.labelFuzziness->setText(tr("Partition fuzziness = %1%").arg(value * 10));
+}
+
+void RequestEventsDlg::accept()
+{
+	Setting::getInstance()->setValue("PartitionFuzziness", ui.sliderFuzziness->value());
+	QDialog::accept();
 }
