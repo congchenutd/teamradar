@@ -14,6 +14,7 @@
 //		GREETING: [OK, CONNECTED]/[WRONG_USER]
 //		PHOTO_RESPONSE: [filename#binary photo data]/[empty]
 //		USERLIST_RESPONSE: username1#username2#...
+//		ALLUSERS_RESPONSE: username1#username2#...
 //		EVENT: user#event#[parameters]#time
 //			Format of parameters: parameter1#parameter2#...
 //		COLOR_RESPONSE: [username#color]/[empty]
@@ -30,6 +31,7 @@ public:
 		Event,
 		PhotoResponse,
 		UserListResponse,
+		ALLUsersResponse,
 		ColorResponse,
 		EventsResponse,
 		Chat,
@@ -49,6 +51,7 @@ public:
 signals:
 	void newEvent(const TeamRadarEvent& event);
 	void userList(const QList<QByteArray>& list);
+	void allUsers(const QList<QByteArray>& list);
 	void photoResponse(const QString& fileName,   const QByteArray& photoData);
 	void colorResponse(const QString& targetUser, const QByteArray& color);
 	void eventsResponse(const TeamRadarEvent& event);
@@ -60,6 +63,7 @@ private:
 	void parseGreeting(const QByteArray& buffer);
 	void parseEvent   (const QByteArray& buffer);
 	void parseUserList(const QByteArray& buffer);
+	void parseAllUsers(const QByteArray& buffer);
 	void parsePhoto   (const QByteArray& buffer);
 	void parseColor   (const QByteArray& buffer);
 	void parseEvents  (const QByteArray& buffer);
@@ -134,6 +138,7 @@ private:
 // Does not need to send my user name, because the server knows who I am
 // Format of body:
 //		REQUEST_USERLIST: [empty], server knows the user name
+//		REQUEST_ALLUSERS: [empty], server knows the user name
 //		REQUEST_PHOTO: target user name
 //		REGISTER_PHOTO: file format#binary photo data
 //		EVENT: event type#parameters
@@ -158,6 +163,7 @@ public:
 	Sender();
 	void sendEvent(const QString& event, const QString& parameters);
 	void sendUserListRequest();
+	void sendAllUsersRequest();
 	void sendPhotoRegistration(const QByteArray& format, const QByteArray& photoData);
 	void sendColorRegistration(const QColor& color);
 	void sendPhotoRequest(const QString& targetUser);

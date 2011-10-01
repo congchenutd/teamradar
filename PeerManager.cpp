@@ -4,6 +4,7 @@
 #include "PeerModel.h"
 #include "TeamRadarView.h"
 #include <QFileInfo>
+#include <QSqlError>
 
 #if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
 #include "PlayerWidget.h"
@@ -13,12 +14,18 @@
 PeerManager::PeerManager(QObject *parent)
 	: QObject(parent), view(0)
 {
-	model = new PeerModel(this);
-	model->setTable("Peers");
-	model->select();
+	modelOnline = new PeerModel(this);
+	modelOnline->setTable("Peers");
+	modelOnline->select();
+
+	modelAll = new QSqlTableModel(this);
+	modelAll->setEditStrategy(QSqlTableModel::OnManualSubmit);
+	modelAll->setTable("AllPeers");
+	bool result = modelAll->select();
 
 	Receiver* receiver = Receiver::getInstance();
-	connect(receiver, SIGNAL(userList(QList<QByteArray>)),        this, SLOT(onUserList(QList<QByteArray>)));
+	connect(receiver, SIGNAL(userList(QList<QByteArray>)), this, SLOT(onUserList(QList<QByteArray>)));
+	connect(receiver, SIGNAL(allUsers(QList<QByteArray>)), this, SLOT(onAllUsers(QList<QByteArray>)));
 	connect(receiver, SIGNAL(photoResponse(QString, QByteArray)), this, SLOT(onPhotoResponse(QString, QByteArray)));
 	connect(receiver, SIGNAL(colorResponse(QString, QByteArray)), this, SLOT(onColorResponse(QString, QByteArray)));
 	connect(receiver, SIGNAL(newEvent(TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
@@ -39,33 +46,51 @@ PeerManager* PeerManager::getInstance()
 PeerManager* PeerManager::instance = 0;
 
 QString PeerManager::getImage(const QString& userName) const {
-	return model->getUserInfo(userName).image;
+	return modelOnline->getUserInfo(userName).image;
 }
 
 QColor PeerManager::getDeveloperColor(const QString& userName) {
-	return model->getUserInfo(userName).color;
+	return modelOnline->getUserInfo(userName).color;
 }
 
 void PeerManager::refreshUserList() {
 	Sender::getInstance()->sendUserListRequest();
+	Sender::getInstance()->sendAllUsersRequest();
 }
 
 // online user list
 void PeerManager::onUserList(const QList<QByteArray>& list)
 {
-	model->makeAllOffline();
+	modelOnline->makeAllOffline();
 	foreach(QString name, list)
 		setUserOnline(name, true);
+}
+
+// update all users model
+void PeerManager::onAllUsers(const QList<QByteArray>& list)
+{
+	modelAll->removeRows(0, modelAll->rowCount());
+	foreach(QByteArray userName, list)
+	{
+		int lastRow = modelAll->rowCount();
+		bool result = modelAll->insertRow(lastRow);
+		result = modelAll->setData(modelAll->index(lastRow, 0), userName);
+		QString errMsg = modelAll->lastError().text();
+		DeveloperInfo developerInfo = PeerModel::getUserInfo(userName);
+		result = modelAll->setData(modelAll->index(lastRow, 1), developerInfo.image);
+		result = modelAll->setData(modelAll->index(lastRow, 2), true);
+	}
+	modelAll->submitAll();
 }
 
 // update the online status in the database, and notify player of the change
 void PeerManager::setUserOnline(const QString& name, bool online)
 {
 	// update online info
-	DeveloperInfo user = model->getUserInfo(name);
+	DeveloperInfo user = modelOnline->getUserInfo(name);
 	user.online = online;
-	model->updateUser(user);
-	model->select();
+	modelOnline->updateUser(user);
+	modelOnline->select();
 
 	// update photo, color
 	if(online && Setting::getInstance()->getUserName() != name)
@@ -92,10 +117,10 @@ void PeerManager::onPhotoResponse(const QString& fileName, const QByteArray& pho
 	}
 
 	// update the db
-	DeveloperInfo userInfo = model->getUserInfo(userName);
+	DeveloperInfo userInfo = modelOnline->getUserInfo(userName);
 	userInfo.image = filePath;
-	model->updateUser(userInfo);
-	model->select();
+	modelOnline->updateUser(userInfo);
+	modelOnline->select();
 
 	// ask the node to use the new photo
 	if(view != 0)
@@ -104,15 +129,15 @@ void PeerManager::onPhotoResponse(const QString& fileName, const QByteArray& pho
 
 void PeerManager::onColorResponse(const QString& userName, const QByteArray& color)
 {
-	DeveloperInfo userInfo = model->getUserInfo(userName);
+	DeveloperInfo userInfo = modelOnline->getUserInfo(userName);
 	userInfo.color = QString(color);
-	model->updateUser(userInfo);
-	model->select();
+	modelOnline->updateUser(userInfo);
+	modelOnline->select();
 }
 
 void PeerManager::onEvent(const TeamRadarEvent& event)
 {
-	if(event.eventType == "CONNECTED")
+	if(event.eventType == "JOINED")
 		setUserOnline(event.userName, true);
 	else if(event.eventType == "DISCONNECTED")
 		setUserOnline(event.userName, false);

@@ -19,6 +19,8 @@ public:
 	int     getFontSize() const;
 	bool    showLightTrail() const;
 	bool    showAfterImage() const;
+	int     getEngineRate() const;
+	int     getEngineSubtlety() const;
 
 	void setServerAddress(const QString& address);
 	void setServerPort(quint16 port);
@@ -26,10 +28,10 @@ public:
 	void setColor(const QString& section, const QColor& color);
 	void setExtensionColor(const QString& extension, const QColor& color);
 	void setRootPath(const QString& path);
-	void setThreshold(qreal sensitivity);
 	void setFontSize(int size);
 	void setShowLightTrail(bool show);
 	void setShowAfterImage(bool show);
+	void setEngineSubtlety(int subtlety);
 
 private:
     void loadDefaults();

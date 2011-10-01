@@ -9,6 +9,9 @@ Server					Client
 	<- Request_UserList
 	-> UserList_Response
 
+	<- Request_AllUsers
+	-> AllUsers_Response
+
 	<- Request_Photo
 	-> Photo_Response
 

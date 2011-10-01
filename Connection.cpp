@@ -204,6 +204,7 @@ Receiver::Receiver()
 	dataTypes.insert("EVENT",             Event);
 	dataTypes.insert("PHOTO_RESPONSE",    PhotoResponse);
 	dataTypes.insert("USERLIST_RESPONSE", UserListResponse);
+	dataTypes.insert("ALLUSERS_RESPONSE", ALLUsersResponse);
 	dataTypes.insert("COLOR_RESPONSE",    ColorResponse);
 	dataTypes.insert("CHAT",              Chat);
 	dataTypes.insert("TIMESPAN_RESPONSE", TimeSpanResponse);
@@ -213,6 +214,7 @@ Receiver::Receiver()
 	parsers.insert(EventsResponse,   &Receiver::parseEvents);
 	parsers.insert(Event,            &Receiver::parseEvent);
 	parsers.insert(UserListResponse, &Receiver::parseUserList);
+	parsers.insert(ALLUsersResponse, &Receiver::parseAllUsers);
 	parsers.insert(PhotoResponse,    &Receiver::parsePhoto);
 	parsers.insert(ColorResponse,    &Receiver::parseColor);
 	parsers.insert(Chat,             &Receiver::parseChat);
@@ -251,7 +253,9 @@ void Receiver::parseEvent(const QByteArray& buffer)
 void Receiver::parseUserList(const QByteArray& buffer) {
 	emit userList(buffer.split(Connection::Delimiter1));
 }
-
+void Receiver::parseAllUsers(const QByteArray& buffer) {
+	emit allUsers(buffer.split(Connection::Delimiter1));
+}
 void Receiver::parsePhoto(const QByteArray& buffer)
 {
 	int seperator = buffer.indexOf(Connection::Delimiter1);
@@ -308,6 +312,7 @@ void Receiver::parseProjects(const QByteArray& buffer)
 		emit projectsResponse(QStringList());
 }
 
+
 //////////////////////////////////////////////////////////////////////////
 Sender* Sender::getInstance()
 {
@@ -330,6 +335,11 @@ void Sender::sendEvent(const QString& event, const QString& parameters) {
 void Sender::sendUserListRequest() {
 	if(connection->isReadyForUse())
 		connection->send("REQUEST_USERLIST");
+}
+
+void Sender::sendAllUsersRequest() {
+	if(connection->isReadyForUse())
+		connection->send("REQUEST_ALLUSERS");
 }
 
 void Sender::sendPhotoRequest(const QString& targetUser) {

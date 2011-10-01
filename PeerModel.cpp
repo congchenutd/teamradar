@@ -45,14 +45,11 @@ void PeerModel::createTables()
 			   Online  bool, \
 			   Receive bool \
 			   )");
-
-	// for RequestEventsDlg
-	//query.exec("create table PeersTemp( \
-	//		   Name     varchar primary key, \
-	//		   Image    varchar, \
-	//		   Online   bool, \
-	//		   Selected bool \
-	//		   )");
+	query.exec("create table AllPeers( \
+			   Name    varchar primary key, \
+			   Image   varchar, \
+			   Selected bool \
+			   )");
 }
 
 void PeerModel::makeAllOffline()
@@ -72,12 +69,6 @@ void PeerModel::updateUser(const DeveloperInfo& info)
 {
 	QSqlQuery query;
 	query.exec(tr("delete from Peers where Name = \"%1\"").arg(info.name));
-	addUser(info);
-}
-
-void PeerModel::addUser(const DeveloperInfo& info)
-{
-	QSqlQuery query;
 	query.exec(tr("insert into Peers values (\"%1\", \"%2\", \"%3\", \"%4\", \"%5\")")
 		.arg(info.name).arg(info.color.name()).arg(info.image).arg(info.online ? "true" : "false").arg(info.receive));
 }

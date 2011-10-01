@@ -67,8 +67,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>332</width>
-            <height>406</height>
+            <width>119</width>
+            <height>116</height>
            </rect>
           </property>
           <attribute name="label">
@@ -135,8 +135,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>332</width>
-            <height>406</height>
+            <width>152</width>
+            <height>92</height>
            </rect>
           </property>
           <attribute name="label">
@@ -209,7 +209,7 @@
             <x>0</x>
             <y>0</y>
             <width>332</width>
-            <height>406</height>
+            <height>416</height>
            </rect>
           </property>
           <attribute name="label">
@@ -269,7 +269,7 @@
            <item>
             <widget class="QLabel" name="labelFuzziness">
              <property name="text">
-              <string>Phase division fuzziness</string>
+              <string>Division fuzziness</string>
              </property>
             </widget>
            </item>

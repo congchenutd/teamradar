@@ -20,7 +20,7 @@ Engine::Engine(TeamRadarView* v)
 void Engine::start() {
 	if(timerID == 0)
 	{
-		timerID = startTimer(10);
+		timerID = startTimer(Setting::getInstance()->getEngineRate());
 //		time.start();
 	}
 }

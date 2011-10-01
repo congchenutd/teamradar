@@ -2,7 +2,8 @@
 #include "../ImageColorBoolModel/ImageColorBoolProxy.h"
 #include "../ImageColorBoolModel/ImageColorBoolDelegate.h"
 #include "Connection.h"
-#include <QSqlQueryModel>
+#include "PeerManager.h"
+#include <QSqlTableModel>
 
 RequestEventsDlg::RequestEventsDlg(QWidget* parent) : QDialog(parent)
 {
@@ -11,23 +12,23 @@ RequestEventsDlg::RequestEventsDlg(QWidget* parent) : QDialog(parent)
 	showMaximized();
 #endif
 	
-	initModels();
-
 	// User list
-	ImageColorBoolProxy* usersProxy = new ImageColorBoolProxy(this);
-	usersProxy->setColumnType(NAME,     ImageColorBoolProxy::NameColumn);
-	usersProxy->setColumnType(IMAGE,    ImageColorBoolProxy::ImageColumn);
-	usersProxy->setColumnType(SELECTED, ImageColorBoolProxy::BoolColumn);
-	usersProxy->setImageColumn(IMAGE);
-	usersProxy->setSourceModel(&usersModel);
+	allUsersModel = PeerManager::getInstance()->getAllPeersModel();
 
-	ui.tvUsers->setModel(usersProxy);
-	ImageColorBoolDelegate* usersDelegate = new ImageColorBoolDelegate(usersProxy, ui.tvUsers);
-	usersDelegate->setEditTrigger(QEvent::MouseButtonPress);
-	usersDelegate->setCheckedImage  (QPixmap(":/Images/Checked.png"));
-	usersDelegate->setUncheckedImage(QPixmap(":/Images/Unchecked.png"));
-	ui.tvUsers->setItemDelegate(usersDelegate);
-	ui.tvUsers->hideColumn(IMAGE);
+//	ImageColorBoolProxy* usersProxy = new ImageColorBoolProxy(this);
+//	usersProxy->setColumnType(NAME,     ImageColorBoolProxy::NameColumn);
+//	usersProxy->setColumnType(IMAGE,    ImageColorBoolProxy::ImageColumn);
+//	usersProxy->setColumnType(SELECTED, ImageColorBoolProxy::BoolColumn);
+//	usersProxy->setImageColumn(IMAGE);
+//	usersProxy->setSourceModel(allUsersModel);
+
+	ui.tvUsers->setModel(allUsersModel);
+//	ImageColorBoolDelegate* usersDelegate = new ImageColorBoolDelegate(usersProxy, ui.tvUsers);
+//	usersDelegate->setEditTrigger(QEvent::MouseButtonPress);
+//	usersDelegate->setCheckedImage  (QPixmap(":/Images/Checked.png"));
+//	usersDelegate->setUncheckedImage(QPixmap(":/Images/Unchecked.png"));
+//	ui.tvUsers->setItemDelegate(usersDelegate);
+//	ui.tvUsers->hideColumn(IMAGE);
 	ui.tvUsers->resizeRowsToContents();
 	ui.tvUsers->resizeColumnsToContents();
 	ui.tvUsers->horizontalHeader()->setStretchLastSection(true);
@@ -43,37 +44,19 @@ RequestEventsDlg::RequestEventsDlg(QWidget* parent) : QDialog(parent)
 	connect(ui.sliderFuzziness, SIGNAL(valueChanged(int)), this, SLOT(onFussiness(int)));
 }
 
-void RequestEventsDlg::initModels()
-{
-	// Receive will be displayed as Selected
-	QSqlQueryModel peersModel;
-	peersModel.setQuery("select Name, Image, Receive from Peers");
-
-	usersModel.setColumnCount(3);
-	usersModel.setHeaderData(NAME,     Qt::Horizontal, "Name");
-	usersModel.setHeaderData(SELECTED, Qt::Horizontal, "Selected");
-	usersModel.insertRows(0, peersModel.rowCount());
-	for(int row=0; row<peersModel.rowCount(); ++row)
-	{
-		usersModel.setData(usersModel.index(row, NAME),   peersModel.data(peersModel.index(row, NAME)));
-		usersModel.setData(usersModel.index(row, IMAGE),  peersModel.data(peersModel.index(row, IMAGE)));
-		usersModel.setData(usersModel.index(row, SELECTED), true);
-	}
-}
-
 QStringList RequestEventsDlg::getUserList() const
 {
 	QStringList result;
-	for(int row=0; row<usersModel.rowCount(); ++row)
-		if(usersModel.data(usersModel.index(row, SELECTED)).toBool())           // if selected
-			result << usersModel.data(usersModel.index(row, NAME)).toString();  // add name
+	for(int row=0; row<allUsersModel->rowCount(); ++row)
+		if(allUsersModel->data(allUsersModel->index(row, SELECTED)).toBool())           // if selected
+			result << allUsersModel->data(allUsersModel->index(row, NAME)).toString();  // add name
 	return result;
 }
 
 QStringList RequestEventsDlg::getEventList() const
 {
 	QStringList result;
-	result << "CONNECTED" << "DISCONNECTED" << "OPENPROJECT";   // default ones
+	result << "JOINED" << "DISCONNECTED";   // default ones
 	if(ui.checkSave->isChecked())
 		result << "SAVE";
 	if(ui.checkMode->isChecked())
@@ -120,5 +103,5 @@ int RequestEventsDlg::getFuzziness() const {
 }
 
 void RequestEventsDlg::onFussiness(int value) {
-	ui.labelFuzziness->setText(tr("Phase division fuzziness = %1%").arg(value * 10));
+	ui.labelFuzziness->setText(tr("Division fuzziness = %1%").arg(value * 10));
 }
