@@ -15,20 +15,20 @@ RequestEventsDlg::RequestEventsDlg(QWidget* parent) : QDialog(parent)
 	// User list
 	allUsersModel = PeerManager::getInstance()->getAllPeersModel();
 
-//	ImageColorBoolProxy* usersProxy = new ImageColorBoolProxy(this);
-//	usersProxy->setColumnType(NAME,     ImageColorBoolProxy::NameColumn);
-//	usersProxy->setColumnType(IMAGE,    ImageColorBoolProxy::ImageColumn);
-//	usersProxy->setColumnType(SELECTED, ImageColorBoolProxy::BoolColumn);
-//	usersProxy->setImageColumn(IMAGE);
-//	usersProxy->setSourceModel(allUsersModel);
+	ImageColorBoolProxy* proxy = new ImageColorBoolProxy(this);
+	proxy->setColumnType(NAME,     ImageColorBoolProxy::NameColumn);
+	proxy->setColumnType(IMAGE,    ImageColorBoolProxy::ImageColumn);
+	proxy->setColumnType(SELECTED, ImageColorBoolProxy::BoolColumn);
+	proxy->setImageColumn(IMAGE);
+	proxy->setSourceModel(allUsersModel);
 
-	ui.tvUsers->setModel(allUsersModel);
-//	ImageColorBoolDelegate* usersDelegate = new ImageColorBoolDelegate(usersProxy, ui.tvUsers);
-//	usersDelegate->setEditTrigger(QEvent::MouseButtonPress);
-//	usersDelegate->setCheckedImage  (QPixmap(":/Images/Checked.png"));
-//	usersDelegate->setUncheckedImage(QPixmap(":/Images/Unchecked.png"));
-//	ui.tvUsers->setItemDelegate(usersDelegate);
-//	ui.tvUsers->hideColumn(IMAGE);
+	ui.tvUsers->setModel(proxy);
+	ImageColorBoolDelegate* usersDelegate = new ImageColorBoolDelegate(proxy, ui.tvUsers);
+	usersDelegate->setEditTrigger(QEvent::MouseButtonPress);
+	usersDelegate->setCheckedImage  (QPixmap(":/Images/Checked.png"));
+	usersDelegate->setUncheckedImage(QPixmap(":/Images/Unchecked.png"));
+	ui.tvUsers->setItemDelegate(usersDelegate);
+	ui.tvUsers->hideColumn(IMAGE);
 	ui.tvUsers->resizeRowsToContents();
 	ui.tvUsers->resizeColumnsToContents();
 	ui.tvUsers->horizontalHeader()->setStretchLastSection(true);
