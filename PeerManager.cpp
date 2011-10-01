@@ -21,7 +21,7 @@ PeerManager::PeerManager(QObject *parent)
 	modelAll = new QSqlTableModel(this);
 	modelAll->setEditStrategy(QSqlTableModel::OnManualSubmit);
 	modelAll->setTable("AllPeers");
-	bool result = modelAll->select();
+	modelAll->select();
 
 	Receiver* receiver = Receiver::getInstance();
 	connect(receiver, SIGNAL(userList(QList<QByteArray>)), this, SLOT(onUserList(QList<QByteArray>)));
