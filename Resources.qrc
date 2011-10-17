@@ -28,5 +28,6 @@
         <file>Images/Projects.png</file>
         <file>Images/Welcome.png</file>
         <file>Images/Conflict.png</file>
+        <file>Images/Radar.png</file>
     </qresource>
 </RCC>
