@@ -29,5 +29,6 @@
         <file>Images/Welcome.png</file>
         <file>Images/Conflict.png</file>
         <file>Images/Radar.png</file>
+        <file>CompileDate.txt</file>
     </qresource>
 </RCC>
