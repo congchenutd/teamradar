@@ -21,6 +21,7 @@ public:
 	bool    showAfterImage() const;
 	int     getEngineRate() const;
 	int     getEngineSubtlety() const;
+	QString getCompileDate() const;
 
 	void setServerAddress(const QString& address);
 	void setServerPort(quint16 port);

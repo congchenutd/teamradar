@@ -1,5 +1,6 @@
 #include "Setting.h"
 #include <QColor>
+#include <QResource>
 
 Setting::Setting(const QString& fileName) : MySetting<Setting>(fileName)
 {
@@ -168,5 +169,13 @@ int Setting::getEngineSubtlety() const {
 
 void Setting::setEngineSubtlety(int subtlety) {
 	setValue("EngineSubtlety", subtlety);
+}
+
+QString Setting::getCompileDate() const
+{
+	// this resource file will be generated after running CompileDate.bat
+	QResource resource(":/CompileDate.txt");
+	QString result = (char*)resource.data();
+	return result.isEmpty() ? "Unknown" : result;
 }
 

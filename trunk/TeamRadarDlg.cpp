@@ -23,6 +23,7 @@ TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QWidget(parent)
 	peerManager = PeerManager::getInstance();
     ui.setupUi(this);
 
+
 	// load settings
 	setting = MySetting<Setting>::getInstance();
 	ui.leServerAddress->setText (setting->getServerAddress());
@@ -35,6 +36,10 @@ TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QWidget(parent)
 		ui.labelImage->setPixmap(pixmap);
 	setColor(setting->getColor("DefaultDeveloperColor"));            // color
 
+	ui.labelAbout->setText(tr("<H1 align=\"center\">Team Radar</H1>"
+							  "<P align=\"center\">A workspace awareness plugin</P>"
+							  "<P align=\"center\">Cong Chen &lt;CongChenUTD@Gmail.com&gt;</P>"
+							  "<P align=\"center\">Build on %1</P>").arg(setting->getCompileDate()));
 	// model
 	model = peerManager->getPeerModel();
 	
