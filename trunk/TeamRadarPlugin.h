@@ -22,13 +22,12 @@ public:
     bool initialize(const QStringList &arguments, QString *error_message);
 	void extensionsInitialized() {}
 
-private slots:
-    void onTeamRadarOption();
-
 private:
 	Setting* setting;
 };
 
+
+// the Team Radar Window at bottom-left corner
 class TeamRadarNavigationWidgetFactory : public Core::INavigationWidgetFactory 
 { 
 public: 

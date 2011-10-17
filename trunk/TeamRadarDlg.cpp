@@ -18,7 +18,7 @@
 #include <QMenu>
 #include <QMessageBox>
 
-TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QDialog(parent)
+TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QWidget(parent)
 {
 	peerManager = PeerManager::getInstance();
     ui.setupUi(this);
@@ -69,7 +69,7 @@ TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QDialog(parent)
 	onConnectedToServer(Connection::getInstance()->isReadyForUse());   // init light
 }
 
-void TeamRadarDlg::accept()
+void TeamRadarDlg::save()
 {
 	// save settings
 	setting->setServerAddress(ui.leServerAddress->text());
@@ -78,7 +78,8 @@ void TeamRadarDlg::accept()
 	setting->setColor("DefaultDeveloperColor", color);
 
 	QString photoPath = setting->getPhotoFilePath(getUserName());
-	ui.labelImage->pixmap()->save(photoPath);  // save photo file
+	if(ui.labelImage->pixmap() != 0)
+		ui.labelImage->pixmap()->save(photoPath);  // save photo file
 
 	// save my photo and color info in the db
 	DeveloperInfo userInfo = model->getUserInfo(getUserName());
@@ -89,8 +90,6 @@ void TeamRadarDlg::accept()
 	// send settings to the server
 	registerPhoto();
 	Sender::getInstance()->sendColorRegistration(color);
-
-	QDialog::accept();
 }
 
 // search the environmental variables for user name

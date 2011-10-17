@@ -1,23 +1,23 @@
 #ifndef TEAMRADARWINDOW_H
 #define TEAMRADARWINDOW_H
 
-#include <QtGui/QDialog>
+#include <QtGui/QWidget>
 #include "ui_TeamRadarDlg.h"
 #include "MySetting.h"
 	
-// Configuration dialog
+// Configuration dialog in the options page
 
 class Setting;
 class PeerManager;
 class PeerModel;
 
-class TeamRadarDlg : public QDialog
+class TeamRadarDlg : public QWidget
 {
     Q_OBJECT
 
 public:
     TeamRadarDlg(QWidget *parent = 0);
-    void accept();
+	void save();
 
 protected:
 	void contextMenuEvent(QContextMenuEvent*);
