@@ -13,10 +13,8 @@ public:
 	OptionsPage(QObject* parent = 0);
 
 	QString id() const;
-	QString trName() const;
 	QString displayName() const;
 	QString category() const;
-	QString trCategory() const;
 	QString displayCategory() const;
 	QIcon categoryIcon() const;
 	QWidget *createPage(QWidget *parent);

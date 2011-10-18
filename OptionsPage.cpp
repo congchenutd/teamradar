@@ -9,20 +9,12 @@ QString OptionsPage::id() const {
 	return tr("TeamRadar");
 }
 
-QString OptionsPage::trName() const {
-	return tr("Team Radar");
-}
-
 QString OptionsPage::category() const {
 	return tr("TeamRadar");
 }
 
-QString OptionsPage::trCategory() const {
-	return category();
-}
-
 QString OptionsPage::displayName() const {
-	return trName();
+	return tr("Team Radar");
 }
 
 QIcon OptionsPage::categoryIcon() const {
@@ -30,7 +22,7 @@ QIcon OptionsPage::categoryIcon() const {
 }
 
 QString OptionsPage::displayCategory() const {
-	return trCategory();
+	return category();
 }
 
 QWidget * OptionsPage::createPage(QWidget *parent) {
