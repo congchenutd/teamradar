@@ -69,6 +69,7 @@ TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QWidget(parent)
 	connect(ui.btColor, SIGNAL(clicked()),  this, SLOT(onSetColor()));
 	connect(ui.leServerAddress, SIGNAL(textEdited(QString)), this, SLOT(onShowHint()));
 	connect(ui.sbPort,          SIGNAL(valueChanged(int)),   this, SLOT(onShowHint()));
+	connect(ui.leUserName,      SIGNAL(textEdited(QString)), this, SLOT(onShowHint()));
 	connect(Connection::getInstance(), SIGNAL(connectionStatusChanged(bool)), this, SLOT(onConnectedToServer(bool)));
 	
 	onConnectedToServer(Connection::getInstance()->isReadyForUse());   // init light

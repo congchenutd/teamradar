@@ -7,9 +7,7 @@ TARGET = TeamRadar
 PROVIDER = CongChen
 QT += sql network
 
-# these two variables need to be changed in difference machines
-IDE_SOURCE_TREE = C:/Users/cxc094020/Program/QtCreator
-IDE_BUILD_TREE  = C:/Users/cxc094020/Program/QtCreator
+include (EV.pri)
 
 DESTDIR = $$IDE_BUILD_TREE/lib/qtcreator/plugins/$$(PROVIDER)
 
