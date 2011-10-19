@@ -7,7 +7,7 @@ TARGET = TeamRadar
 PROVIDER = CongChen
 QT += sql network
 
-include (EV.pri)
+include(EV.pri)
 
 DESTDIR = $$IDE_BUILD_TREE/lib/qtcreator/plugins/$$(PROVIDER)
 
