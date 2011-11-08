@@ -49,7 +49,7 @@ HEADERS += ChatWindow.h \
            Utility.h \
 		   ../ImageColorBoolModel/ImageColorBoolDelegate.h \
 		   ../ImageColorBoolModel/ImageColorBoolProxy.h \
-    OptionsPage.h
+	OptionsPage.h
 FORMS += ChatWindow.ui PlayerWidget.ui RequestEventsDlg.ui TeamRadarDlg.ui
 SOURCES += ChatWindow.cpp \
            Connection.cpp \
@@ -72,7 +72,7 @@ SOURCES += ChatWindow.cpp \
            Utility.cpp \
 		   ../ImageColorBoolModel/ImageColorBoolDelegate.cpp \
 		   ../ImageColorBoolModel/ImageColorBoolProxy.cpp \
-    OptionsPage.cpp
+		   OptionsPage.cpp
 RESOURCES += Resources.qrc
 OTHER_FILES += TeamRadar.pluginspec
 
