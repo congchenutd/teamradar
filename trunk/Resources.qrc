@@ -30,5 +30,6 @@
         <file>Images/Conflict.png</file>
         <file>Images/Radar.png</file>
         <file>CompileDate.txt</file>
+        <file>Images/Analyze.png</file>
     </qresource>
 </RCC>

@@ -22,7 +22,6 @@ TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QWidget(parent)
 	peerManager = PeerManager::getInstance();
 	ui.setupUi(this);
 
-
 	// load settings
 	setting = MySetting<Setting>::getInstance();
 	ui.leServerAddress->setText (setting->getServerAddress());

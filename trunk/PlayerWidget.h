@@ -22,9 +22,9 @@ public:
 	static PlayerWidget* getInstance();
 
 protected:
-	virtual void closeEvent(QCloseEvent*);
-	virtual void resizeEvent(QResizeEvent*);
-	virtual void showEvent(QShowEvent*);
+	void closeEvent (QCloseEvent*);
+	void resizeEvent(QResizeEvent*);
+	void showEvent  (QShowEvent*);
 
 public slots:
 	void play();
@@ -43,6 +43,7 @@ private slots:
 	void onConnectedToServer(bool connected);
 	void onEventDownloaded(const TeamRadarEvent& event);
 	void onChatMessage(const QString& peerName, const QString& content);
+	void onAnalyze();
 
 private:
 	void play(int row);
