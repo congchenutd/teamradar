@@ -4,7 +4,7 @@
 #include <QtGui/QWidget>
 #include "ui_TeamRadarDlg.h"
 #include "MySetting.h"
-	
+
 // Configuration dialog in the options page
 
 class Setting;
@@ -13,17 +13,16 @@ class PeerModel;
 
 class TeamRadarDlg : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    TeamRadarDlg(QWidget *parent = 0);
+	TeamRadarDlg(QWidget *parent = 0);
 	void save();
 
 protected:
 	void contextMenuEvent(QContextMenuEvent*);
 
 private slots:
-    void onSetImage();
 	void onSetColor();
 	void resizeTable();
 	void onDelete();

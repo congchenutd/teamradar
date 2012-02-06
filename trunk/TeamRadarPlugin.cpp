@@ -15,7 +15,6 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/imode.h>
 #include <coreplugin/modemanager.h>
-#include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/editormanager/ieditor.h>
 #include <coreplugin/editormanager/editormanager.h>
 
@@ -29,8 +28,8 @@
 
 bool TeamRadarPlugin::initialize(const QStringList &arguments, QString *error_message)
 {
-    Q_UNUSED(arguments)
-    Q_UNUSED(error_message)
+	Q_UNUSED(arguments)
+	Q_UNUSED(error_message)
 
 	PeerModel::openDB("TeamRadar.db");
 	PeerModel::createTables();
@@ -43,10 +42,11 @@ bool TeamRadarPlugin::initialize(const QStringList &arguments, QString *error_me
 	connection->setUserName(setting->getUserName());
 	connection->connectToHost(setting->getServerAddress(), setting->getServerPort());
 
-	addAutoReleasedObject(new TeamRadarNavigationWidgetFactory); 
+	addAutoReleasedObject(new TeamRadarNavigationWidgetFactory);
 	addAutoReleasedObject(new OptionsPage);
+	addAutoReleasedObject(new AboutOptionPage);
 
-    return true;
+	return true;
 }
 
 Q_EXPORT_PLUGIN(TeamRadarPlugin)
@@ -56,7 +56,7 @@ Q_EXPORT_PLUGIN(TeamRadarPlugin)
 // Factory
 Core::NavigationView TeamRadarNavigationWidgetFactory::createWidget()
 {
-	Core::NavigationView view; 
+	Core::NavigationView view;
 	view.widget = PlayerWidget::getInstance();
 	return view;
 }

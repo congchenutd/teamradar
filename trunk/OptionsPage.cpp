@@ -1,28 +1,13 @@
 #include "OptionsPage.h"
 #include "TeamRadarDlg.h"
+#include "Setting.h"
 #include <QLabel>
 
 OptionsPage::OptionsPage(QObject* parent) : IOptionsPage(parent), dlg(0)
 {}
 
-QString OptionsPage::id() const {
-	return tr("TeamRadar");
-}
-
-QString OptionsPage::category() const {
-	return tr("TeamRadar");
-}
-
-QString OptionsPage::displayName() const {
-	return tr("Team Radar");
-}
-
 QIcon OptionsPage::categoryIcon() const {
 	return QIcon(":/Images/Radar.png");
-}
-
-QString OptionsPage::displayCategory() const {
-	return category();
 }
 
 QWidget * OptionsPage::createPage(QWidget *parent) {
@@ -34,9 +19,18 @@ void OptionsPage::apply() {
 	dlg->save();
 }
 
-void OptionsPage::finish()
+///////////////////////////////////////////////////////////////////////
+AboutOptionPage::AboutOptionPage(QObject* parent) : OptionsPage(parent) {}
+
+QWidget *AboutOptionPage::createPage(QWidget* parent)
 {
+	QWidget* widget = new QWidget(parent);
+	QLabel* label = new QLabel(tr("<H1 align=\"center\">Team Radar</H1>"
+								  "<P align=\"center\">A continuous awareness plugin</P>"
+								  "<P align=\"center\">Cong Chen &lt;CongChenUTD@Gmail.com&gt;</P>"
+								  "<P align=\"center\">Build on %1</P>")
+							   .arg(Setting::getInstance()->getCompileDate()), widget);
+	QHBoxLayout* layout = new QHBoxLayout(widget);
+	layout->addWidget(label);
+	return widget;
 }
-
-
-
