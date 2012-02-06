@@ -14,6 +14,7 @@
 #include "MessageCollector.h"
 #include "RequestEventsDlg.h"
 #include "ChatWindow.h"
+#include "Analyzer.h"
 
 PlayerWidget::PlayerWidget(QWidget *parent) :
 	QWidget(parent)
@@ -61,6 +62,7 @@ PlayerWidget::PlayerWidget(QWidget *parent) :
 	connect(ui.btLoad,      SIGNAL(clicked()),     this, SLOT(onLoad()));
 	connect(ui.btOnline,    SIGNAL(clicked()),     this, SLOT(onOnline()));
 	connect(ui.btDownload,  SIGNAL(clicked()),     this, SLOT(onDownload()));
+	connect(ui.btAnalyze,   SIGNAL(clicked()),     this, SLOT(onAnalyze()));
 	connect(ui.sbSpeed,     SIGNAL(valueChanged(double)),       this, SLOT(onSpeed(double)));
 	connect(ui.tvPlaylist,  SIGNAL(clicked      (QModelIndex)), this, SLOT(onPlaylistClicked(QModelIndex)));
 	connect(ui.tvPlaylist,  SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onPlaylistCoubleClicked(QModelIndex)));
@@ -110,7 +112,7 @@ void PlayerWidget::onLoad()
 
 	ui.graphicsView->loadDir(Setting::getInstance()->getRootPath());
 	modelPlaylist->removeRows(0, modelPlaylist->rowCount());
-	
+
 	QTextStream is(&file);
 	while(!is.atEnd())
 	{
@@ -200,6 +202,7 @@ void PlayerWidget::onOnline()
 	ui.sbSpeed    ->setHidden(online);
 	ui.btLoad     ->setHidden(online);
 	ui.btDownload ->setHidden(online);
+	ui.btAnalyze  ->setHidden(online);
 	onShowPlaylist(!online);
 	ui.graphicsView->setEffectsEnabled(!online);
 	reloadProject();
@@ -245,7 +248,7 @@ void PlayerWidget::onDownload()
 		modelPlaylist->removeRows(0, modelPlaylist->rowCount());   // remove current, request new
 		Sender::getInstance()->sendEventRequest(dlg.getUserList(),
 												dlg.getEventList(),
-												dlg.getStartTime(), 
+												dlg.getStartTime(),
 												dlg.getEndTime(),
 												dlg.getPhases(),
 												dlg.getFuzziness());
@@ -253,7 +256,7 @@ void PlayerWidget::onDownload()
 }
 
 void PlayerWidget::onConnectedToServer(bool connected) {
-	ui.labelConnection->setPixmap(connected ? QPixmap(":/Images/Green.png") 
+	ui.labelConnection->setPixmap(connected ? QPixmap(":/Images/Green.png")
 											: QPixmap(":/Images/Red.png"));
 }
 
@@ -278,6 +281,12 @@ void PlayerWidget::onEventDownloaded(const TeamRadarEvent& event)
 void PlayerWidget::onChatMessage(const QString& peerName, const QString& content) {
 	if(HumanNode* human = ui.graphicsView->findDeveloper(peerName))
 		human->chat(content);
+}
+
+void PlayerWidget::onAnalyze()
+{
+	Analyzer analyzer(this);
+	analyzer.exec();
 }
 
 PlayerWidget::~PlayerWidget()

@@ -150,6 +150,17 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QPushButton" name="btAnalyze">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="Resources.qrc">
+              <normaloff>:/Images/Analyze.png</normaloff>:/Images/Analyze.png</iconset>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
