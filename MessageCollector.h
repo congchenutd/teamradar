@@ -2,13 +2,9 @@
 #define MessageCollector_h__
 
 #include <QObject>
-//#include <coreplugin/actionmanager/actionmanager.h>
-//#include <coreplugin/actionmanager/actioncontainer.h>
-//#include <coreplugin/coreconstants.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/imode.h>
 #include <coreplugin/modemanager.h>
-#include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/editormanager/ieditor.h>
 #include <coreplugin/editormanager/editormanager.h>
 #include <projectexplorer/project.h>

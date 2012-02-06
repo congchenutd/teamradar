@@ -10,7 +10,6 @@
 #include <QtGui/QTextEdit>
 #include <QtGui/QVBoxLayout>
 #include <QProcess>
-#include <QFileDialog>
 #include <QColorDialog>
 #include <QSqlQuery>
 #include <QSortFilterProxyModel>
@@ -21,14 +20,14 @@
 TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QWidget(parent)
 {
 	peerManager = PeerManager::getInstance();
-    ui.setupUi(this);
+	ui.setupUi(this);
 
 
 	// load settings
 	setting = MySetting<Setting>::getInstance();
 	ui.leServerAddress->setText (setting->getServerAddress());
 	ui.sbPort         ->setValue(setting->getServerPort());
-	ui.leUserName->setText(setting->getUserName().isEmpty() ? 
+	ui.leUserName->setText(setting->getUserName().isEmpty() ?
 											guessUserName() : setting->getUserName());
 
 	QPixmap pixmap = QPixmap(setting->getPhotoFilePath(getUserName())).scaled(128, 128);   // photo
@@ -36,13 +35,9 @@ TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QWidget(parent)
 		ui.labelImage->setPixmap(pixmap);
 	setColor(setting->getColor("DefaultDeveloperColor"));            // color
 
-	ui.labelAbout->setText(tr("<H1 align=\"center\">Team Radar</H1>"
-							  "<P align=\"center\">A workspace awareness plugin</P>"
-							  "<P align=\"center\">Cong Chen &lt;CongChenUTD@Gmail.com&gt;</P>"
-							  "<P align=\"center\">Build on %1</P>").arg(setting->getCompileDate()));
 	// model
 	model = peerManager->getPeerModel();
-	
+
 	// no myself, "true" before "false"
 	model->setFilter(tr("Name <> \"%1\" order by Online Desc").arg(setting->getUserName()));
 
@@ -64,14 +59,13 @@ TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QWidget(parent)
 	ui.tvPeers->hideColumn(model->ONLINE);
 	resizeTable();
 
-	connect(model,      SIGNAL(selected()), this, SLOT(resizeTable()));
-    connect(ui.btImage, SIGNAL(clicked()),  this, SLOT(onSetImage()));
-	connect(ui.btColor, SIGNAL(clicked()),  this, SLOT(onSetColor()));
+	connect(model,              SIGNAL(selected()), this, SLOT(resizeTable()));
+	connect(ui.btColor,         SIGNAL(clicked()),  this, SLOT(onSetColor()));
 	connect(ui.leServerAddress, SIGNAL(textEdited(QString)), this, SLOT(onShowHint()));
 	connect(ui.sbPort,          SIGNAL(valueChanged(int)),   this, SLOT(onShowHint()));
 	connect(ui.leUserName,      SIGNAL(textEdited(QString)), this, SLOT(onShowHint()));
 	connect(Connection::getInstance(), SIGNAL(connectionStatusChanged(bool)), this, SLOT(onConnectedToServer(bool)));
-	
+
 	onConnectedToServer(Connection::getInstance()->isReadyForUse());   // init light
 }
 
@@ -121,14 +115,6 @@ QString TeamRadarDlg::guessUserName() const
 	}
 
 	return result.isEmpty() ? "Unknown" : result;
-}
-
-void TeamRadarDlg::onSetImage()
-{
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Choose Image"), ".",
-                                                    "Images (*.png *.jpg *.bmp *.ico)");
-    if(!fileName.isEmpty())
-		ui.labelImage->setPixmap(QPixmap(fileName).scaled(128, 128));
 }
 
 void TeamRadarDlg::registerPhoto()
@@ -185,7 +171,7 @@ void TeamRadarDlg::onDelete()
 	if(idxes.isEmpty())
 		return;
 
-	if(QMessageBox::warning(this, tr("Warning"), tr("Really delete this entry?"), 
+	if(QMessageBox::warning(this, tr("Warning"), tr("Really delete this entry?"),
 		QMessageBox::Yes | QMessageBox::No)	== QMessageBox::No)
 		return;
 
@@ -197,6 +183,6 @@ void TeamRadarDlg::onShowHint() {
 }
 
 void TeamRadarDlg::onConnectedToServer(bool connected) {
-	ui.labelLight->setPixmap(connected ? QPixmap(":/Images/Green.png") 
+	ui.labelLight->setPixmap(connected ? QPixmap(":/Images/Green.png")
 									   : QPixmap(":/Images/Red.png"));
 }
