@@ -20,8 +20,9 @@
 #include "ModeTag.h"
 #include "Utility.h"
 #include "PeerManager.h"
+#include "Defines.h"
 
-#if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
+#ifdef OS_DESKTOP
 #include "ChatWindow.h"
 #endif
 
