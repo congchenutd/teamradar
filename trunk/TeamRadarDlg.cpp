@@ -10,7 +10,6 @@
 #include <QtGui/QTextEdit>
 #include <QtGui/QVBoxLayout>
 #include <QProcess>
-#include <QColorDialog>
 #include <QSqlQuery>
 #include <QSortFilterProxyModel>
 #include <QContextMenuEvent>
@@ -32,7 +31,8 @@ TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QWidget(parent)
 	QPixmap pixmap = QPixmap(setting->getPhotoFilePath(getUserName())).scaled(128, 128);   // photo
 	if(!pixmap.isNull())
 		ui.labelImage->setPixmap(pixmap);
-	setColor(setting->getColor("DefaultDeveloperColor"));            // color
+	ui.labelColor->setColor(setting->getColor("DefaultDeveloperColor"));    // color
+	ui.gridLayout->update();
 
 	// model
 	model = peerManager->getPeerModel();
@@ -59,7 +59,6 @@ TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QWidget(parent)
 	resizeTable();
 
 	connect(model,              SIGNAL(selected()), this, SLOT(resizeTable()));
-	connect(ui.btColor,         SIGNAL(clicked()),  this, SLOT(onSetColor()));
 	connect(ui.leServerAddress, SIGNAL(textEdited(QString)), this, SLOT(onShowHint()));
 	connect(ui.sbPort,          SIGNAL(valueChanged(int)),   this, SLOT(onShowHint()));
 	connect(ui.leUserName,      SIGNAL(textEdited(QString)), this, SLOT(onShowHint()));
@@ -74,7 +73,7 @@ void TeamRadarDlg::save()
 	setting->setServerAddress(ui.leServerAddress->text());
 	setting->setServerPort(ui.sbPort->value());
 	setting->setUserName(getUserName());
-	setting->setColor("DefaultDeveloperColor", color);
+	setting->setColor("DefaultDeveloperColor", ui.labelColor->getColor());
 
 	QString photoPath = setting->getPhotoFilePath(getUserName());
 	if(ui.labelImage->pixmap() != 0)
@@ -83,12 +82,12 @@ void TeamRadarDlg::save()
 	// save my photo and color info in the db
 	DeveloperInfo userInfo = model->getUserInfo(getUserName());
 	userInfo.image = photoPath;
-	userInfo.color = color;
+	userInfo.color = ui.labelColor->getColor();
 	model->updateUser(userInfo);
 
 	// send settings to the server
 	registerPhoto();
-	Sender::getInstance()->sendColorRegistration(color);
+	Sender::getInstance()->sendColorRegistration(ui.labelColor->getColor());
 }
 
 // search the environmental variables for user name
@@ -132,23 +131,8 @@ void TeamRadarDlg::resizeTable()
 	ui.tvPeers->resizeColumnsToContents();
 }
 
-void TeamRadarDlg::onSetColor() {
-	setColor(QColorDialog::getColor(color));
-}
-
 QString TeamRadarDlg::getUserName() const {
 	return ui.leUserName->text();
-}
-
-void TeamRadarDlg::setColor(const QColor& clr)
-{
-	if(clr.isValid())
-	{
-		color = clr;
-		QPixmap pixmap(ui.labelColor->size());
-		pixmap.fill(color);
-		ui.labelColor->setPixmap(pixmap);
-	}
 }
 
 void TeamRadarDlg::contextMenuEvent(QContextMenuEvent* event)

@@ -23,22 +23,19 @@ protected:
 	void contextMenuEvent(QContextMenuEvent*);
 
 private slots:
-	void onSetColor();
 	void resizeTable();
 	void onDelete();
 	void onShowHint();
 	void onConnectedToServer(bool connected);
 
 private:
-	QString guessUserName() const;
-	void registerPhoto();
-	QString getUserName() const;
-	void setColor(const QColor& color);
+	QString guessUserName() const;   // initialize user name
+	QString getUserName()   const;   // convenient
+	void    registerPhoto();
 
 private:
 	Ui::TeamRadarDlgClass ui;
 	Setting*     setting;
-	QColor       color;
 	PeerModel*   model;
 	PeerManager* peerManager;
 };

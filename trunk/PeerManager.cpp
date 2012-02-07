@@ -6,7 +6,7 @@
 #include <QFileInfo>
 #include <QSqlError>
 
-#if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
+#ifdef OS_DESKTOP
 #include "PlayerWidget.h"
 #include "MessageCollector.h"
 #endif
@@ -31,7 +31,7 @@ PeerManager::PeerManager(QObject *parent)
 	connect(receiver, SIGNAL(newEvent(TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
 	connect(Connection::getInstance(), SIGNAL(connectionStatusChanged(bool)), this, SLOT(refreshUserList()));
 
-#if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
+#ifdef OS_DESKTOP
 	connect(MessageCollector::getInstance(), SIGNAL(localEvent(TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
 #endif
 }
@@ -141,7 +141,7 @@ void PeerManager::onEvent(const TeamRadarEvent& event)
 		setUserOnline(event.userName, true);
 	else if(event.eventType == "DISCONNECTED")
 		setUserOnline(event.userName, false);
-#if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)	
+#ifdef OS_DESKTOP
 	else if(event.eventType == "OPENPROJECT")  // must be local
 	{
 		Setting::getInstance()->setRootPath(event.parameters);

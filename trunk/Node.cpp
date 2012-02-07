@@ -23,7 +23,7 @@
 #include "Defines.h"
 
 #ifdef OS_DESKTOP
-#include "ChatWindow.h"
+	#include "ChatWindow.h"
 #endif
 
 TeamRadarView* TeamRadarNode::view = 0;
@@ -248,13 +248,13 @@ Nodes TeamRadarNode::getAncestors() const
 Nodes TeamRadarNode::getPushers() const
 {
 	Nodes pushers;
-	if(getOwner() != 0)   // siblings excluding human
-	{
-		Nodes children = getOwner()->getChildren();
-		foreach(TeamRadarNode* child, children)
-			if(dynamic_cast<HumanNode*>(child) == 0 && child != this)
-				pushers << child;
-	}
+//	if(getOwner() != 0)   // siblings excluding human
+//	{
+//		Nodes children = getOwner()->getChildren();
+//		foreach(TeamRadarNode* child, children)
+//			if(dynamic_cast<HumanNode*>(child) == 0 && child != this)
+//				pushers << child;
+//	}
 	pushers << getAncestors();
 	return pushers;
 }
@@ -337,9 +337,9 @@ QList<HumanNode*> TeamRadarNode::getHumans() const
 {
 	QList<HumanNode*> humans;
 	Nodes children = getChildren();
-	foreach(TeamRadarNode* child, children)
-		if(child->type() == HumanNode::Type)
-			humans << dynamic_cast<HumanNode*>(child);
+//	foreach(TeamRadarNode* child, children)
+//		if(child->type() == HumanNode::Type)
+//			humans << dynamic_cast<HumanNode*>(child);
 	return humans;
 }
 
@@ -372,9 +372,9 @@ int DirNode::directChildrenCount() const
 {
 	int result = 0;
 	Nodes children = getChildren();
-	foreach(TeamRadarNode* child, children)
-		if(dynamic_cast<HumanNode*>(child) == 0)
-			result ++;
+//	foreach(TeamRadarNode* child, children)
+//		if(dynamic_cast<HumanNode*>(child) == 0)
+//			result ++;
 	return result;
 }
 
@@ -671,7 +671,8 @@ void HumanNode::hideLabel()
 
 void HumanNode::chat(const QString& content)
 {
-#if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
+	Q_UNUSED(content)
+#ifdef OS_DESKTOP
 	ChatWindow* chatWindow = ChatWindow::getChatWindow(getName());
 	if(chatWindow != 0)
 	{
@@ -679,8 +680,6 @@ void HumanNode::chat(const QString& content)
 		chatWindow->show();
 	}
 #endif
-
-	Q_UNUSED(content)
 }
 
 const double HumanNode::oneSlice = M_PI / 50.0;  // 1/100 of a circle
