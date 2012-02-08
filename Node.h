@@ -18,6 +18,7 @@ typedef QList<TeamRadarNode*> Nodes;
 // A node is connected to its parent with an edge, parent being the source of the edge
 class TeamRadarNode : public QGraphicsObject
 {
+	Q_OBJECT
 public:
 	TeamRadarNode(TeamRadarNode* owner, const QString& name = QString(), int level = 0);
 	virtual ~TeamRadarNode() {}      // do not use dtr to destroy, scene()->clear() kills them all
@@ -105,6 +106,7 @@ protected:
 
 class DirNode : public TeamRadarNode
 {
+	Q_OBJECT
 public:
 	DirNode(TeamRadarNode* owner, const QString& name);
 	enum { Type = UserType + 12 };

@@ -7,6 +7,7 @@
 #include "Setting.h"
 #include "PeerManager.h"
 #include "OptionsPage.h"
+#include "Defines.h"
 
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/actioncontainer.h>

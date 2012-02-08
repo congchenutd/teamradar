@@ -191,19 +191,19 @@ void TeamRadarView::save(const QString& fileName)
 // recursively save nodes
 void TeamRadarView::saveNodeToXML(QXmlStreamWriter& xml, const TeamRadarNode* node)
 {
-//	bool isDir = dynamic_cast<const DirNode*>(node);
-//	xml.writeStartElement(isDir ? "dir" : "file");
-//	xml.writeAttribute("name",   node->getName());
-//	xml.writeAttribute("pinned", node->isPinned() ? "yes" : "no");
-//	xml.writeAttribute("x", tr("%1").arg((int)node->x()));
-//	xml.writeAttribute("y", tr("%1").arg((int)node->y()));
-//	if(isDir)
-//	{
-//		Nodes children = node->getChildren();
-//		foreach(TeamRadarNode* child, children)       // save all children
-//			saveNodeToXML(xml, child);
-//	}
-//	xml.writeEndElement();
+	bool isDir = node->type() == DirNode::Type;
+	xml.writeStartElement(isDir ? "dir" : "file");
+	xml.writeAttribute("name",   node->getName());
+	xml.writeAttribute("pinned", node->isPinned() ? "yes" : "no");
+	xml.writeAttribute("x", tr("%1").arg((int)node->x()));
+	xml.writeAttribute("y", tr("%1").arg((int)node->y()));
+	if(isDir)
+	{
+		Nodes children = node->getChildren();
+		foreach(TeamRadarNode* child, children)       // save all children
+			saveNodeToXML(xml, child);
+	}
+	xml.writeEndElement();
 }
 
 // load graph from xml
@@ -256,10 +256,11 @@ void TeamRadarView::moveCanvasBy(const QPointF& vec) {
 	moveCanvasBy(vec.x(), vec.y());
 }
 
-void TeamRadarView::setShowLabels(bool show) {
-//	foreach(QGraphicsItem* item, items())
-//		if(TeamRadarNode* node = dynamic_cast<TeamRadarNode*>(item))
-//			node->setShowLabel(show);
+void TeamRadarView::setShowLabels(bool show)
+{
+	foreach(QGraphicsItem* item, items())
+		if(TeamRadarNode* node = castToTeamRadarNode(item))
+			node->setShowLabel(show);
 }
 
 void TeamRadarView::mouseMoveEvent(QMouseEvent* event)
@@ -274,22 +275,22 @@ void TeamRadarView::mouseMoveEvent(QMouseEvent* event)
 
 void TeamRadarView::mousePressEvent(QMouseEvent* event)
 {
-//	if(event->button() == Qt::LeftButton)
-//	{
-//		if(picking)  // wait the user to select the target file a human works on
-//		{
-//			TeamRadarNode* node = dynamic_cast<TeamRadarNode*>(itemAt(event->pos()));
-//			picking = false;
-//			if(node != 0)
-//				currentHuman->setWorkOn(node->getName());
-//		}
-//		else   // start dragging
-//		{
-//			lastMousePos = event->pos();
-//			dragging = dynamic_cast<TeamRadarNode*>(itemAt(lastMousePos)) == 0;   // click on canvas?
-//			setCursor(Qt::ClosedHandCursor);
-//		}
-//	}
+	if(event->button() == Qt::LeftButton)
+	{
+		if(picking)  // wait the user to select the target file a human works on
+		{
+			TeamRadarNode* node = castToTeamRadarNode(itemAt(event->pos()));
+			picking = false;
+			if(node != 0)
+				currentHuman->setWorkOn(node->getName());
+		}
+		else   // start dragging
+		{
+			lastMousePos = event->pos();
+			dragging = itemAt(lastMousePos)->type() == TeamRadarNode::Type;   // click on canvas?
+			setCursor(Qt::ClosedHandCursor);
+		}
+	}
 	QGraphicsView::mousePressEvent(event);
 }
 
@@ -303,12 +304,12 @@ void TeamRadarView::mouseReleaseEvent(QMouseEvent* event)
 void TeamRadarView::contextMenuEvent(QContextMenuEvent *event)
 {
 	// catch the node, get the menu, and show it
-//	currentNode = dynamic_cast<TeamRadarNode*>(itemAt(event->pos()));
-//	if(currentNode == 0)
-//		return;
+	currentNode = castToTeamRadarNode(itemAt(event->pos()));
+	if(currentNode == 0)
+		return;
 
-//	if(HumanNode* human = dynamic_cast<HumanNode*>(currentNode))
-//		currentHuman = human;
+	if(HumanNode* human = qobject_cast<HumanNode*>(currentNode))
+		currentHuman = human;
 
 	currentNode->getContextMenu().exec(event->globalPos());
 }
@@ -423,29 +424,38 @@ void TeamRadarView::autoScale()
 
 void TeamRadarView::centerTree(TeamRadarNode* node)
 {
-//	if(node != 0)
-//		moveCanvasBy(sceneRect().center() - node->pos());
-//	else	// find a selected node
-//	{
-//		TeamRadarNode* selectedNode = 0;
-//		QList<QGraphicsItem*> items = scene()->selectedItems();
-//		if(!items.isEmpty())
-//			if(TeamRadarNode* node = dynamic_cast<TeamRadarNode*>(items.front()))
-//				selectedNode = node;
+	if(node != 0)
+		moveCanvasBy(sceneRect().center() - node->pos());
+	else	// find a selected node
+	{
+		TeamRadarNode* selectedNode = 0;
+		QList<QGraphicsItem*> items = scene()->selectedItems();
+		if(!items.isEmpty())
+			if(TeamRadarNode* node = castToTeamRadarNode(items.front()))
+				selectedNode = node;
 
-//		QPointF center = selectedNode == 0 ? nodesBoundingRect().center()
-//			: selectedNode->pos();
-//		moveCanvasBy(sceneRect().center() - center);
-//	}
+		QPointF center = selectedNode == 0 ? nodesBoundingRect().center()
+			: selectedNode->pos();
+		moveCanvasBy(sceneRect().center() - center);
+	}
 }
 
 QRectF TeamRadarView::nodesBoundingRect() const
 {
 	QRectF boundingRect;
-//	foreach(QGraphicsItem* item, items())
-//		if(TeamRadarNode* node = dynamic_cast<TeamRadarNode*>(item))
-//			boundingRect |= node->sceneBoundingRect();
+	foreach(QGraphicsItem* item, items())
+		if(TeamRadarNode* node = castToTeamRadarNode(item))
+			boundingRect |= item->sceneBoundingRect();
 	return boundingRect;
+}
+
+TeamRadarNode *TeamRadarView::castToTeamRadarNode(QGraphicsItem* item) const
+{
+	if(item == 0)
+		return 0;
+	int type = item->type();
+	return type == TeamRadarNode::Type || type == DirNode::Type || type == FileNode::Type || type == HumanNode::Type
+			? static_cast<TeamRadarNode*>(item) : 0;
 }
 
 // dirlabel needs to know the depth of the whole tree to set opacity
@@ -479,10 +489,10 @@ void TeamRadarView::setDeveloperMode(const QString& developerName, const QString
 
 void TeamRadarView::setEffectsEnabled(bool enable)
 {
-//	foreach(QGraphicsItem* item, items())
-//		if(TeamRadarNode* node = dynamic_cast<TeamRadarNode*>(item))
-//			node->setEffectsEnabled(enable);
-//	Setting::getInstance()->setValue("UseEffects", enable);
+	foreach(QGraphicsItem* item, items())
+		if(TeamRadarNode* node = castToTeamRadarNode(item))
+			node->setEffectsEnabled(enable);
+	Setting::getInstance()->setValue("UseEffects", enable);
 }
 
 void TeamRadarView::onChat()
