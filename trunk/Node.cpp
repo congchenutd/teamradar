@@ -20,7 +20,7 @@
 #include "ModeTag.h"
 #include "Utility.h"
 #include "PeerManager.h"
-#include "Defines.h"
+//#include "Defines.h"
 
 #ifdef OS_DESKTOP
 	#include "ChatWindow.h"
@@ -671,7 +671,6 @@ void HumanNode::hideLabel()
 
 void HumanNode::chat(const QString& content)
 {
-	Q_UNUSED(content)
 #ifdef OS_DESKTOP
 	ChatWindow* chatWindow = ChatWindow::getChatWindow(getName());
 	if(chatWindow != 0)
@@ -680,6 +679,7 @@ void HumanNode::chat(const QString& content)
 		chatWindow->show();
 	}
 #endif
+	Q_UNUSED(content);
 }
 
 const double HumanNode::oneSlice = M_PI / 50.0;  // 1/100 of a circle

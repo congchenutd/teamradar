@@ -3,13 +3,13 @@
 #include "Connection.h"
 #include "PeerModel.h"
 #include "TeamRadarView.h"
-#include "Defines.h"
+//#include "Defines.h"
 #include <QFileInfo>
 #include <QSqlError>
 
 #ifdef OS_DESKTOP
-#include "PlayerWidget.h"
-#include "MessageCollector.h"
+	#include "PlayerWidget.h"
+	#include "MessageCollector.h"
 #endif
 
 PeerManager::PeerManager(QObject *parent)
