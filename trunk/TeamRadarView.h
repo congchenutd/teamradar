@@ -70,6 +70,7 @@ private:
 	void moveCanvasBy(const QPointF& vec);
 	void initActions();                          // init menu actions for nodes
 	QRectF nodesBoundingRect() const;
+	TeamRadarNode* castToTeamRadarNode(QGraphicsItem* item) const;
 
 private slots:
 	void onAddDir();                             // work with menu

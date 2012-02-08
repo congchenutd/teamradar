@@ -248,13 +248,13 @@ Nodes TeamRadarNode::getAncestors() const
 Nodes TeamRadarNode::getPushers() const
 {
 	Nodes pushers;
-//	if(getOwner() != 0)   // siblings excluding human
-//	{
-//		Nodes children = getOwner()->getChildren();
-//		foreach(TeamRadarNode* child, children)
-//			if(dynamic_cast<HumanNode*>(child) == 0 && child != this)
-//				pushers << child;
-//	}
+	if(getOwner() != 0)   // siblings excluding human
+	{
+		Nodes children = getOwner()->getChildren();
+		foreach(TeamRadarNode* child, children)
+			if(child->type() != HumanNode::Type && child != this)
+				pushers << child;
+	}
 	pushers << getAncestors();
 	return pushers;
 }
@@ -337,9 +337,9 @@ QList<HumanNode*> TeamRadarNode::getHumans() const
 {
 	QList<HumanNode*> humans;
 	Nodes children = getChildren();
-//	foreach(TeamRadarNode* child, children)
-//		if(child->type() == HumanNode::Type)
-//			humans << dynamic_cast<HumanNode*>(child);
+	foreach(TeamRadarNode* child, children)
+		if(child->type() == HumanNode::Type)
+			humans << static_cast<HumanNode*>(child);
 	return humans;
 }
 
@@ -372,9 +372,9 @@ int DirNode::directChildrenCount() const
 {
 	int result = 0;
 	Nodes children = getChildren();
-//	foreach(TeamRadarNode* child, children)
-//		if(dynamic_cast<HumanNode*>(child) == 0)
-//			result ++;
+	foreach(TeamRadarNode* child, children)
+		if(child->type() != HumanNode::Type)
+			result ++;
 	return result;
 }
 
