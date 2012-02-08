@@ -287,7 +287,7 @@ void TeamRadarView::mousePressEvent(QMouseEvent* event)
 		else   // start dragging
 		{
 			lastMousePos = event->pos();
-			dragging = itemAt(lastMousePos)->type() == TeamRadarNode::Type;   // click on canvas?
+			dragging = itemAt(lastMousePos) == 0;   // click on canvas?
 			setCursor(Qt::ClosedHandCursor);
 		}
 	}
