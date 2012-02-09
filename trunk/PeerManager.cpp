@@ -3,7 +3,7 @@
 #include "Connection.h"
 #include "PeerModel.h"
 #include "TeamRadarView.h"
-//#include "Defines.h"
+#include "Defines.h"
 #include <QFileInfo>
 #include <QSqlError>
 

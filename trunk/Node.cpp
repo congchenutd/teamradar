@@ -20,7 +20,7 @@
 #include "ModeTag.h"
 #include "Utility.h"
 #include "PeerManager.h"
-//#include "Defines.h"
+#include "Defines.h"
 
 #ifdef OS_DESKTOP
 	#include "ChatWindow.h"

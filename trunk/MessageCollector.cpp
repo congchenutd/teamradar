@@ -5,6 +5,7 @@
 #include <QtGui/QMessageBox>
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectexplorer.h>
+#include <projectexplorer/buildmanager.h>
 #include <coreplugin/filemanager.h>
 #include <vcsbase/vcsplugin.h>
 #include <vcsbase/corelistener.h>
@@ -17,12 +18,14 @@ MessageCollector::MessageCollector()
 	modeManager   = Core::ICore::instance()->modeManager();
 //	fileManager   = Core::ICore::instance()->fileManager();
 	projectExplorer = ProjectExplorer::ProjectExplorerPlugin::instance();
+	ProjectExplorer::BuildManager* buildManager = projectExplorer->buildManager();
 
 	connect(projectExplorer, SIGNAL(currentProjectChanged(ProjectExplorer::Project*)), this, SLOT(onOpenProject(ProjectExplorer::Project*)));
 	connect(editorManager,   SIGNAL(currentEditorChanged(Core::IEditor*)),   this, SLOT(onCurrentFileChanged(Core::IEditor*)));
 	connect(editorManager,   SIGNAL(editorCreated(Core::IEditor*, QString)), this, SLOT(onOpenFile(Core::IEditor*)));
 	connect(editorManager,   SIGNAL(editorAboutToClose(Core::IEditor*)), this, SLOT(onEditorAboutToClose(Core::IEditor*)));
 	connect(modeManager,     SIGNAL(currentModeChanged(Core::IMode*, Core::IMode*)), this, SLOT(onChangeMode(Core::IMode*, Core::IMode*)));
+	connect(buildManager,    SIGNAL(buildQueueFinished(bool)), this, SLOT(onBuild(bool)));
 }
 
 MessageCollector* MessageCollector::getInstance()
@@ -59,7 +62,10 @@ void MessageCollector::onChangeMode(Core::IMode* mode, Core::IMode* oldMode)
 // PeerManager::onEvent() will capture this event, convert the path, and send it to the server
 void MessageCollector::onOpenProject(ProjectExplorer::Project* project) {
 	if(project != 0)
+	{
 		sendLocalEvent("OPENPROJECT", project->projectDirectory());
+	//	sendEvent("OPENPROJECT", project->projectDirectory());
+	}
 }
 
 // capture version control's submit event
@@ -74,6 +80,12 @@ void MessageCollector::onEditorAboutToClose(Core::IEditor* editor)
 	QStringList files = submitEditor->checkedFiles();
 	foreach(QString fileName, files)
 		sendEvent("SCM_COMMIT", fileName);
+}
+
+void MessageCollector::onBuild(bool success)
+{
+//	if(success)
+//		sendEvent("Build", project->projectDirectory());
 }
 
 void MessageCollector::sendEvent(const QString& event, const QString& parameters)
