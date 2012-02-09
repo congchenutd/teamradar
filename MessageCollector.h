@@ -30,6 +30,7 @@ private slots:
 	void onChangeMode(Core::IMode* mode, Core::IMode* oldMode);
 	void onOpenProject(ProjectExplorer::Project* project);
 	void onEditorAboutToClose(Core::IEditor* editor);
+	void onBuild(bool success);
 
 signals:
 	void localEvent(const TeamRadarEvent& event);

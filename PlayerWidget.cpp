@@ -285,7 +285,7 @@ void PlayerWidget::onChatMessage(const QString& peerName, const QString& content
 
 void PlayerWidget::onAnalyze()
 {
-	Analyzer analyzer(this);
+	Analyzer analyzer(modelPlaylist, this);
 	analyzer.exec();
 }
 
