@@ -255,7 +255,7 @@ Nodes TeamRadarNode::getPushers() const
 			if(child->type() != HumanNode::Type && child != this)
 				pushers << child;
 	}
-	pushers << getAncestors();
+	pushers << getAncestors();   // plus ancestors
 	return pushers;
 }
 
@@ -435,7 +435,7 @@ QMenu & FileNode::getContextMenu() const
 HumanNode::HumanNode(const QString& name, const QImage& img, TeamRadarNode* owner)
 : TeamRadarNode(owner, name), image(img), dying(false)
 {
-	setFlag(ItemIsMovable, false);
+//	setFlag(ItemIsMovable, false);
 	setColor(PeerManager::getInstance()->getDeveloperColor(name));
 	lightTrail = 0;
 	modeTag = new NullTag(this);

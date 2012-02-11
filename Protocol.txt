@@ -6,10 +6,10 @@ Server					Client
 
 	<- Register_Color
 
-	<- Request_UserList
+	<- Request_UserList    // for online users
 	-> UserList_Response
 
-	<- Request_AllUsers
+	<- Request_AllUsers    // for all users
 	-> AllUsers_Response
 
 	<- Request_Photo
@@ -21,16 +21,19 @@ Server					Client
 	<- Event
 	->
 
-	<- Request_Events (UserList, TimeSpan, EventTypes)
+	<- Request_Events (UserList, TimeSpan, EventTypes)  // offline downloading
 	-> Events_Response
 
-	<- Request_TimeSpan
+	<- Request_TimeSpan     // time span from the earliest to the latest event
 	-> TimeSpan_Response
 
 	<- Chat
 	-> Chat
 
-	<- Request_Projects
+	<- Request_Projects    // project list
 	-> Projects_Response
 	
 	<- Joint_Project (ProjectName)
+
+	<- Request_Recent (EventCount)
+	-> Recent_Events_Response

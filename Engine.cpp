@@ -45,13 +45,14 @@ void Engine::timerEvent(QTimerEvent*)
 
 void Engine::pull(TeamRadarNode* node, qreal& xvel, qreal& yvel)
 {
-	foreach(Edge* edge, node->getEdges())
-		if(edge->getDest() == node)                  // find owner's edge
+	foreach(Edge* edge, node->getEdges()) {
+		if(edge->getDest() == node)    // find owner's edge
 		{
 			QPointF vec = node->mapToItem(edge->getSource(), 0, 0);
 			xvel -= edge->getForce() * vec.x();
 			yvel -= edge->getForce() * vec.y();
 		}
+	}
 }
 
 void Engine::calculateForces(TeamRadarNode* node)

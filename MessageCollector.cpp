@@ -35,8 +35,11 @@ MessageCollector* MessageCollector::getInstance()
 	return instance;
 }
 
-void MessageCollector::onOpenFile(Core::IEditor* editor) {
-	connect(editor->file(), SIGNAL(changed()), this, SLOT(onChangeFile()));
+void MessageCollector::onOpenFile(Core::IEditor* editor)
+{
+	// when the file is changed (before saved)
+	// connect to editor->file()'s changed signal for file being saved
+	connect(editor, SIGNAL(changed()), this, SLOT(onChangeFile()));
 }
 
 void MessageCollector::onChangeFile() {
@@ -57,15 +60,12 @@ void MessageCollector::onChangeMode(Core::IMode* mode, Core::IMode* oldMode)
 	sendEvent("MODE", mode->displayName());
 }
 
-// The reason I split sendEvent() into local and remote is because  
-// OPENPROJECT event contains absolute path, while the server needs relative path
-// PeerManager::onEvent() will capture this event, convert the path, and send it to the server
+// The reason I split sendEvent() into local and remote is because
+// OPENPROJECT needs to be processed locally by PeerManager::onEvent(),
+// which then sends event "JOIN" to the server
 void MessageCollector::onOpenProject(ProjectExplorer::Project* project) {
 	if(project != 0)
-	{
 		sendLocalEvent("OPENPROJECT", project->projectDirectory());
-	//	sendEvent("OPENPROJECT", project->projectDirectory());
-	}
 }
 
 // capture version control's submit event
@@ -84,8 +84,8 @@ void MessageCollector::onEditorAboutToClose(Core::IEditor* editor)
 
 void MessageCollector::onBuild(bool success)
 {
-//	if(success)
-//		sendEvent("Build", project->projectDirectory());
+	if(success)
+		sendEvent("Build", QString());
 }
 
 void MessageCollector::sendEvent(const QString& event, const QString& parameters)

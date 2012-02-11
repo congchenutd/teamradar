@@ -7,7 +7,7 @@
 #include <QColor>
 #include "PeerModel.h"
 
-// Handles the status and configurations of peers
+// Handles the (login/out) status of both itself and peers, and configurations of peers
 class PeerModel;
 struct TeamRadarEvent;
 class TeamRadarView;
