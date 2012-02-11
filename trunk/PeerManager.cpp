@@ -138,12 +138,15 @@ void PeerManager::onColorResponse(const QString& userName, const QByteArray& col
 
 void PeerManager::onEvent(const TeamRadarEvent& event)
 {
+	// peers
 	if(event.eventType == "JOINED")
 		setUserOnline(event.userName, true);
 	else if(event.eventType == "DISCONNECTED")
 		setUserOnline(event.userName, false);
+
+	// local
 #ifdef OS_DESKTOP
-	else if(event.eventType == "OPENPROJECT")  // must be local
+	else if(event.eventType == "OPENPROJECT")
 	{
 		Setting::getInstance()->setRootPath(event.parameters);
 		Sender::getInstance()->sendJoinProject(QFileInfo(event.parameters).baseName());

@@ -211,7 +211,7 @@ Receiver::Receiver()
 	dataTypes.insert("PROJECTS_RESPONSE", ProjectsResponse);
 
 	parsers.insert(Greeting,         &Receiver::parseGreeting);
-	parsers.insert(EventsResponse,   &Receiver::parseEvents);
+	parsers.insert(EventsResponse,   &Receiver::parseEventsResponse);
 	parsers.insert(Event,            &Receiver::parseEvent);
 	parsers.insert(UserListResponse, &Receiver::parseUserList);
 	parsers.insert(ALLUsersResponse, &Receiver::parseAllUsers);
@@ -278,11 +278,18 @@ void Receiver::parseColor(const QByteArray& buffer)
 	}
 }
 
-void Receiver::parseEvents(const QByteArray& buffer)
+void Receiver::parseEventsResponse(const QByteArray& buffer)
 {
 	QList<QByteArray> sections = buffer.split(Connection::Delimiter1);
 	if(sections.size() == 4)
 		emit eventsResponse(TeamRadarEvent(sections[0], sections[1], sections[2], sections[3]));
+}
+
+void Receiver::parseRecentEventResponse(const QByteArray &buffer)
+{
+	QList<QByteArray> sections = buffer.split(Connection::Delimiter1);
+	if(sections.size() == 4)
+		emit recentEventResponse(TeamRadarEvent(sections[0], sections[1], sections[2], sections[3]));
 }
 
 void Receiver::parseChat(const QByteArray& buffer)
@@ -396,4 +403,10 @@ void Sender::sendProjectsRequest() {
 void Sender::sendJoinProject(const QString& projectName) {
 	if(connection->isReadyForUse())
 		connection->send("JOIN_PROJECT", projectName.toUtf8());
+}
+
+void Sender::sendRecentEventRequest(int count)
+{
+	if(connection->isReadyForUse())
+		connection->send("REQUEST_RECENT", QByteArray::number(count));
 }

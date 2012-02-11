@@ -10,33 +10,25 @@
 
 // Parses the message header & body from Connection
 // Format of packet: header#size#body
-// Format of body:
-//		GREETING: [OK, CONNECTED]/[WRONG_USER]
-//		PHOTO_RESPONSE: [filename#binary photo data]/[empty]
-//		USERLIST_RESPONSE: username1#username2#...
-//		ALLUSERS_RESPONSE: username1#username2#...
-//		EVENT: user#event#[parameters]#time
-//			Format of parameters: parameter1#parameter2#...
-//		COLOR_RESPONSE: [username#color]/[empty]
-//		TIMESPAN_RESPONSE: start#end
-//		PROJECTS_RESPONSE: projectName1#name2...
 class Receiver : public QObject
 {
 	Q_OBJECT
 
 public:
 	typedef enum {
-		Undefined,
-		Greeting,
-		Event,
-		PhotoResponse,
-		UserListResponse,
-		ALLUsersResponse,
-		ColorResponse,
-		EventsResponse,
+		Undefined,            // Format of body see below:
+		Greeting,             // GREETING: [OK, CONNECTED]/[WRONG_USER]
+		Event,                // EVENT: user#event#[parameters]#time
+							  //	  Format of parameters: parameter1#parameter2#...
+		EventsResponse,       // same as EVENT
+		RecentEventResponse,  // RECENT_EVENT_RESPONSE: same as EVENT
+		PhotoResponse,        // PHOTO_RESPONSE: [filename#binary photo data]/[empty]
+		UserListResponse,     // USERLIST_RESPONSE: username1#username2#...
+		ALLUsersResponse,     // ALLUSERS_RESPONSE: username1#username2#...
+		ColorResponse,        // COLOR_RESPONSE: [username#color]/[empty]
 		Chat,
-		TimeSpanResponse,
-		ProjectsResponse
+		TimeSpanResponse,     // TIMESPAN_RESPONSE: start#end
+		ProjectsResponse      // PROJECTS_RESPONSE: projectName1#name2...
 	} DataType;
 
 	typedef void(Receiver::*Parser)(const QByteArray& buffer);
@@ -49,24 +41,26 @@ public:
 	void processData(Receiver::DataType dataType, const QByteArray& buffer);
 
 signals:
-	void newEvent(const TeamRadarEvent& event);
+	void newEvent           (const TeamRadarEvent& event);
+	void eventsResponse     (const TeamRadarEvent& event);
+	void recentEventResponse(const TeamRadarEvent& event);
 	void userList(const QList<QByteArray>& list);
 	void allUsers(const QList<QByteArray>& list);
 	void photoResponse(const QString& fileName,   const QByteArray& photoData);
 	void colorResponse(const QString& targetUser, const QByteArray& color);
-	void eventsResponse(const TeamRadarEvent& event);
 	void chatMessage(const QString& peerName, const QString& content);
 	void timespan(const QDateTime& start, const QDateTime& end);
 	void projectsResponse(const QStringList& list);
 
 private:
 	void parseGreeting(const QByteArray& buffer);
-	void parseEvent   (const QByteArray& buffer);
+	void parseEvent              (const QByteArray& buffer);
+	void parseEventsResponse     (const QByteArray& buffer);
+	void parseRecentEventResponse(const QByteArray& buffer);
 	void parseUserList(const QByteArray& buffer);
 	void parseAllUsers(const QByteArray& buffer);
 	void parsePhoto   (const QByteArray& buffer);
 	void parseColor   (const QByteArray& buffer);
-	void parseEvents  (const QByteArray& buffer);
 	void parseChat    (const QByteArray& buffer);
 	void parseTimeSpan(const QByteArray& buffer);
 	void parseProjects(const QByteArray& buffer);
@@ -156,6 +150,7 @@ private:
 //		REQUEST_TIMESPAN: [empty]
 //		REQUEST_PROJECTS: [empty]
 //		JOIN_PROJECT: projectname
+//		REQUEST_RECENT: event count
 class Sender : public QObject
 {
 public:
@@ -175,6 +170,7 @@ public:
 	void sendTimeSpanRequest();
 	void sendProjectsRequest();
 	void sendJoinProject(const QString& projectName);
+	void sendRecentEventRequest(int count);
 
 private:
 	static Sender* instance;
