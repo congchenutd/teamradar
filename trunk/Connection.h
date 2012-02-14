@@ -41,9 +41,9 @@ public:
 	void processData(Receiver::DataType dataType, const QByteArray& buffer);
 
 signals:
-	void newEvent           (const TeamRadarEvent& event);
-	void eventsResponse     (const TeamRadarEvent& event);
-	void recentEventResponse(const TeamRadarEvent& event);
+	void newEvent      (const TeamRadarEvent& event);
+	void eventsResponse(const TeamRadarEvent& event);
+	void recentEvent   (const TeamRadarEvent& event);
 	void userList(const QList<QByteArray>& list);
 	void allUsers(const QList<QByteArray>& list);
 	void photoResponse(const QString& fileName,   const QByteArray& photoData);
@@ -54,9 +54,9 @@ signals:
 
 private:
 	void parseGreeting(const QByteArray& buffer);
-	void parseEvent              (const QByteArray& buffer);
-	void parseEventsResponse     (const QByteArray& buffer);
-	void parseRecentEventResponse(const QByteArray& buffer);
+	void parseEvent         (const QByteArray& buffer);
+	void parseEventsResponse(const QByteArray& buffer);
+	void parseRecentEvent   (const QByteArray& buffer);
 	void parseUserList(const QByteArray& buffer);
 	void parseAllUsers(const QByteArray& buffer);
 	void parsePhoto   (const QByteArray& buffer);

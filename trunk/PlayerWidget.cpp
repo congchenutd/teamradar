@@ -71,6 +71,7 @@ PlayerWidget::PlayerWidget(QWidget *parent) :
 	connect(Connection:: getInstance(), SIGNAL(connectionStatusChanged(bool)),  this, SLOT(onConnectedToServer(bool)));
 	connect(peerManager,                SIGNAL(userOnline    (TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
 	connect(Receiver::   getInstance(), SIGNAL(newEvent      (TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
+	connect(Receiver::   getInstance(), SIGNAL(recentEvent   (TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
 	connect(Receiver::   getInstance(), SIGNAL(eventsResponse(TeamRadarEvent)), this, SLOT(onEventDownloaded(TeamRadarEvent)));
 	connect(Receiver::   getInstance(), SIGNAL(chatMessage(QString, QString)),  this, SLOT(onChatMessage(QString, QString)));
 }
@@ -275,10 +276,6 @@ void PlayerWidget::onEventDownloaded(const TeamRadarEvent& event)
 	ui.tvPlaylist->resizeColumnsToContents();
 	ui.slider->setMaximum(modelPlaylist->rowCount() - 1);
 	modelPlaylist->sort(DateTime);
-}
-
-void PlayerWidget::onRecentEvents(const TeamRadarEvent &event)
-{
 }
 
 // received a chat message from peerName

@@ -199,27 +199,29 @@ Receiver* Receiver::getInstance()
 
 Receiver::Receiver()
 {
-	dataTypes.insert("GREETING",          Greeting);
-	dataTypes.insert("EVENT_RESPONSE",    EventsResponse);
-	dataTypes.insert("EVENT",             Event);
-	dataTypes.insert("PHOTO_RESPONSE",    PhotoResponse);
-	dataTypes.insert("USERLIST_RESPONSE", UserListResponse);
-	dataTypes.insert("ALLUSERS_RESPONSE", ALLUsersResponse);
-	dataTypes.insert("COLOR_RESPONSE",    ColorResponse);
-	dataTypes.insert("CHAT",              Chat);
-	dataTypes.insert("TIMESPAN_RESPONSE", TimeSpanResponse);
-	dataTypes.insert("PROJECTS_RESPONSE", ProjectsResponse);
+	dataTypes.insert("GREETING",              Greeting);
+	dataTypes.insert("EVENT_RESPONSE",        EventsResponse);
+	dataTypes.insert("EVENT",                 Event);
+	dataTypes.insert("RECENT_EVENT_RESPONSE", RecentEventResponse);
+	dataTypes.insert("PHOTO_RESPONSE",        PhotoResponse);
+	dataTypes.insert("USERLIST_RESPONSE",     UserListResponse);
+	dataTypes.insert("ALLUSERS_RESPONSE",     ALLUsersResponse);
+	dataTypes.insert("COLOR_RESPONSE",        ColorResponse);
+	dataTypes.insert("CHAT",                  Chat);
+	dataTypes.insert("TIMESPAN_RESPONSE",     TimeSpanResponse);
+	dataTypes.insert("PROJECTS_RESPONSE",     ProjectsResponse);
 
-	parsers.insert(Greeting,         &Receiver::parseGreeting);
-	parsers.insert(EventsResponse,   &Receiver::parseEventsResponse);
-	parsers.insert(Event,            &Receiver::parseEvent);
-	parsers.insert(UserListResponse, &Receiver::parseUserList);
-	parsers.insert(ALLUsersResponse, &Receiver::parseAllUsers);
-	parsers.insert(PhotoResponse,    &Receiver::parsePhoto);
-	parsers.insert(ColorResponse,    &Receiver::parseColor);
-	parsers.insert(Chat,             &Receiver::parseChat);
-	parsers.insert(TimeSpanResponse, &Receiver::parseTimeSpan);
-	parsers.insert(ProjectsResponse, &Receiver::parseProjects);
+	parsers.insert(Greeting,            &Receiver::parseGreeting);
+	parsers.insert(EventsResponse,      &Receiver::parseEventsResponse);
+	parsers.insert(Event,               &Receiver::parseEvent);
+	parsers.insert(RecentEventResponse, &Receiver::parseRecentEvent);
+	parsers.insert(UserListResponse,    &Receiver::parseUserList);
+	parsers.insert(ALLUsersResponse,    &Receiver::parseAllUsers);
+	parsers.insert(PhotoResponse,       &Receiver::parsePhoto);
+	parsers.insert(ColorResponse,       &Receiver::parseColor);
+	parsers.insert(Chat,                &Receiver::parseChat);
+	parsers.insert(TimeSpanResponse,    &Receiver::parseTimeSpan);
+	parsers.insert(ProjectsResponse,    &Receiver::parseProjects);
 }
 
 Receiver::DataType Receiver::guessDataType(const QByteArray& h)
@@ -285,11 +287,11 @@ void Receiver::parseEventsResponse(const QByteArray& buffer)
 		emit eventsResponse(TeamRadarEvent(sections[0], sections[1], sections[2], sections[3]));
 }
 
-void Receiver::parseRecentEventResponse(const QByteArray &buffer)
+void Receiver::parseRecentEvent(const QByteArray &buffer)
 {
 	QList<QByteArray> sections = buffer.split(Connection::Delimiter1);
 	if(sections.size() == 4)
-		emit recentEventResponse(TeamRadarEvent(sections[0], sections[1], sections[2], sections[3]));
+		emit recentEvent(TeamRadarEvent(sections[0], sections[1], sections[2], sections[3]));
 }
 
 void Receiver::parseChat(const QByteArray& buffer)

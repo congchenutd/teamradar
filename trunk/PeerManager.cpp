@@ -151,6 +151,7 @@ void PeerManager::onEvent(const TeamRadarEvent& event)
 		Setting::getInstance()->setRootPath(event.parameters);
 		Sender::getInstance()->sendJoinProject(QFileInfo(event.parameters).baseName());
 		PlayerWidget::getInstance()->reloadProject();
+		Sender::getInstance()->sendRecentEventRequest(3);
 	}
 #endif
 }
