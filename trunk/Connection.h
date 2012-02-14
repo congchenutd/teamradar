@@ -130,27 +130,7 @@ private:
 
 // Format of packet: header#size#body
 // Does not need to send my user name, because the server knows who I am
-// Format of body:
-//		REQUEST_USERLIST: [empty], server knows the user name
-//		REQUEST_ALLUSERS: [empty], server knows the user name
-//		REQUEST_PHOTO: target user name
-//		REGISTER_PHOTO: file format#binary photo data
-//		EVENT: event type#parameters
-//			Format of parameters: parameter1#parameter2#...
-//		REGISTER_COLOR: color
-//		REQUEST_COLOR: target user name
-//		REQUEST_EVENTS: user list#event types#time span#phases#fuzziness
-//			user list: name1;name2;...
-//			event types: type1;type2;...
-//			time span: start time;end time
-//			phases: phase1;phase2;...
-//			fuzziness: an integer for percentage
-//		CHAT: recipients#content
-//			recipients = name1;name2;...
-//		REQUEST_TIMESPAN: [empty]
-//		REQUEST_PROJECTS: [empty]
-//		JOIN_PROJECT: projectname
-//		REQUEST_RECENT: event count
+// See TeamRadarServer's connection.h for details of the protocol
 class Sender : public QObject
 {
 public:
