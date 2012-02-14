@@ -277,6 +277,10 @@ void PlayerWidget::onEventDownloaded(const TeamRadarEvent& event)
 	modelPlaylist->sort(DateTime);
 }
 
+void PlayerWidget::onRecentEvents(const TeamRadarEvent &event)
+{
+}
+
 // received a chat message from peerName
 void PlayerWidget::onChatMessage(const QString& peerName, const QString& content) {
 	if(HumanNode* human = ui.graphicsView->findDeveloper(peerName))
