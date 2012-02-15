@@ -199,10 +199,10 @@ Receiver* Receiver::getInstance()
 
 Receiver::Receiver()
 {
+	// header -> type id
 	dataTypes.insert("GREETING",              Greeting);
 	dataTypes.insert("EVENT_RESPONSE",        EventsResponse);
 	dataTypes.insert("EVENT",                 Event);
-	dataTypes.insert("RECENT_EVENT_RESPONSE", RecentEventResponse);
 	dataTypes.insert("PHOTO_RESPONSE",        PhotoResponse);
 	dataTypes.insert("USERLIST_RESPONSE",     UserListResponse);
 	dataTypes.insert("ALLUSERS_RESPONSE",     ALLUsersResponse);
@@ -210,11 +210,12 @@ Receiver::Receiver()
 	dataTypes.insert("CHAT",                  Chat);
 	dataTypes.insert("TIMESPAN_RESPONSE",     TimeSpanResponse);
 	dataTypes.insert("PROJECTS_RESPONSE",     ProjectsResponse);
+	dataTypes.insert("LOCATION_RESPONSE",     LocationResponse);
 
+	// type id -> parser
 	parsers.insert(Greeting,            &Receiver::parseGreeting);
 	parsers.insert(EventsResponse,      &Receiver::parseEventsResponse);
 	parsers.insert(Event,               &Receiver::parseEvent);
-	parsers.insert(RecentEventResponse, &Receiver::parseRecentEvent);
 	parsers.insert(UserListResponse,    &Receiver::parseUserList);
 	parsers.insert(ALLUsersResponse,    &Receiver::parseAllUsers);
 	parsers.insert(PhotoResponse,       &Receiver::parsePhoto);
@@ -222,6 +223,7 @@ Receiver::Receiver()
 	parsers.insert(Chat,                &Receiver::parseChat);
 	parsers.insert(TimeSpanResponse,    &Receiver::parseTimeSpan);
 	parsers.insert(ProjectsResponse,    &Receiver::parseProjects);
+	parsers.insert(LocationResponse,    &Receiver::parseLocation);
 }
 
 Receiver::DataType Receiver::guessDataType(const QByteArray& h)
@@ -287,13 +289,6 @@ void Receiver::parseEventsResponse(const QByteArray& buffer)
 		emit eventsResponse(TeamRadarEvent(sections[0], sections[1], sections[2], sections[3]));
 }
 
-void Receiver::parseRecentEvent(const QByteArray &buffer)
-{
-	QList<QByteArray> sections = buffer.split(Connection::Delimiter1);
-	if(sections.size() == 4)
-		emit recentEvent(TeamRadarEvent(sections[0], sections[1], sections[2], sections[3]));
-}
-
 void Receiver::parseChat(const QByteArray& buffer)
 {
 	int seperator = buffer.indexOf(Connection::Delimiter1);
@@ -319,6 +314,13 @@ void Receiver::parseProjects(const QByteArray& buffer)
 		emit projectsResponse(QString(buffer).split(Connection::Delimiter1));
 	else
 		emit projectsResponse(QStringList());
+}
+
+void Receiver::parseLocation(const QByteArray& buffer)
+{
+	QList<QByteArray> sections = buffer.split(Connection::Delimiter1);
+	if(sections.size() == 2)
+		emit locationResponse(sections[0], sections[1]);
 }
 
 
@@ -407,8 +409,7 @@ void Sender::sendJoinProject(const QString& projectName) {
 		connection->send("JOIN_PROJECT", projectName.toUtf8());
 }
 
-void Sender::sendRecentEventRequest(int count)
-{
+void Sender::sendLocationRequest(const QString& userName) {
 	if(connection->isReadyForUse())
-		connection->send("REQUEST_RECENT", QByteArray::number(count));
+		connection->send("REQUEST_LOCATION", userName.toUtf8());
 }
