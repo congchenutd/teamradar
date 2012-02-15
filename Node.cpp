@@ -528,6 +528,8 @@ void HumanNode::lightTrailDied(LightTrail* trail) {
 
 void HumanNode::setWorkOn(const QString& filePath)
 {
+	if(workOn == filePath)
+		return;
 	if(Setting::getInstance()->showLightTrail())
 	{
 		leaveAfterimage();
