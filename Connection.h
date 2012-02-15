@@ -21,14 +21,14 @@ public:
 		Event,                // EVENT: user#event#[parameters]#time
 							  //	  Format of parameters: parameter1#parameter2#...
 		EventsResponse,       // same as EVENT
-		RecentEventResponse,  // RECENT_EVENT_RESPONSE: same as EVENT
 		PhotoResponse,        // PHOTO_RESPONSE: [filename#binary photo data]/[empty]
 		UserListResponse,     // USERLIST_RESPONSE: username1#username2#...
 		ALLUsersResponse,     // ALLUSERS_RESPONSE: username1#username2#...
 		ColorResponse,        // COLOR_RESPONSE: [username#color]/[empty]
 		Chat,
 		TimeSpanResponse,     // TIMESPAN_RESPONSE: start#end
-		ProjectsResponse      // PROJECTS_RESPONSE: projectName1#name2...
+		ProjectsResponse,     // PROJECTS_RESPONSE: projectName1#name2...
+		LocationResponse      // userName#location (path relative to the root)
 	} DataType;
 
 	typedef void(Receiver::*Parser)(const QByteArray& buffer);
@@ -43,7 +43,6 @@ public:
 signals:
 	void newEvent      (const TeamRadarEvent& event);
 	void eventsResponse(const TeamRadarEvent& event);
-	void recentEvent   (const TeamRadarEvent& event);
 	void userList(const QList<QByteArray>& list);
 	void allUsers(const QList<QByteArray>& list);
 	void photoResponse(const QString& fileName,   const QByteArray& photoData);
@@ -51,12 +50,12 @@ signals:
 	void chatMessage(const QString& peerName, const QString& content);
 	void timespan(const QDateTime& start, const QDateTime& end);
 	void projectsResponse(const QStringList& list);
+	void locationResponse(const QString& userName, const QString& location);
 
 private:
 	void parseGreeting(const QByteArray& buffer);
 	void parseEvent         (const QByteArray& buffer);
 	void parseEventsResponse(const QByteArray& buffer);
-	void parseRecentEvent   (const QByteArray& buffer);
 	void parseUserList(const QByteArray& buffer);
 	void parseAllUsers(const QByteArray& buffer);
 	void parsePhoto   (const QByteArray& buffer);
@@ -64,6 +63,7 @@ private:
 	void parseChat    (const QByteArray& buffer);
 	void parseTimeSpan(const QByteArray& buffer);
 	void parseProjects(const QByteArray& buffer);
+	void parseLocation(const QByteArray& buffer);
 
 private:
 	static Receiver* instance;
@@ -150,7 +150,7 @@ public:
 	void sendTimeSpanRequest();
 	void sendProjectsRequest();
 	void sendJoinProject(const QString& projectName);
-	void sendRecentEventRequest(int count);
+	void sendLocationRequest(const QString& userName);
 
 private:
 	static Sender* instance;

@@ -98,6 +98,7 @@ void PeerManager::setUserOnline(const QString& name, bool online)
 	{
 		Sender::getInstance()->sendPhotoRequest(name);
 		Sender::getInstance()->sendColorRequest(name);
+		Sender::getInstance()->sendLocationRequest(name);
 	}
 
 	// notify player
@@ -151,7 +152,6 @@ void PeerManager::onEvent(const TeamRadarEvent& event)
 		Setting::getInstance()->setRootPath(event.parameters);
 		Sender::getInstance()->sendJoinProject(QFileInfo(event.parameters).baseName());
 		PlayerWidget::getInstance()->reloadProject();
-		Sender::getInstance()->sendRecentEventRequest(30);
 	}
 #endif
 }

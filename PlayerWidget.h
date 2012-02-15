@@ -44,6 +44,7 @@ private slots:
 	void onEventDownloaded(const TeamRadarEvent& event);
 	void onChatMessage(const QString& peerName, const QString& content);
 	void onAnalyze();
+	void onLocationResponse(const QString& userName, const QString& location);
 
 private:
 	void play(int row);

@@ -69,11 +69,13 @@ PlayerWidget::PlayerWidget(QWidget *parent) :
 
 	connect(MessageCollector::getInstance(), SIGNAL(localEvent(TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
 	connect(Connection:: getInstance(), SIGNAL(connectionStatusChanged(bool)),  this, SLOT(onConnectedToServer(bool)));
-	connect(peerManager,                SIGNAL(userOnline    (TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
-	connect(Receiver::   getInstance(), SIGNAL(newEvent      (TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
-	connect(Receiver::   getInstance(), SIGNAL(recentEvent   (TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
-	connect(Receiver::   getInstance(), SIGNAL(eventsResponse(TeamRadarEvent)), this, SLOT(onEventDownloaded(TeamRadarEvent)));
-	connect(Receiver::   getInstance(), SIGNAL(chatMessage(QString, QString)),  this, SLOT(onChatMessage(QString, QString)));
+	connect(peerManager, SIGNAL(userOnline(TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
+	connect(Receiver::getInstance(), SIGNAL(newEvent      (TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
+	connect(Receiver::getInstance(), SIGNAL(recentEvent   (TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
+	connect(Receiver::getInstance(), SIGNAL(eventsResponse(TeamRadarEvent)), this, SLOT(onEventDownloaded(TeamRadarEvent)));
+	connect(Receiver::getInstance(), SIGNAL(chatMessage(QString, QString)),  this, SLOT(onChatMessage(QString, QString)));
+	connect(Receiver::getInstance(), SIGNAL(locationResponse(QString,QString)),
+			this, SLOT(onLocationResponse(QString, QString)));
 }
 
 void PlayerWidget::onShowPlaylist(bool show)
@@ -198,6 +200,7 @@ void PlayerWidget::onOnline()
 {
 	online = !online;
 	ui.btOnline->setIcon(online ? QIcon(":/Images/Connect.png") : QIcon(":/Images/Disconnect.png"));
+	ui.btPlaylist ->setHidden(online);
 	ui.btPlayPause->setHidden(online);
 	ui.slider     ->setHidden(online);
 	ui.sbSpeed    ->setHidden(online);
@@ -288,6 +291,10 @@ void PlayerWidget::onAnalyze()
 {
 	Analyzer analyzer(modelPlaylist, this);
 	analyzer.exec();
+}
+
+void PlayerWidget::onLocationResponse(const QString& userName, const QString& location)
+{
 }
 
 PlayerWidget::~PlayerWidget()

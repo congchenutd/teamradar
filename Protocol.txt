@@ -37,3 +37,6 @@ Server					Client
 
 	<- Request_Recent (EventCount)
 	-> Recent_Events_Response
+
+	<- Request_Location (userName)
+	-> Location_Response (userName, location)

@@ -25,11 +25,12 @@ AboutOptionPage::AboutOptionPage(QObject* parent) : OptionsPage(parent) {}
 QWidget *AboutOptionPage::createPage(QWidget* parent)
 {
 	QWidget* widget = new QWidget(parent);
-	QLabel* label = new QLabel(tr("<H1 align=\"center\">Team Radar</H1>"
-								  "<P align=\"center\">A continuous awareness plugin</P>"
-								  "<P align=\"center\">Cong Chen &lt;CongChenUTD@Gmail.com&gt;</P>"
-								  "<P align=\"center\">Build on %1</P>")
-							   .arg(Setting::getInstance()->getCompileDate()), widget);
+	QLabel* label = new QLabel(tr(
+		"<H1 align=\"center\">Team Radar</H1>"
+		"<P align=\"center\">A continuous awareness plugin</P>"
+		"<P align=\"center\">Cong Chen &lt;CongChenUTD@Gmail.com&gt;</P>"
+		"<P align=\"center\">Built on %1</P>")
+		.arg(Setting::getInstance()->getCompileDate()), widget);
 	QHBoxLayout* layout = new QHBoxLayout(widget);
 	layout->addWidget(label);
 	return widget;

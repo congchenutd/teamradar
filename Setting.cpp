@@ -1,4 +1,5 @@
 #include "Setting.h"
+#include "Defines.h"
 #include <QColor>
 #include <QResource>
 
@@ -29,14 +30,14 @@ void Setting::loadDefaults()
 	setValue("PartitionFuzziness", 100);
 
 	// parameters for the engine
-#if !defined(Q_WS_SIMULATOR) && !defined(Q_OS_SYMBIAN)
-	setEngineSubtlety(10);
-	setShowLightTrail(true);
-	setShowAfterImage(true);
-#else
+#ifdef OS_DESKTOP
 	setEngineSubtlety(1);
 	setShowLightTrail(false);
 	setShowAfterImage(false);
+#else
+	setEngineSubtlety(10);
+	setShowLightTrail(true);
+	setShowAfterImage(true);
 #endif
 
 	// filtered trash files/dirs
