@@ -33,6 +33,7 @@ public:
 	QString  id() const { return tr("Tab2"); }
 	QString  displayName() const { return tr("About"); }
 	QWidget* createPage(QWidget* parent);
+	void apply() {}
 };
 
 

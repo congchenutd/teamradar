@@ -37,9 +37,8 @@ MessageCollector* MessageCollector::getInstance()
 
 void MessageCollector::onOpenFile(Core::IEditor* editor)
 {
-	// when the file is changed (before saved)
-	// connect to editor->file()'s changed signal for file being saved
-	connect(editor, SIGNAL(changed()), this, SLOT(onChangeFile()));
+	connect(editor,         SIGNAL(changed()), this, SLOT(onChangeFile()));  // editted
+	connect(editor->file(), SIGNAL(changed()), this, SLOT(onChangeFile()));  // saved
 }
 
 void MessageCollector::onChangeFile() {
