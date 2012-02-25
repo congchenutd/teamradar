@@ -210,7 +210,6 @@ Receiver::Receiver()
 	dataTypes.insert("CHAT",                  Chat);
 	dataTypes.insert("TIMESPAN_RESPONSE",     TimeSpanResponse);
 	dataTypes.insert("PROJECTS_RESPONSE",     ProjectsResponse);
-	dataTypes.insert("LOCATION_RESPONSE",     LocationResponse);
 
 	// type id -> parser
 	parsers.insert(Greeting,            &Receiver::parseGreeting);
@@ -223,7 +222,6 @@ Receiver::Receiver()
 	parsers.insert(Chat,                &Receiver::parseChat);
 	parsers.insert(TimeSpanResponse,    &Receiver::parseTimeSpan);
 	parsers.insert(ProjectsResponse,    &Receiver::parseProjects);
-	parsers.insert(LocationResponse,    &Receiver::parseLocation);
 }
 
 Receiver::DataType Receiver::guessDataType(const QByteArray& h)
@@ -314,13 +312,6 @@ void Receiver::parseProjects(const QByteArray& buffer)
 		emit projectsResponse(QString(buffer).split(Connection::Delimiter1));
 	else
 		emit projectsResponse(QStringList());
-}
-
-void Receiver::parseLocation(const QByteArray& buffer)
-{
-	QList<QByteArray> sections = buffer.split(Connection::Delimiter1);
-	if(sections.size() == 2)
-		emit locationResponse(sections[0], sections[1]);
 }
 
 

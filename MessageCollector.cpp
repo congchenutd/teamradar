@@ -62,8 +62,11 @@ void MessageCollector::onChangeMode(Core::IMode* mode, Core::IMode* oldMode)
 // The reason I split sendEvent() into local and remote is because
 // OPENPROJECT needs to be processed locally by PeerManager::onEvent(),
 // which then sends event "JOIN" to the server
-void MessageCollector::onOpenProject(ProjectExplorer::Project* project) {
-	if(project != 0)
+void MessageCollector::onOpenProject(ProjectExplorer::Project* project)
+{
+	if(project == 0)
+		sendLocalEvent("CLOSEPROJECT");
+	else
 		sendLocalEvent("OPENPROJECT", project->projectDirectory());
 }
 

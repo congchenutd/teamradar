@@ -76,7 +76,6 @@ void PeerManager::onAllUsers(const QList<QByteArray>& list)
 		int lastRow = modelAll->rowCount();
 		bool result = modelAll->insertRow(lastRow);
 		result = modelAll->setData(modelAll->index(lastRow, 0), userName);
-		QString errMsg = modelAll->lastError().text();
 		DeveloperInfo developerInfo = PeerModel::getUserInfo(userName);
 		result = modelAll->setData(modelAll->index(lastRow, 1), developerInfo.image);
 		result = modelAll->setData(modelAll->index(lastRow, 2), true);
@@ -151,6 +150,12 @@ void PeerManager::onEvent(const TeamRadarEvent& event)
 	{
 		Setting::getInstance()->setRootPath(event.parameters);
 		Sender::getInstance()->sendJoinProject(QFileInfo(event.parameters).baseName());
+		PlayerWidget::getInstance()->reloadProject();
+		refreshUserList();   // refresh users in the same project
+	}
+	else if(event.eventType == "CLOSEPROJECT")
+	{
+		Setting::getInstance()->setRootPath(QString());
 		PlayerWidget::getInstance()->reloadProject();
 	}
 #endif
