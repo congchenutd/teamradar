@@ -37,8 +37,8 @@ signals:
 
 private:
 	void sendEvent(const QString& event, const QString& parameters);  // to the server
-	void sendLocalEvent (const QString& event, const QString& parameters);
-	void sendRemoteEvent(const QString& event, const QString& parameters);
+	void sendLocalEvent (const QString& event, const QString& parameters = QString());
+	void sendRemoteEvent(const QString& event, const QString& parameters = QString());
 
 private:
 	static MessageCollector* instance;

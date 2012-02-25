@@ -39,4 +39,4 @@ Server					Client
 	-> Recent_Events_Response
 
 	<- Request_Location (userName)
-	-> Location_Response (userName, location)
+	-> EVENT (userName, SAVE, fileName)  // the client will update the location of userName

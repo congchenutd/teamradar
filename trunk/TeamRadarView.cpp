@@ -118,8 +118,11 @@ void TeamRadarView::scaleBy(qreal scaleFactor)
 void TeamRadarView::loadDir(const QString& dirPath)
 {
 	clear();
-	setRoot(createNode(true, dirPath, 0));  // create root first
-	centerTree();
+	if(!dirPath.isEmpty())
+	{
+		setRoot(createNode(true, dirPath, 0));  // create root first
+		centerTree();
+	}
 }
 
 // a recursive function for expansion

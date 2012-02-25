@@ -27,8 +27,7 @@ public:
 		ColorResponse,        // COLOR_RESPONSE: [username#color]/[empty]
 		Chat,
 		TimeSpanResponse,     // TIMESPAN_RESPONSE: start#end
-		ProjectsResponse,     // PROJECTS_RESPONSE: projectName1#name2...
-		LocationResponse      // userName#location (path relative to the root)
+		ProjectsResponse      // PROJECTS_RESPONSE: projectName1#name2...
 	} DataType;
 
 	typedef void(Receiver::*Parser)(const QByteArray& buffer);
@@ -50,7 +49,6 @@ signals:
 	void chatMessage(const QString& peerName, const QString& content);
 	void timespan(const QDateTime& start, const QDateTime& end);
 	void projectsResponse(const QStringList& list);
-	void locationResponse(const QString& userName, const QString& location);
 
 private:
 	void parseGreeting(const QByteArray& buffer);
@@ -63,7 +61,6 @@ private:
 	void parseChat    (const QByteArray& buffer);
 	void parseTimeSpan(const QByteArray& buffer);
 	void parseProjects(const QByteArray& buffer);
-	void parseLocation(const QByteArray& buffer);
 
 private:
 	static Receiver* instance;
