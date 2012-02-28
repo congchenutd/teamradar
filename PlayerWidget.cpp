@@ -293,10 +293,6 @@ void PlayerWidget::onAnalyze()
 	analyzer.exec();
 }
 
-void PlayerWidget::onLocationResponse(const QString& userName, const QString& location)
-{
-}
-
 PlayerWidget::~PlayerWidget()
 {
 	ChatWindow::saveAllHistory();

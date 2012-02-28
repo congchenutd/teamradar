@@ -108,7 +108,7 @@ void TeamRadarNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QW
 	gradient.setColorAt(0.7, color);
 	gradient.setColorAt(1, color.darker(120));
 	painter->setBrush(gradient);
-		painter->setPen(QPen(color.darker()));
+	painter->setPen(QPen(color.darker()));
 	painter->drawEllipse(boundingRect());
 
 	// for debugging
@@ -355,8 +355,12 @@ void TeamRadarNode::drawSelectionRect(QPainter* painter)
 
 //////////////////////////////////////////////////////////////////////////
 DirNode::DirNode(TeamRadarNode* owner, const QString& name)
-: TeamRadarNode(owner, name) {
-	setColor(Setting::getInstance()->getColor("DefaultDirColor"));
+: TeamRadarNode(owner, name)
+{
+	if(owner == 0)
+		setColor(Setting::getInstance()->getColor("RootColor"));
+	else
+		setColor(Setting::getInstance()->getColor("DefaultDirColor"));
 }
 
 void DirNode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)
