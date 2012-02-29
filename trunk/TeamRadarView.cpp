@@ -447,7 +447,7 @@ QRectF TeamRadarView::nodesBoundingRect() const
 {
 	QRectF boundingRect;
 	foreach(QGraphicsItem* item, items())
-		if(TeamRadarNode* node = castToTeamRadarNode(item))
+		if(castToTeamRadarNode(item))
 			boundingRect |= item->sceneBoundingRect();
 	return boundingRect;
 }
