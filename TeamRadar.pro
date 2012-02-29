@@ -9,7 +9,7 @@ win32 {
 	PLUGIN_BUILD_PATH = $$IDE_BUILD_PATH/lib/qtcreator/plugins
 }
 macx {
-	PLUGIN_BUILD_PATH = $$IDE_BUILD_PATH/bin/QtCreator.app/Contents/PlugIns
+	PLUGIN_BUILD_PATH = $$IDE_BUILD_PATH/bin/QtCreator/Contents/PlugIns
 }
 
 DESTDIR = $$PLUGIN_BUILD_PATH/$$(PROVIDER)
@@ -51,13 +51,16 @@ HEADERS += ChatWindow.h \
 		   Utility.h \
 		   ../ImageColorBoolModel/ImageColorBoolDelegate.h \
 		   ../ImageColorBoolModel/ImageColorBoolProxy.h \
-	OptionsPage.h \
-	ImageLabel.h \
-	Analyzer.h \
-	Defines.h \
-	ColorLabel.h
-FORMS += ChatWindow.ui PlayerWidget.ui RequestEventsDlg.ui TeamRadarDlg.ui \
-	Analyzer.ui
+		   OptionsPage.h \
+		   ImageLabel.h \
+		   Analyzer.h \
+		   Defines.h \
+		   ColorLabel.h
+FORMS += ChatWindow.ui \
+		 PlayerWidget.ui \
+		 RequestEventsDlg.ui \
+		 TeamRadarDlg.ui \
+		 Analyzer.ui
 SOURCES += ChatWindow.cpp \
 		   Connection.cpp \
 		   Edge.cpp \
@@ -79,9 +82,9 @@ SOURCES += ChatWindow.cpp \
 		   Utility.cpp \
 		   ../ImageColorBoolModel/ImageColorBoolDelegate.cpp \
 		   ../ImageColorBoolModel/ImageColorBoolProxy.cpp \
-	OptionsPage.cpp \
-	ImageLabel.cpp \
-	Analyzer.cpp \
-	ColorLabel.cpp
+		   OptionsPage.cpp \
+		   ImageLabel.cpp \
+		   Analyzer.cpp \
+		   ColorLabel.cpp
 RESOURCES += Resources.qrc
 OTHER_FILES += TeamRadar.pluginspec
