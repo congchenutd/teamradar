@@ -13,8 +13,8 @@ macx {
 }
 
 DESTDIR = $$PLUGIN_BUILD_PATH/$$(PROVIDER)
-LIBS += -L$$PLUGIN_BUILD_PATH/ \
-		-L$$PLUGIN_BUILD_PATH/Nokia
+LIBS += -L$$IDE_BUILD_PATH/lib/qtcreator/ \
+		-L$$IDE_BUILD_PATH/lib/qtcreator/plugins/Nokia
 
 include($$IDE_SOURCE_PATH/src/qtcreatorplugin.pri)
 include($$IDE_SOURCE_PATH/src/plugins/coreplugin/coreplugin.pri)
