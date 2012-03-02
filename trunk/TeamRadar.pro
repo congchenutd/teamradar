@@ -12,6 +12,10 @@ LIBS += -L$$IDE_BUILD_TREE/lib/qtcreator/ \
 		-L$$IDE_BUILD_TREE/lib/qtcreator/plugins/Nokia
 }
 macx {
+#DESTDIR = $$IDE_BUILD_TREE/bin/QtCreator.app/Contents/PlugIns/$$(PROVIDER)
+
+LIBS += -L$$IDE_BUILD_TREE/bin/QtCreator.app/Contents/Plugins \
+		-L$$IDE_BUILD_TREE/bin/QtCreator.app/Contents/PlugIns/Nokia
 }
 
 include($$IDE_SOURCE_TREE/src/qtcreatorplugin.pri)
