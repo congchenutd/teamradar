@@ -27,6 +27,7 @@ private slots:
 	void onDelete();
 	void onShowHint();
 	void onConnectedToServer(bool connected);
+	void onReconnection();
 
 private:
 	QString guessUserName() const;   // initialize user name

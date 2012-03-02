@@ -59,9 +59,9 @@ TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QWidget(parent)
 	resizeTable();
 
 	connect(model,              SIGNAL(selected()), this, SLOT(resizeTable()));
-	connect(ui.leServerAddress, SIGNAL(textEdited(QString)), this, SLOT(onShowHint()));
-	connect(ui.sbPort,          SIGNAL(valueChanged(int)),   this, SLOT(onShowHint()));
-	connect(ui.leUserName,      SIGNAL(textEdited(QString)), this, SLOT(onShowHint()));
+	connect(ui.leServerAddress, SIGNAL(textEdited(QString)), this, SLOT(onReconnection()));
+	connect(ui.sbPort,          SIGNAL(valueChanged(int)),   this, SLOT(onReconnection()));
+	connect(ui.leUserName,      SIGNAL(textEdited(QString)), this, SLOT(onReconnection()));
 	connect(Connection::getInstance(), SIGNAL(connectionStatusChanged(bool)), this, SLOT(onConnectedToServer(bool)));
 
 	onConnectedToServer(Connection::getInstance()->isReadyForUse());   // init light
@@ -162,10 +162,18 @@ void TeamRadarDlg::onDelete()
 }
 
 void TeamRadarDlg::onShowHint() {
-	ui.labelMessage->setText("Restart to activate!");
+	ui.labelMessage->setText("*Restart to activate!");
 }
 
 void TeamRadarDlg::onConnectedToServer(bool connected) {
 	ui.labelLight->setPixmap(connected ? QPixmap(":/Images/Green.png")
 									   : QPixmap(":/Images/Red.png"));
+}
+
+void TeamRadarDlg::onReconnection()
+{
+	setting->setServerAddress(ui.leServerAddress->text());
+	setting->setServerPort(ui.sbPort->value());
+	setting->setUserName(getUserName());
+	Connection::getInstance(this)->connectToServer();
 }
