@@ -4,30 +4,22 @@ PROVIDER = CongChen
 QT += sql network
 
 include(EV.pri)
-
-win32 {
-DESTDIR = $$IDE_BUILD_TREE/lib/qtcreator/plugins/$$(PROVIDER)
-
-LIBS += -L$$IDE_BUILD_TREE/lib/qtcreator/ \
-		-L$$IDE_BUILD_TREE/lib/qtcreator/plugins/Nokia
-}
-macx {
-#DESTDIR = $$IDE_BUILD_TREE/bin/QtCreator.app/Contents/PlugIns/$$(PROVIDER)
-
-LIBS += -L$$IDE_BUILD_TREE/bin/QtCreator.app/Contents/Plugins \
-		-L$$IDE_BUILD_TREE/bin/QtCreator.app/Contents/PlugIns/Nokia
-}
-
 include($$IDE_SOURCE_TREE/src/qtcreatorplugin.pri)
 include($$IDE_SOURCE_TREE/src/plugins/coreplugin/coreplugin.pri)
 include($$IDE_SOURCE_TREE/src/plugins/projectexplorer/projectexplorer.pri)
 include($$IDE_SOURCE_TREE/src/plugins/vcsbase/vcsbase.pri)
 
-INCLUDEPATH += ../ImageColorBoolModel \
-			   $$IDE_SOURCE_TREE/src \
-			   $$IDE_SOURCE_TREE/src/plugins \
-			   $$IDE_SOURCE_TREE/src/libs \
-			   $$IDE_SOURCE_TREE/src/libs/extensionsystem
+win32 {
+LIBS += -L$$IDE_LIBRARY_PATH \
+		-L$$IDE_PLUGIN_PATH/Nokia
+}
+macx {
+LIBS += -L$$IDE_BUILD_TREE/bin/QtCreator.app/Contents/Plugins \
+		-L$$IDE_BUILD_TREE/bin/QtCreator.app/Contents/PlugIns/Nokia
+}
+
+
+INCLUDEPATH += ../ImageColorBoolModel
 
 # Input
 HEADERS += ChatWindow.h \
