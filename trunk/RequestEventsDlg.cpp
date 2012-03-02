@@ -1,6 +1,6 @@
 #include "RequestEventsDlg.h"
-#include "../ImageColorBoolModel/ImageColorBoolProxy.h"
-#include "../ImageColorBoolModel/ImageColorBoolDelegate.h"
+#include "ImageColorBoolProxy.h"
+#include "ImageColorBoolDelegate.h"
 #include "Connection.h"
 #include "PeerManager.h"
 #include <QSqlTableModel>

@@ -1,6 +1,6 @@
 #include "RecipientsDlg.h"
-#include "../ImageColorBoolModel/ImageColorBoolProxy.h"
-#include "../ImageColorBoolModel/ImageColorBoolDelegate.h"
+#include "ImageColorBoolProxy.h"
+#include "ImageColorBoolDelegate.h"
 #include "Setting.h"
 #include <QTableView>
 #include <QDialogButtonBox>
