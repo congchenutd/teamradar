@@ -6,26 +6,24 @@ QT += sql network
 include(EV.pri)
 
 win32 {
-	PLUGIN_BUILD_PATH = $$IDE_BUILD_PATH/lib/qtcreator/plugins
+DESTDIR = $$IDE_BUILD_TREE/lib/qtcreator/plugins/$$(PROVIDER)
+
+LIBS += -L$$IDE_BUILD_TREE/lib/qtcreator/ \
+		-L$$IDE_BUILD_TREE/lib/qtcreator/plugins/Nokia
 }
 macx {
-	PLUGIN_BUILD_PATH = $$IDE_BUILD_PATH/bin/QtCreator/Contents/PlugIns
 }
 
-DESTDIR = $$PLUGIN_BUILD_PATH/$$(PROVIDER)
-LIBS += -L$$IDE_BUILD_PATH/lib/qtcreator/ \
-		-L$$IDE_BUILD_PATH/lib/qtcreator/plugins/Nokia
-
-include($$IDE_SOURCE_PATH/src/qtcreatorplugin.pri)
-include($$IDE_SOURCE_PATH/src/plugins/coreplugin/coreplugin.pri)
-include($$IDE_SOURCE_PATH/src/plugins/projectexplorer/projectexplorer.pri)
-include($$IDE_SOURCE_PATH/src/plugins/vcsbase/vcsbase.pri)
+include($$IDE_SOURCE_TREE/src/qtcreatorplugin.pri)
+include($$IDE_SOURCE_TREE/src/plugins/coreplugin/coreplugin.pri)
+include($$IDE_SOURCE_TREE/src/plugins/projectexplorer/projectexplorer.pri)
+include($$IDE_SOURCE_TREE/src/plugins/vcsbase/vcsbase.pri)
 
 INCLUDEPATH += ../ImageColorBoolModel \
-			   $$IDE_SOURCE_PATH/src \
-			   $$IDE_SOURCE_PATH/src/plugins \
-			   $$IDE_SOURCE_PATH/src/libs \
-			   $$IDE_SOURCE_PATH/src/libs/extensionsystem
+			   $$IDE_SOURCE_TREE/src \
+			   $$IDE_SOURCE_TREE/src/plugins \
+			   $$IDE_SOURCE_TREE/src/libs \
+			   $$IDE_SOURCE_TREE/src/libs/extensionsystem
 
 # Input
 HEADERS += ChatWindow.h \
