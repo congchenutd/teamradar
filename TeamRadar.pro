@@ -9,15 +9,8 @@ include($$IDE_SOURCE_TREE/src/plugins/coreplugin/coreplugin.pri)
 include($$IDE_SOURCE_TREE/src/plugins/projectexplorer/projectexplorer.pri)
 include($$IDE_SOURCE_TREE/src/plugins/vcsbase/vcsbase.pri)
 
-win32 {
 LIBS += -L$$IDE_LIBRARY_PATH \
 		-L$$IDE_PLUGIN_PATH/Nokia
-}
-macx {
-LIBS += -L$$IDE_BUILD_TREE/bin/QtCreator.app/Contents/Plugins \
-		-L$$IDE_BUILD_TREE/bin/QtCreator.app/Contents/PlugIns/Nokia
-}
-
 
 INCLUDEPATH += ../ImageColorBoolModel
 
