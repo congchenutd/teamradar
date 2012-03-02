@@ -84,6 +84,7 @@ public:
 	void setUserName(const QString& name) { userName = name; }
 	void setReadyForUse();
 
+	void connectToServer();
 	void send(const QByteArray& header, const QByteArray& body = QByteArray());
 	void send(const QByteArray& header, const QList<QByteArray>& bodies);
 

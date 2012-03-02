@@ -187,6 +187,13 @@ void Connection::setReadyForUse()
 	emit connectionStatusChanged(true);
 }
 
+void Connection::connectToServer()
+{
+	Setting* setting = Setting::getInstance();
+	setUserName(setting->getUserName());
+	connectToHost(setting->getServerAddress(), setting->getServerPort());
+}
+
 //////////////////////////////////////////////////////////////////////////
 Receiver* Receiver::instance = 0;
 
