@@ -83,7 +83,7 @@ void TeamRadarDlg::save()
 	DeveloperInfo userInfo = model->getUserInfo(getUserName());
 	userInfo.image = photoPath;
 	userInfo.color = ui.labelColor->getColor();
-	model->updateUser(userInfo);
+	PeerModel::updateUser(userInfo);
 
 	// send settings to the server
 	registerPhoto();

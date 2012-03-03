@@ -15,9 +15,9 @@
 PeerManager::PeerManager(QObject *parent)
 	: QObject(parent), view(0)
 {
-	modelOnline = new PeerModel(this);
-	modelOnline->setTable("Peers");
-	modelOnline->select();
+	modelPeers = new PeerModel(this);
+	modelPeers->setTable("Peers");
+	modelPeers->select();
 
 	modelAll = new QSqlTableModel(this);
 	modelAll->setEditStrategy(QSqlTableModel::OnManualSubmit);
@@ -47,11 +47,11 @@ PeerManager* PeerManager::getInstance()
 PeerManager* PeerManager::instance = 0;
 
 QString PeerManager::getImage(const QString& userName) const {
-	return modelOnline->getUserInfo(userName).image;
+	return modelPeers->getUserInfo(userName).image;
 }
 
 QColor PeerManager::getDeveloperColor(const QString& userName) {
-	return modelOnline->getUserInfo(userName).color;
+	return modelPeers->getUserInfo(userName).color;
 }
 
 void PeerManager::refreshUserList() {
@@ -59,10 +59,10 @@ void PeerManager::refreshUserList() {
 	Sender::getInstance()->sendUserListRequest();
 }
 
-// online user list
+// teammates list
 void PeerManager::onUserList(const QList<QByteArray>& list)
 {
-	modelOnline->makeAllOffline();
+	modelPeers->makeAllOffline();
 	foreach(QString name, list)
 		setUserOnline(name, true);
 }
@@ -74,11 +74,11 @@ void PeerManager::onAllUsers(const QList<QByteArray>& list)
 	foreach(QByteArray userName, list)
 	{
 		int lastRow = modelAll->rowCount();
-		bool result = modelAll->insertRow(lastRow);
-		result = modelAll->setData(modelAll->index(lastRow, 0), userName);
+		modelAll->insertRow(lastRow);
+		modelAll->setData(modelAll->index(lastRow, 0), userName);
 		DeveloperInfo developerInfo = PeerModel::getUserInfo(userName);
-		result = modelAll->setData(modelAll->index(lastRow, 1), developerInfo.image);
-		result = modelAll->setData(modelAll->index(lastRow, 2), true);
+		modelAll->setData(modelAll->index(lastRow, 1), developerInfo.image);
+		modelAll->setData(modelAll->index(lastRow, 2), true);
 	}
 	modelAll->submitAll();
 }
@@ -87,10 +87,10 @@ void PeerManager::onAllUsers(const QList<QByteArray>& list)
 void PeerManager::setUserOnline(const QString& name, bool online)
 {
 	// update online info
-	DeveloperInfo user = modelOnline->getUserInfo(name);
+	DeveloperInfo user = modelPeers->getUserInfo(name);
 	user.online = online;
-	modelOnline->updateUser(user);
-	modelOnline->select();
+	PeerModel::updateUser(user);
+	modelPeers->select();
 
 	// update photo, color
 	if(online && Setting::getInstance()->getUserName() != name)
@@ -118,10 +118,10 @@ void PeerManager::onPhotoResponse(const QString& fileName, const QByteArray& pho
 	}
 
 	// update the db
-	DeveloperInfo userInfo = modelOnline->getUserInfo(userName);
+	DeveloperInfo userInfo = modelPeers->getUserInfo(userName);
 	userInfo.image = filePath;
-	modelOnline->updateUser(userInfo);
-	modelOnline->select();
+	PeerModel::updateUser(userInfo);
+	modelPeers->select();
 
 	// ask the node to use the new photo
 	if(view != 0)
@@ -130,10 +130,10 @@ void PeerManager::onPhotoResponse(const QString& fileName, const QByteArray& pho
 
 void PeerManager::onColorResponse(const QString& userName, const QByteArray& color)
 {
-	DeveloperInfo userInfo = modelOnline->getUserInfo(userName);
+	DeveloperInfo userInfo = modelPeers->getUserInfo(userName);
 	userInfo.color = QString(color);
-	modelOnline->updateUser(userInfo);
-	modelOnline->select();
+	PeerModel::updateUser(userInfo);
+	modelPeers->select();
 }
 
 void PeerManager::onEvent(const TeamRadarEvent& event)
