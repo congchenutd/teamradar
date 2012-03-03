@@ -80,13 +80,13 @@ public:
 
 	Connection(QObject* parent = 0);
 	QString getUserName()   const { return userName; }
-	bool    isReadyForUse() const { return ready;    }
+	bool    isReadyForUse() const { return state() == ConnectedState && ready;    }
 	void setUserName(const QString& name) { userName = name; }
 	void setReadyForUse();
 
-	void connectToServer();
 	void send(const QByteArray& header, const QByteArray& body = QByteArray());
 	void send(const QByteArray& header, const QList<QByteArray>& bodies);
+	void reconnect();
 
 protected:
 	void timerEvent(QTimerEvent* timerEvent);

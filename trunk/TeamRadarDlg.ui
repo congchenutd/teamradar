@@ -25,12 +25,12 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QGroupBox" name="groupBox_2">
+        <widget class="QGroupBox" name="groupConnection">
          <property name="title">
-          <string>Server</string>
+          <string>Connection</string>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
@@ -75,11 +75,18 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QPushButton" name="btConnect">
+            <property name="text">
+             <string>Connect</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_3">
+        <widget class="QGroupBox" name="groupClient">
          <property name="title">
           <string>Client</string>
          </property>

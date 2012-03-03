@@ -58,13 +58,13 @@ TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QWidget(parent)
 	ui.tvPeers->hideColumn(model->ONLINE);
 	resizeTable();
 
-	connect(model,              SIGNAL(selected()), this, SLOT(resizeTable()));
-	connect(ui.leServerAddress, SIGNAL(textEdited(QString)), this, SLOT(onReconnection()));
-	connect(ui.sbPort,          SIGNAL(valueChanged(int)),   this, SLOT(onReconnection()));
-	connect(ui.leUserName,      SIGNAL(textEdited(QString)), this, SLOT(onReconnection()));
-	connect(Connection::getInstance(), SIGNAL(connectionStatusChanged(bool)), this, SLOT(onConnectedToServer(bool)));
+	connection = Connection::getInstance();
+	connect(model,        SIGNAL(selected()), this, SLOT(resizeTable()));
+	connect(ui.btConnect, SIGNAL(clicked()),  this, SLOT(onConnect()));
+	connect(connection,   SIGNAL(connectionStatusChanged(bool)),
+			this, SLOT(onConnectedToServer(bool)));
 
-	onConnectedToServer(Connection::getInstance()->isReadyForUse());   // init light
+	onConnectedToServer(connection->isReadyForUse());   // init light
 }
 
 void TeamRadarDlg::save()
@@ -168,12 +168,12 @@ void TeamRadarDlg::onShowHint() {
 void TeamRadarDlg::onConnectedToServer(bool connected) {
 	ui.labelLight->setPixmap(connected ? QPixmap(":/Images/Green.png")
 									   : QPixmap(":/Images/Red.png"));
+	ui.groupClient->setEnabled(connected);
 }
 
-void TeamRadarDlg::onReconnection()
+void TeamRadarDlg::onConnect()
 {
 	setting->setServerAddress(ui.leServerAddress->text());
 	setting->setServerPort(ui.sbPort->value());
-	setting->setUserName(getUserName());
-	Connection::getInstance(this)->connectToServer();
+	connection->reconnect();
 }

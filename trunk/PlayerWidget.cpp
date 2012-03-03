@@ -305,7 +305,7 @@ void PlayerWidget::showEvent(QShowEvent*)
 	static bool firstTime = true;
 	if(firstTime)
 	{
-		peerManager->refreshUserList();
+//		peerManager->refreshUserList();
 		firstTime = false;
 	}
 }

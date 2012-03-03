@@ -187,10 +187,11 @@ void Connection::setReadyForUse()
 	emit connectionStatusChanged(true);
 }
 
-void Connection::connectToServer()
+void Connection::reconnect()
 {
+	if(state() == ConnectedState)
+		disconnectFromHost();
 	Setting* setting = Setting::getInstance();
-	setUserName(setting->getUserName());
 	connectToHost(setting->getServerAddress(), setting->getServerPort());
 }
 

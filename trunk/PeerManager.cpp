@@ -30,7 +30,7 @@ PeerManager::PeerManager(QObject *parent)
 	connect(receiver, SIGNAL(photoResponse(QString, QByteArray)), this, SLOT(onPhotoResponse(QString, QByteArray)));
 	connect(receiver, SIGNAL(colorResponse(QString, QByteArray)), this, SLOT(onColorResponse(QString, QByteArray)));
 	connect(receiver, SIGNAL(newEvent(TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
-	connect(Connection::getInstance(), SIGNAL(connectionStatusChanged(bool)), this, SLOT(refreshUserList()));
+//	connect(Connection::getInstance(), SIGNAL(connectionStatusChanged(bool)), this, SLOT(refreshUserList()));
 
 #ifdef OS_DESKTOP
 	connect(MessageCollector::getInstance(), SIGNAL(localEvent(TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
@@ -55,8 +55,8 @@ QColor PeerManager::getDeveloperColor(const QString& userName) {
 }
 
 void PeerManager::refreshUserList() {
-	Sender::getInstance()->sendUserListRequest();
 	Sender::getInstance()->sendAllUsersRequest();
+	Sender::getInstance()->sendUserListRequest();
 }
 
 // online user list
