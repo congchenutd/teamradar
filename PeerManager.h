@@ -21,7 +21,7 @@ public:
 	static PeerManager* getInstance();
 	QString getImage(const QString& userName) const;
 	QColor getDeveloperColor(const QString& userName);
-	PeerModel*      getPeerModel()     const { return modelOnline; }  // the underlying models
+	PeerModel*      getPeerModel()     const { return modelPeers; }  // the underlying models
 	QSqlTableModel* getAllPeersModel() const { return modelAll; }
 	void setView(TeamRadarView* v) { view = v; }
 
@@ -47,7 +47,7 @@ private:
 
 private:
 	static PeerManager* instance;
-	PeerModel*      modelOnline;   // online users
+	PeerModel*      modelPeers;    // teammates
 	QSqlTableModel* modelAll;      // all logged users
 	TeamRadarView* view;
 };
