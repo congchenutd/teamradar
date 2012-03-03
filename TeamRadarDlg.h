@@ -10,6 +10,7 @@
 class Setting;
 class PeerManager;
 class PeerModel;
+class Connection;
 
 class TeamRadarDlg : public QWidget
 {
@@ -27,7 +28,7 @@ private slots:
 	void onDelete();
 	void onShowHint();
 	void onConnectedToServer(bool connected);
-	void onReconnection();
+	void onConnect();
 
 private:
 	QString guessUserName() const;   // initialize user name
@@ -39,6 +40,7 @@ private:
 	Setting*     setting;
 	PeerModel*   model;
 	PeerManager* peerManager;
+	Connection*  connection;
 };
 
 
