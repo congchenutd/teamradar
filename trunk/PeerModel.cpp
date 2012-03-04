@@ -45,11 +45,6 @@ void PeerModel::createTables()
 			   Online  bool, \
 			   Receive bool \
 			   )");
-	query.exec("create table AllPeers( \
-			   Name    varchar primary key, \
-			   Image   varchar, \
-			   Selected bool \
-			   )");
 }
 
 void PeerModel::makeAllOffline()
@@ -86,27 +81,6 @@ DeveloperInfo PeerModel::getUserInfo(const QString& name)
 		result.receive = query.value(3).toBool();
 	}
 	return result;
-}
-
-QPixmap PeerModel::toGrayPixmap(const QImage& colorImage)
-{
-	int width  = colorImage.width();
-	int height = colorImage.height();
-	QImage grayImage(width, height, QImage::Format_RGB32);
-	for(int i=0; i<width; ++i)
-		for(int j=0; j<height; ++j)
-		{
-			int pixel = colorImage.pixel(i, j);
-			int alpha = qAlpha(pixel);
-			if(alpha == 0)   // make transparent pixel white
-				grayImage.setPixel(i, j, qRgb(255, 255, 255));
-			else
-			{
-				int gray = qGray(pixel);
-				grayImage.setPixel(i, j, qRgb(gray, gray, gray));
-			}
-		}
-	return QPixmap::fromImage(grayImage);
 }
 
 bool PeerModel::isBlocked(const QString& name) {

@@ -50,7 +50,7 @@ bool Connection::readHeader()
 
 	dataType = receiver->guessDataType(buffer);  // guess payload type from header
 	buffer.clear();
-	
+
 	return dataType != Receiver::Undefined;
 }
 
@@ -208,28 +208,28 @@ Receiver* Receiver::getInstance()
 Receiver::Receiver()
 {
 	// header -> type id
-	dataTypes.insert("GREETING",              Greeting);
-	dataTypes.insert("EVENT_RESPONSE",        EventsResponse);
-	dataTypes.insert("EVENT",                 Event);
-	dataTypes.insert("PHOTO_RESPONSE",        PhotoResponse);
-	dataTypes.insert("USERLIST_RESPONSE",     UserListResponse);
-	dataTypes.insert("ALLUSERS_RESPONSE",     ALLUsersResponse);
-	dataTypes.insert("COLOR_RESPONSE",        ColorResponse);
-	dataTypes.insert("CHAT",                  Chat);
-	dataTypes.insert("TIMESPAN_RESPONSE",     TimeSpanResponse);
-	dataTypes.insert("PROJECTS_RESPONSE",     ProjectsResponse);
+	dataTypes.insert("GREETING",          Greeting);
+	dataTypes.insert("CHAT",              Chat);
+	dataTypes.insert("EVENT",             Event);
+	dataTypes.insert("EVENTS_REPLY",      EventsReply);
+	dataTypes.insert("TEAMMEMBERS_REPLY", TeamMembersReply);
+	dataTypes.insert("COLOR_REPLY",       ColorReply);
+	dataTypes.insert("PHOTO_REPLY",       PhotoReply);
+	dataTypes.insert("ONLINE_REPLY",      OnlineReply);
+	dataTypes.insert("TIMESPAN_REPLY",    TimeSpanReply);
+	dataTypes.insert("PROJECTS_REPLY",    ProjectsReply);
 
 	// type id -> parser
-	parsers.insert(Greeting,            &Receiver::parseGreeting);
-	parsers.insert(EventsResponse,      &Receiver::parseEventsResponse);
-	parsers.insert(Event,               &Receiver::parseEvent);
-	parsers.insert(UserListResponse,    &Receiver::parseUserList);
-	parsers.insert(ALLUsersResponse,    &Receiver::parseAllUsers);
-	parsers.insert(PhotoResponse,       &Receiver::parsePhoto);
-	parsers.insert(ColorResponse,       &Receiver::parseColor);
-	parsers.insert(Chat,                &Receiver::parseChat);
-	parsers.insert(TimeSpanResponse,    &Receiver::parseTimeSpan);
-	parsers.insert(ProjectsResponse,    &Receiver::parseProjects);
+	parsers.insert(Greeting,         &Receiver::parseGreeting);
+	parsers.insert(Chat,             &Receiver::parseChat);
+	parsers.insert(Event,            &Receiver::parseEvent);
+	parsers.insert(EventsReply,      &Receiver::parseEventsReply);
+	parsers.insert(TeamMembersReply, &Receiver::parseTeamMembersReply);
+	parsers.insert(PhotoReply,       &Receiver::parsePhotoReply);
+	parsers.insert(ColorReply,       &Receiver::parseColorReply);
+	parsers.insert(OnlineReply,      &Receiver::parseOnlinerReply);
+	parsers.insert(TimeSpanReply,    &Receiver::parseTimeSpanReply);
+	parsers.insert(ProjectsReply,    &Receiver::parseProjectsReply);
 }
 
 Receiver::DataType Receiver::guessDataType(const QByteArray& h)
@@ -260,39 +260,48 @@ void Receiver::parseEvent(const QByteArray& buffer)
 		emit newEvent(TeamRadarEvent(sections[0], sections[1], sections[2], sections[3]));
 }
 
-void Receiver::parseUserList(const QByteArray& buffer) {
-	emit userList(buffer.split(Connection::Delimiter1));
+void Receiver::parseTeamMembersReply(const QByteArray& buffer) {
+	emit teamMembersReply(buffer.split(Connection::Delimiter1));
 }
-void Receiver::parseAllUsers(const QByteArray& buffer) {
-	emit allUsers(buffer.split(Connection::Delimiter1));
+
+void Receiver::parseOnlinerReply(const QByteArray& buffer)
+{
+	int seperator = buffer.indexOf(Connection::Delimiter1);
+	if(seperator != -1)
+	{
+		QString targetUser = buffer.left(seperator);
+		QByteArray online = buffer.right(buffer.length() - seperator - 1);
+		emit onlineReply(targetUser, online == "TRUE");
+	}
 }
-void Receiver::parsePhoto(const QByteArray& buffer)
+
+void Receiver::parsePhotoReply(const QByteArray& buffer)
 {
 	int seperator = buffer.indexOf(Connection::Delimiter1);
 	if(seperator != -1)
 	{
 		QString fileName = buffer.left(seperator);
 		QByteArray photoData = buffer.right(buffer.length() - seperator - 1);
-		emit photoResponse(fileName, photoData);
+		emit photoReply(fileName, photoData);
 	}
 }
 
-void Receiver::parseColor(const QByteArray& buffer)
+void Receiver::parseColorReply(const QByteArray& buffer)
 {
 	int seperator = buffer.indexOf(Connection::Delimiter1);
 	if(seperator != -1)
 	{
 		QString targetUser = buffer.left(seperator);
 		QByteArray color = buffer.right(buffer.length() - seperator - 1);
-		emit colorResponse(targetUser, color);
+		emit colorReply(targetUser, color);
 	}
 }
 
-void Receiver::parseEventsResponse(const QByteArray& buffer)
+void Receiver::parseEventsReply(const QByteArray& buffer)
 {
 	QList<QByteArray> sections = buffer.split(Connection::Delimiter1);
 	if(sections.size() == 4)
-		emit eventsResponse(TeamRadarEvent(sections[0], sections[1], sections[2], sections[3]));
+		emit eventsReply(TeamRadarEvent(sections[0], sections[1], sections[2], sections[3]));
 }
 
 void Receiver::parseChat(const QByteArray& buffer)
@@ -306,20 +315,20 @@ void Receiver::parseChat(const QByteArray& buffer)
 	}
 }
 
-void Receiver::parseTimeSpan(const QByteArray& buffer)
+void Receiver::parseTimeSpanReply(const QByteArray& buffer)
 {
 	QList<QByteArray> sections = buffer.split(Connection::Delimiter1);
 	if(sections.size() == 2)
-		emit timespan(QDateTime::fromString(sections[0], Setting::dateTimeFormat),
+		emit timespanReply(QDateTime::fromString(sections[0], Setting::dateTimeFormat),
 					  QDateTime::fromString(sections[1], Setting::dateTimeFormat));
 }
 
-void Receiver::parseProjects(const QByteArray& buffer)
+void Receiver::parseProjectsReply(const QByteArray& buffer)
 {
 	if(!buffer.isEmpty())
-		emit projectsResponse(QString(buffer).split(Connection::Delimiter1));
+		emit projectsReply(QString(buffer).split(Connection::Delimiter1));
 	else
-		emit projectsResponse(QStringList());
+		emit projectsReply(QStringList());
 }
 
 
@@ -342,34 +351,34 @@ void Sender::sendEvent(const QString& event, const QString& parameters) {
 		connection->send("EVENT", QList<QByteArray>() << event.toUtf8() << parameters.toUtf8());
 }
 
-void Sender::sendUserListRequest() {
+void Sender::sendTeamMemberRequest() {
 	if(connection->isReadyForUse())
-		connection->send("REQUEST_USERLIST");
-}
-
-void Sender::sendAllUsersRequest() {
-	if(connection->isReadyForUse())
-		connection->send("REQUEST_ALLUSERS");
+		connection->send("REQ_TEAMMEMBERS");
 }
 
 void Sender::sendPhotoRequest(const QString& targetUser) {
 	if(connection->isReadyForUse())
-		connection->send("REQUEST_PHOTO", targetUser.toUtf8());
+		connection->send("REQ_PHOTO", targetUser.toUtf8());
 }
 
 void Sender::sendPhotoRegistration(const QByteArray& format, const QByteArray& photoData) {
 	if(connection->isReadyForUse())
-		connection->send("REGISTER_PHOTO", QList<QByteArray>() << format << photoData);
+		connection->send("REG_PHOTO", QList<QByteArray>() << format << photoData);
 }
 
 void Sender::sendColorRegistration(const QColor& color) {
 	if(connection->isReadyForUse())
-		connection->send("REGISTER_COLOR", color.name().toUtf8());
+		connection->send("REG_COLOR", color.name().toUtf8());
+}
+
+void Sender::sendOnlineRequest(const QString &targetUser) {
+	if(connection->isReadyForUse())
+		connection->send("REQ_ONLINE", targetUser.toUtf8());
 }
 
 void Sender::sendColorRequest(const QString& targetUser) {
 	if(connection->isReadyForUse())
-		connection->send("REQUEST_COLOR", targetUser.toUtf8());
+		connection->send("REQ_COLOR", targetUser.toUtf8());
 }
 
 void Sender::sendEventRequest(const QStringList& users, const QStringList& eventTypes,
@@ -377,7 +386,7 @@ void Sender::sendEventRequest(const QStringList& users, const QStringList& event
 							  const QStringList& phases, int fuzziness)
 {
 	if(connection->isReadyForUse())
-		connection->send("REQUEST_EVENTS",
+		connection->send("REQ_EVENTS",
 			QList<QByteArray>() << users.join(QString(Connection::Delimiter2)).toUtf8()
 								<< eventTypes.join(QString(Connection::Delimiter2)).toUtf8()
 								<< startTime.toString(Setting::dateTimeFormat).toUtf8() + Connection::Delimiter2 +
@@ -395,12 +404,12 @@ void Sender::sendChat(const QStringList& recipients, const QString& content) {
 
 void Sender::sendTimeSpanRequest() {
 	if(connection->isReadyForUse())
-		connection->send("REQUEST_TIMESPAN");
+		connection->send("REQ_TIMESPAN");
 }
 
 void Sender::sendProjectsRequest() {
 	if(connection->isReadyForUse())
-		connection->send("REQUEST_PROJECTS");
+		connection->send("REQ_PROJECTS");
 }
 
 void Sender::sendJoinProject(const QString& projectName) {
@@ -410,5 +419,5 @@ void Sender::sendJoinProject(const QString& projectName) {
 
 void Sender::sendLocationRequest(const QString& userName) {
 	if(connection->isReadyForUse())
-		connection->send("REQUEST_LOCATION", userName.toUtf8());
+		connection->send("REQ_LOCATION", userName.toUtf8());
 }

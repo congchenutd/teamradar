@@ -8,10 +8,10 @@
 #include "PeerModel.h"
 
 // Handles the (login/out) status of both itself and peers, and configurations of peers
-class PeerModel;
 struct TeamRadarEvent;
+class PeerModel;
 class TeamRadarView;
-class QSqlTableModel;
+class Sender;
 
 class PeerManager : public QObject
 {
@@ -22,7 +22,6 @@ public:
 	QString getImage(const QString& userName) const;
 	QColor getDeveloperColor(const QString& userName);
 	PeerModel*      getPeerModel()     const { return modelPeers; }  // the underlying models
-	QSqlTableModel* getAllPeersModel() const { return modelAll; }
 	void setView(TeamRadarView* v) { view = v; }
 
 signals:
@@ -33,10 +32,10 @@ public slots:
 	void refreshUserList();      // ask the server for online user, and all users list
 
 private slots:
-	void onUserList(const QList<QByteArray>& list);
 	void onAllUsers(const QList<QByteArray>& list);
-	void onPhotoResponse(const QString& fileName, const QByteArray& photoData);
-	void onColorResponse(const QString& userName, const QByteArray& color);
+	void onPhotoReply (const QString& fileName, const QByteArray& photoData);
+	void onColorReply (const QString& userName, const QByteArray& color);
+	void onOnlineReply(const QString& targetUser, bool online);
 
 	// handles CONNECTED, DISCONNECTED, JOINTED messages
 	void onEvent(const TeamRadarEvent& event);
@@ -48,8 +47,8 @@ private:
 private:
 	static PeerManager* instance;
 	PeerModel*      modelPeers;    // teammates
-	QSqlTableModel* modelAll;      // all logged users
 	TeamRadarView* view;
+	Sender* sender;
 };
 
 

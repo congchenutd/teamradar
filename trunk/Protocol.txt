@@ -6,11 +6,8 @@ Server					Client
 
 	<- Register_Color
 
-	<- Request_UserList    // for online users
-	-> UserList_Response
-
-	<- Request_AllUsers    // for all users
-	-> AllUsers_Response
+	<- REQ_TEAMMEMBERS
+	-> TEAMMEMERS_Response
 
 	<- Request_Photo
 	-> Photo_Response
@@ -40,3 +37,6 @@ Server					Client
 
 	<- Request_Location (userName)
 	-> EVENT (userName, SAVE, fileName)  // the client will update the location of userName
+
+	<- Request_Online(targetUser)              // query if the targetUser is online
+	-> OnlineResponse(targetUser, online)

@@ -29,6 +29,7 @@ private slots:
 	void onShowHint();
 	void onConnectedToServer(bool connected);
 	void onConnect();
+	void onDirty();
 
 private:
 	QString guessUserName() const;   // initialize user name
@@ -41,6 +42,7 @@ private:
 	PeerModel*   model;
 	PeerManager* peerManager;
 	Connection*  connection;
+	bool dirty;
 };
 
 

@@ -15,6 +15,9 @@ public:
 protected:
 	void mousePressEvent(QMouseEvent*);
 
+signals:
+	void valueChanged();
+
 private:
 	QColor color;
 };

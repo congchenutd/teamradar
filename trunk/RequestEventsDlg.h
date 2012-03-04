@@ -2,9 +2,9 @@
 #define RequestEventsDlg_h__
 
 #include <QDialog>
+#include <QStandardItemModel>
 #include "ui_RequestEventsDlg.h"
 
-class QSqlTableModel;
 class RequestEventsDlg : public QDialog
 {
 	Q_OBJECT
@@ -28,7 +28,7 @@ private:
 
 private:
 	Ui::RequestEventsDlgClass ui;
-	QSqlTableModel* allUsersModel;
+	QStandardItemModel model;
 
 	enum {NAME, IMAGE, SELECTED};   // for users list
 };

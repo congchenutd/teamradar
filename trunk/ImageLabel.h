@@ -11,6 +11,9 @@ public:
 
 protected:
 	void mousePressEvent(QMouseEvent*);
+
+signals:
+	void valueChanged();
 };
 
 #endif // IMAGELABEL_H

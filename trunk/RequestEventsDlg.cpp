@@ -3,24 +3,37 @@
 #include "ImageColorBoolDelegate.h"
 #include "Connection.h"
 #include "PeerManager.h"
+#include "Defines.h"
 #include <QSqlTableModel>
 
 RequestEventsDlg::RequestEventsDlg(QWidget* parent) : QDialog(parent)
 {
 	ui.setupUi(this);
-#if defined(Q_WS_SIMULATOR) || defined(Q_OS_SYMBIAN)
+#ifdef OS_MOBILE
 	showMaximized();
 #endif
-	
-	// User list
-	allUsersModel = PeerManager::getInstance()->getAllPeersModel();
+
+	// Copy from peerModel
+	QSqlTableModel* peerModel = PeerManager::getInstance()->getPeerModel();
+	peerModel->setFilter("1");    // reset filter to show everybody
+	model.setColumnCount(3);
+	model.setHeaderData(NAME,     Qt::Horizontal, tr("Name"));
+	model.setHeaderData(IMAGE,    Qt::Horizontal, tr("Image"));
+	model.setHeaderData(SELECTED, Qt::Horizontal, tr("Selected"));
+	for(int row = 0; row < peerModel->rowCount(); ++row)
+	{
+		model.insertRow(row);
+		model.setData(model.index(row, NAME),  peerModel->data(peerModel->index(row, PeerModel::NAME)));
+		model.setData(model.index(row, IMAGE), peerModel->data(peerModel->index(row, PeerModel::IMAGE)));
+		model.setData(model.index(row, SELECTED), false);
+	}
 
 	ImageColorBoolProxy* proxy = new ImageColorBoolProxy(this);
 	proxy->setColumnType(NAME,     ImageColorBoolProxy::NameColumn);
 	proxy->setColumnType(IMAGE,    ImageColorBoolProxy::ImageColumn);
 	proxy->setColumnType(SELECTED, ImageColorBoolProxy::BoolColumn);
 	proxy->setImageColumn(IMAGE);
-	proxy->setSourceModel(allUsersModel);
+	proxy->setSourceModel(&model);
 
 	ui.tvUsers->setModel(proxy);
 	ImageColorBoolDelegate* usersDelegate = new ImageColorBoolDelegate(proxy, ui.tvUsers);
@@ -33,6 +46,7 @@ RequestEventsDlg::RequestEventsDlg(QWidget* parent) : QDialog(parent)
 	ui.tvUsers->resizeColumnsToContents();
 	ui.tvUsers->horizontalHeader()->setStretchLastSection(true);
 
+	// init fussiness
 	onFussiness(Setting::getInstance()->value("PartitionFuzziness").toInt());
 
 	// fetch time span from the server
@@ -40,7 +54,7 @@ RequestEventsDlg::RequestEventsDlg(QWidget* parent) : QDialog(parent)
 	ui.dtEnd  ->setDisplayFormat(Setting::dateTimeFormat);
 	ui.dtStart->setDateTime(QDateTime::currentDateTime());
 	ui.dtEnd  ->setDateTime(QDateTime::currentDateTime());
-	connect(Receiver::getInstance(), SIGNAL(timespan(QDateTime, QDateTime)), this, SLOT(onTimeSpan(QDateTime, QDateTime)));
+	connect(Receiver::getInstance(), SIGNAL(timespanReply(QDateTime, QDateTime)), this, SLOT(onTimeSpan(QDateTime, QDateTime)));
 	Sender::getInstance()->sendTimeSpanRequest();
 
 	connect(ui.sliderFuzziness, SIGNAL(valueChanged(int)), this, SLOT(onFussiness(int)));
@@ -49,9 +63,9 @@ RequestEventsDlg::RequestEventsDlg(QWidget* parent) : QDialog(parent)
 QStringList RequestEventsDlg::getUserList() const
 {
 	QStringList result;
-	for(int row=0; row<allUsersModel->rowCount(); ++row)
-		if(allUsersModel->data(allUsersModel->index(row, SELECTED)).toBool())           // if selected
-			result << allUsersModel->data(allUsersModel->index(row, NAME)).toString();  // add name
+	for(int row=0; row<model.rowCount(); ++row)
+		if(model.data(model.index(row, SELECTED)).toBool())           // if selected
+			result << model.data(model.index(row, NAME)).toString();  // add name
 	return result;
 }
 

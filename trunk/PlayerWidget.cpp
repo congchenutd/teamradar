@@ -68,14 +68,11 @@ PlayerWidget::PlayerWidget(QWidget *parent) :
 	connect(ui.tvPlaylist,  SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onPlaylistCoubleClicked(QModelIndex)));
 
 	connect(MessageCollector::getInstance(), SIGNAL(localEvent(TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
-	connect(Connection:: getInstance(), SIGNAL(connectionStatusChanged(bool)),  this, SLOT(onConnectedToServer(bool)));
+	connect(Connection::getInstance(), SIGNAL(connectionStatusChanged(bool)),  this, SLOT(onConnectedToServer(bool)));
 	connect(peerManager, SIGNAL(userOnline(TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
-	connect(Receiver::getInstance(), SIGNAL(newEvent      (TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
-	connect(Receiver::getInstance(), SIGNAL(recentEvent   (TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
-	connect(Receiver::getInstance(), SIGNAL(eventsResponse(TeamRadarEvent)), this, SLOT(onEventDownloaded(TeamRadarEvent)));
-	connect(Receiver::getInstance(), SIGNAL(chatMessage(QString, QString)),  this, SLOT(onChatMessage(QString, QString)));
-	connect(Receiver::getInstance(), SIGNAL(locationResponse(QString,QString)),
-			this, SLOT(onLocationResponse(QString, QString)));
+	connect(Receiver::getInstance(), SIGNAL(newEvent   (TeamRadarEvent)),   this, SLOT(onEvent(TeamRadarEvent)));
+	connect(Receiver::getInstance(), SIGNAL(eventsReply(TeamRadarEvent)),   this, SLOT(onEventDownloaded(TeamRadarEvent)));
+	connect(Receiver::getInstance(), SIGNAL(chatMessage(QString, QString)), this, SLOT(onChatMessage(QString, QString)));
 }
 
 void PlayerWidget::onShowPlaylist(bool show)
