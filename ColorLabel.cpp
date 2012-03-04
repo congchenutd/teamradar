@@ -11,6 +11,7 @@ void ColorLabel::setColor(const QColor& clr)
 		QPixmap pixmap(QSize(1000, 30));
 		pixmap.fill(color);
 		setPixmap(pixmap);
+		emit valueChanged();
 	}
 }
 

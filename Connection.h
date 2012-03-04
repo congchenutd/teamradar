@@ -16,18 +16,18 @@ class Receiver : public QObject
 
 public:
 	typedef enum {
-		Undefined,            // Format of body see below:
-		Greeting,             // GREETING: [OK, CONNECTED]/[WRONG_USER]
-		Event,                // EVENT: user#event#[parameters]#time
-							  //	  Format of parameters: parameter1#parameter2#...
-		EventsResponse,       // same as EVENT
-		PhotoResponse,        // PHOTO_RESPONSE: [filename#binary photo data]/[empty]
-		UserListResponse,     // USERLIST_RESPONSE: username1#username2#...
-		ALLUsersResponse,     // ALLUSERS_RESPONSE: username1#username2#...
-		ColorResponse,        // COLOR_RESPONSE: [username#color]/[empty]
+		Undefined,         // Format of body see below:
+		Greeting,          // GREETING: [OK, CONNECTED]/[WRONG_USER]
 		Chat,
-		TimeSpanResponse,     // TIMESPAN_RESPONSE: start#end
-		ProjectsResponse      // PROJECTS_RESPONSE: projectName1#name2...
+		Event,             // EVENT: user#event#[parameters]#time
+						   //	  Format of parameters: parameter1#parameter2#...
+		EventsReply,       // same as EVENT
+		TeamMembersReply,  // ALLUSERS_REPLY: username1#username2#...
+		PhotoReply,        // PHOTO_REPLY: [filename#binary photo data]/[empty]
+		ColorReply,        // COLOR_REPLY: [username#color]/[empty]
+		OnlineReply,       // targetUser#online
+		TimeSpanReply,     // TIMESPAN_REPLY: start#end
+		ProjectsReply      // PROJECTS_REPLY: projectName1#name2...
 	} DataType;
 
 	typedef void(Receiver::*Parser)(const QByteArray& buffer);
@@ -40,27 +40,27 @@ public:
 	void processData(Receiver::DataType dataType, const QByteArray& buffer);
 
 signals:
-	void newEvent      (const TeamRadarEvent& event);
-	void eventsResponse(const TeamRadarEvent& event);
-	void userList(const QList<QByteArray>& list);
-	void allUsers(const QList<QByteArray>& list);
-	void photoResponse(const QString& fileName,   const QByteArray& photoData);
-	void colorResponse(const QString& targetUser, const QByteArray& color);
+	void newEvent   (const TeamRadarEvent& event);
+	void eventsReply(const TeamRadarEvent& event);
+	void teamMembersReply(const QList<QByteArray>& list);
+	void onlineReply(const QString& targetUser, bool online);
+	void colorReply (const QString& targetUser, const QByteArray& color);
+	void photoReply (const QString& fileName,   const QByteArray& photoData);
 	void chatMessage(const QString& peerName, const QString& content);
-	void timespan(const QDateTime& start, const QDateTime& end);
-	void projectsResponse(const QStringList& list);
+	void timespanReply(const QDateTime& start, const QDateTime& end);
+	void projectsReply(const QStringList& list);
 
 private:
-	void parseGreeting(const QByteArray& buffer);
-	void parseEvent         (const QByteArray& buffer);
-	void parseEventsResponse(const QByteArray& buffer);
-	void parseUserList(const QByteArray& buffer);
-	void parseAllUsers(const QByteArray& buffer);
-	void parsePhoto   (const QByteArray& buffer);
-	void parseColor   (const QByteArray& buffer);
-	void parseChat    (const QByteArray& buffer);
-	void parseTimeSpan(const QByteArray& buffer);
-	void parseProjects(const QByteArray& buffer);
+	void parseGreeting        (const QByteArray& buffer);
+	void parseChat            (const QByteArray& buffer);
+	void parseEvent           (const QByteArray& buffer);
+	void parseEventsReply     (const QByteArray& buffer);
+	void parseTeamMembersReply(const QByteArray& buffer);
+	void parseOnlinerReply    (const QByteArray& buffer);
+	void parsePhotoReply      (const QByteArray& buffer);
+	void parseColorReply      (const QByteArray& buffer);
+	void parseTimeSpanReply   (const QByteArray& buffer);
+	void parseProjectsReply   (const QByteArray& buffer);
 
 private:
 	static Receiver* instance;
@@ -135,12 +135,12 @@ public:
 	static Sender* getInstance();
 	Sender();
 	void sendEvent(const QString& event, const QString& parameters);
-	void sendUserListRequest();
-	void sendAllUsersRequest();
+	void sendTeamMemberRequest();
 	void sendPhotoRegistration(const QByteArray& format, const QByteArray& photoData);
 	void sendColorRegistration(const QColor& color);
-	void sendPhotoRequest(const QString& targetUser);
-	void sendColorRequest(const QString& targetUser);
+	void sendOnlineRequest(const QString& targetUser);
+	void sendPhotoRequest (const QString& targetUser);
+	void sendColorRequest (const QString& targetUser);
 	void sendEventRequest(const QStringList& users, const QStringList& eventTypes,
 						  const QDateTime& startTime, const QDateTime& endTime,
 						  const QStringList& phases, int fuzziness);
