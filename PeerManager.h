@@ -19,36 +19,30 @@ class PeerManager : public QObject
 
 public:
 	static PeerManager* getInstance();
-	QString getImage(const QString& userName) const;
-	QColor getDeveloperColor(const QString& userName);
-	PeerModel*      getPeerModel()     const { return modelPeers; }  // the underlying models
+	QString    getImage(const QString& userName) const;
+	QColor     getDeveloperColor(const QString& userName);
+	PeerModel* getPeerModel() const { return modelPeers; }  // the underlying model
 	void setView(TeamRadarView* v) { view = v; }
 
 signals:
 	void userOnline(const TeamRadarEvent& event);
 
 // handle server messages
-public slots:
-	void refreshUserList();      // ask the server for online user, and all users list
-
 private slots:
-	void onAllUsers(const QList<QByteArray>& list);
+	void onTeamMembersReply(const QList<QByteArray>& list);
 	void onPhotoReply (const QString& fileName, const QByteArray& photoData);
 	void onColorReply (const QString& userName, const QByteArray& color);
-	void onOnlineReply(const QString& targetUser, bool online);
-
-	// handles CONNECTED, DISCONNECTED, JOINTED messages
-	void onEvent(const TeamRadarEvent& event);
-
-private:
-	PeerManager(QObject* parent = 0);
+	void onEvent(const TeamRadarEvent& event);  // DISCONNECTED/JOINTED, OPEN/CLOSE PROJECT
 	void setUserOnline(const QString& name, bool online);  // update online status
 
 private:
+	PeerManager(QObject* parent = 0);
+
+private:
 	static PeerManager* instance;
-	PeerModel*      modelPeers;    // teammates
+	PeerModel*     modelPeers;    // team members
 	TeamRadarView* view;
-	Sender* sender;
+	Sender*        sender;
 };
 
 
