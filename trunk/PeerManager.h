@@ -19,7 +19,7 @@ class PeerManager : public QObject
 
 public:
 	static PeerManager* getInstance();
-	QString    getImage(const QString& userName) const;
+	QImage     getImage(const QString& userName) const;
 	QColor     getDeveloperColor(const QString& userName);
 	PeerModel* getPeerModel() const { return modelPeers; }  // the underlying model
 	void setView(TeamRadarView* v) { view = v; }

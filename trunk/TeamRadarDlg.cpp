@@ -18,7 +18,6 @@
 
 TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QWidget(parent)
 {
-	dirty = false;
 	peerManager = PeerManager::getInstance();
 	ui.setupUi(this);
 
@@ -65,20 +64,11 @@ TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QWidget(parent)
 	connect(connection,   SIGNAL(connectionStatusChanged(bool)),
 			this, SLOT(onConnectedToServer(bool)));
 
-	connect(ui.leServerAddress, SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
-	connect(ui.sbPort,          SIGNAL(valueChanged(int)),   this, SLOT(onDirty()));
-	connect(ui.labelColor, SIGNAL(valueChanged()),      this, SLOT(onDirty()));
-	connect(ui.labelImage, SIGNAL(valueChanged()),      this, SLOT(onDirty()));
-	connect(ui.leUserName, SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
-
 	onConnectedToServer(connection->isReadyForUse());   // init light
 }
 
 void TeamRadarDlg::save()
 {
-	if(!dirty)
-		return;
-
 	// save settings
 	setting->setServerAddress(ui.leServerAddress->text());
 	setting->setServerPort(ui.sbPort->value());
@@ -186,8 +176,4 @@ void TeamRadarDlg::onConnect()
 	setting->setServerAddress(ui.leServerAddress->text());
 	setting->setServerPort(ui.sbPort->value());
 	connection->reconnect();
-}
-
-void TeamRadarDlg::onDirty() {
-	dirty = true;
 }
