@@ -43,8 +43,8 @@ PeerManager* PeerManager::getInstance()
 
 PeerManager* PeerManager::instance = 0;
 
-QString PeerManager::getImage(const QString& userName) const {
-	return modelPeers->getUserInfo(userName).image;
+QImage PeerManager::getImage(const QString& userName) const {
+	return QImage(modelPeers->getUserInfo(userName).image);
 }
 
 QColor PeerManager::getDeveloperColor(const QString& userName) {
@@ -99,7 +99,7 @@ void PeerManager::onPhotoReply(const QString& fileName, const QByteArray& photoD
 
 	// ask the node to use the new photo
 	if(view != 0)
-		view->reloadDeveloperImage(userName, QImage(filePath));
+		view->setDeveloperImage(userName, QImage(filePath));
 }
 
 void PeerManager::onColorReply(const QString& userName, const QByteArray& color)
@@ -108,6 +108,9 @@ void PeerManager::onColorReply(const QString& userName, const QByteArray& color)
 	userInfo.color = QString(color);
 	PeerModel::updateUser(userInfo);
 	modelPeers->select();
+
+	if(view != 0)
+		view->setDeveloperColor(userName, QColor(QString(color)));
 }
 
 void PeerManager::onEvent(const TeamRadarEvent& event)

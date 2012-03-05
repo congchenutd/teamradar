@@ -376,11 +376,11 @@ void TeamRadarView::clear()
 	setRoot(0);
 }
 
-void TeamRadarView::addDeveloper(const QString &name, const QString &image)
+void TeamRadarView::addDeveloper(const QString& name, const QImage& image)
 {
 	if(humanExists(name))
 		return;
-	currentHuman = new HumanNode(name, QImage(image));
+	currentHuman = new HumanNode(name, image);
 	scene()->addItem(currentHuman);
 	humans.insert(name, currentHuman);
 	currentHuman->enterCanvas();
@@ -554,7 +554,12 @@ bool TeamRadarView::viewportEvent(QEvent *event)
 	return QGraphicsView::viewportEvent(event);
 }
 
-void TeamRadarView::reloadDeveloperImage(const QString& name, const QImage& image) {
+void TeamRadarView::setDeveloperImage(const QString& name, const QImage& image) {
 	if(HumanNode* human = findDeveloper(name))
 		human->setImage(image);
+}
+
+void TeamRadarView::setDeveloperColor(const QString& name, const QColor& color) {
+	if(HumanNode* human = findDeveloper(name))
+		human->setColor(color);
 }

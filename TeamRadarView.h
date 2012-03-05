@@ -42,12 +42,13 @@ public:
 	TeamRadarNode* createNode(bool isDir, const QString& name, TeamRadarNode* owner);     // factory
 	bool humanExists(const QString& name);
 
-	void addDeveloper(const QString& name, const QString& image);
+	void addDeveloper(const QString& name, const QImage& image);
 	void moveDeveloperTo(const QString& name, const QString& relativePath);
 	void removeDeveloper(const QString& name);
 	void setDeveloperMode(const QString& developerName, const QString& mode);
 	HumanNode* findDeveloper(const QString& name);
-	void reloadDeveloperImage(const QString& name, const QImage& image);
+	void setDeveloperImage(const QString& name, const QImage& image);
+	void setDeveloperColor(const QString& name, const QColor& color);
 
 protected:
 	void keyPressEvent(QKeyEvent*   event);
