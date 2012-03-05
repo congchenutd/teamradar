@@ -23,12 +23,11 @@ PeerManager::PeerManager(QObject *parent)
 	sender = Sender::getInstance();
 
 	Receiver* receiver = Receiver::getInstance();
-	connect(receiver, SIGNAL(teamMembersReply(QList<QByteArray>)), this, SLOT(onAllUsers(QList<QByteArray>)));
-	connect(receiver, SIGNAL(onlineReply(QString, bool)),       this, SLOT(onOnlineReply(QString, bool)));
+	connect(receiver, SIGNAL(teamMembersReply(QList<QByteArray>)), this, SLOT(onTeamMembersReply(QList<QByteArray>)));
+	connect(receiver, SIGNAL(onlineReply(QString, bool)),       this, SLOT(setUserOnline(QString, bool)));
 	connect(receiver, SIGNAL(photoReply (QString, QByteArray)), this, SLOT(onPhotoReply (QString, QByteArray)));
 	connect(receiver, SIGNAL(colorReply (QString, QByteArray)), this, SLOT(onColorReply (QString, QByteArray)));
 	connect(receiver, SIGNAL(newEvent(TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
-//	connect(Connection::getInstance(), SIGNAL(connectionStatusChanged(bool)), this, SLOT(refreshUserList()));
 
 #ifdef OS_DESKTOP
 	connect(MessageCollector::getInstance(), SIGNAL(localEvent(TeamRadarEvent)), this, SLOT(onEvent(TeamRadarEvent)));
@@ -52,11 +51,7 @@ QColor PeerManager::getDeveloperColor(const QString& userName) {
 	return modelPeers->getUserInfo(userName).color;
 }
 
-void PeerManager::refreshUserList() {
-	Sender::getInstance()->sendTeamMemberRequest();
-}
-
-void PeerManager::onAllUsers(const QList<QByteArray>& list)
+void PeerManager::onTeamMembersReply(const QList<QByteArray>& list)
 {
 	foreach(const QString& name, list)
 	{
@@ -75,7 +70,7 @@ void PeerManager::setUserOnline(const QString& name, bool online)
 	PeerModel::updateUser(user);
 	modelPeers->select();
 
-	// update photo, color
+	// update online users' locations
 	if(online && Setting::getInstance()->getUserName() != name)
 		sender->sendLocationRequest(name);
 
@@ -115,17 +110,6 @@ void PeerManager::onColorReply(const QString& userName, const QByteArray& color)
 	modelPeers->select();
 }
 
-void PeerManager::onOnlineReply(const QString& targetUser, bool online)
-{
-	setUserOnline(targetUser, online);
-//	sender->sendLocationRequest(targetUser);
-
-//	DeveloperInfo userInfo = modelPeers->getUserInfo(targetUser);
-//	userInfo.online = online;
-//	PeerModel::updateUser(userInfo);
-//	modelPeers->select();
-}
-
 void PeerManager::onEvent(const TeamRadarEvent& event)
 {
 	// peers
@@ -141,7 +125,7 @@ void PeerManager::onEvent(const TeamRadarEvent& event)
 		Setting::getInstance()->setRootPath(event.parameters);
 		Sender::getInstance()->sendJoinProject(QFileInfo(event.parameters).baseName());
 		PlayerWidget::getInstance()->reloadProject();
-		refreshUserList();   // refresh users in the same project
+		Sender::getInstance()->sendTeamMemberRequest();  // refresh member list
 	}
 	else if(event.eventType == "CLOSEPROJECT")
 	{

@@ -165,8 +165,12 @@ void PlayerWidget::play(int row)
 
 void PlayerWidget::play(const TeamRadarEvent& event)
 {
+	// ignore blocked peers
 	if(online && PeerModel::isBlocked(event.userName))
 		return;
+
+	if(event.eventType == "DISCONNECTED")
+		return ui.graphicsView->removeDeveloper(event.userName);
 
 	if(!ui.graphicsView->humanExists(event.userName))   // this overrides CONNECTED event
 		ui.graphicsView->addDeveloper(event.userName, peerManager->getImage(event.userName));
@@ -175,9 +179,6 @@ void PlayerWidget::play(const TeamRadarEvent& event)
 		ui.graphicsView->moveDeveloperTo(event.userName, event.parameters);
 	else if(event.eventType == "MODE")
 		ui.graphicsView->setDeveloperMode(event.userName, event.parameters);
-	else if(event.eventType == "DISCONNECTED") {
-		ui.graphicsView->removeDeveloper(event.userName);
-	}
 }
 
 void PlayerWidget::reloadProject() {
