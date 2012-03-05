@@ -20,6 +20,7 @@ void Setting::loadDefaults()
 	setServerPort(12345);
 
 	// client
+	setUserName(guessUserName());
 	setRootPath(QDir::currentPath());
 	setValue("UseEffects", false);   // fancy visual effects: blur, shadow
 	setValue("AfterImageDuration", 20);
@@ -181,3 +182,27 @@ QString Setting::getCompileDate() const
 	return result.isEmpty() ? "Unknown" : result;
 }
 
+// search the environmental variables for user name
+QString Setting::guessUserName() const
+{
+	QStringList envVariables;
+	envVariables << "USERNAME.*" << "USER.*" << "USERDOMAIN.*"
+				 << "HOSTNAME.*" << "DOMAINNAME.*";
+	QString result;
+	QStringList environment = QProcess::systemEnvironment();
+	foreach(QString string, envVariables)
+	{
+		int index = environment.indexOf(QRegExp(string));
+		if(index != -1)
+		{
+			QStringList stringList = environment.at(index).split('=');
+			if(stringList.size() == 2)
+			{
+				result = stringList.at(1).toUtf8();
+				break;
+			}
+		}
+	}
+
+	return result.isEmpty() ? "Unknown" : result;
+}

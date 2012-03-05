@@ -185,6 +185,14 @@ void PlayerWidget::reloadProject() {
 	ui.graphicsView->loadDir(Setting::getInstance()->getRootPath());
 }
 
+void PlayerWidget::setDeveloperImage(const QString& name, const QImage& image) {
+	ui.graphicsView->setDeveloperImage(name, image);
+}
+
+void PlayerWidget::setDeveloperColor(const QString& name, const QColor& color) {
+	ui.graphicsView->setDeveloperColor(name, color);
+}
+
 void PlayerWidget::onPlaylistClicked(const QModelIndex& idx) {
 	currentRow = idx.isValid() ? idx.row() : -1;
 }

@@ -81,7 +81,7 @@ public:
 	Connection(QObject* parent = 0);
 	QString getUserName()   const { return userName; }
 	bool    isReadyForUse() const { return state() == ConnectedState && ready;    }
-	void setUserName(const QString& name) { userName = name; }
+	void setUserName(const QString& name);
 	void setReadyForUse();
 
 	void send(const QByteArray& header, const QByteArray& body = QByteArray());

@@ -20,6 +20,16 @@ Connection::Connection(QObject* parent) : QTcpSocket(parent)
 	connect(this, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
 }
 
+void Connection::setUserName(const QString& name)
+{
+	if(userName == name)
+		return;
+
+	userName = name;
+	if(isReadyForUse())
+		send("CHANGE_NAME", name.toUtf8());
+}
+
 void Connection::onReadyRead()
 {
 	do {
@@ -157,7 +167,7 @@ void Connection::onDisconnected()
 {
 	emit connectionStatusChanged(false);
 
-	 // reconnect
+	// reconnect
 	Setting* setting = Setting::getInstance();
 	connectToHost(setting->getServerAddress(), setting->getServerPort());
 }

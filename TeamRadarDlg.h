@@ -31,7 +31,6 @@ private slots:
 	void onConnect();
 
 private:
-	QString guessUserName() const;   // initialize user name
 	QString getUserName()   const;   // convenient
 	void    registerPhoto();
 

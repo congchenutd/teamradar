@@ -36,6 +36,7 @@ public:
 
 private:
     void loadDefaults();
+	QString guessUserName() const;
 
 public:
 	static const QString dateTimeFormat;
