@@ -18,6 +18,8 @@ public:
 	PlayerWidget(QWidget* parent = 0);
 	~PlayerWidget();
 	void reloadProject();
+	void setDeveloperImage(const QString& name, const QImage& image);
+	void setDeveloperColor(const QString& name, const QColor& color);
 
 	static PlayerWidget* getInstance();
 

@@ -6,6 +6,7 @@
 #include "TeamRadarEvent.h"
 #include "ImageColorBoolDelegate.h"
 #include "ImageColorBoolProxy.h"
+#include "PlayerWidget.h"
 #include <QHostAddress>
 #include <QtGui/QTextEdit>
 #include <QtGui/QVBoxLayout>
@@ -25,8 +26,7 @@ TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QWidget(parent)
 	setting = MySetting<Setting>::getInstance();
 	ui.leServerAddress->setText (setting->getServerAddress());
 	ui.sbPort         ->setValue(setting->getServerPort());
-	ui.leUserName->setText(setting->getUserName().isEmpty() ?
-											guessUserName() : setting->getUserName());
+	ui.leUserName     ->setText (setting->getUserName());
 
 	QPixmap pixmap = QPixmap(setting->getPhotoFilePath(getUserName())).scaled(128, 128);   // photo
 	if(!pixmap.isNull())
@@ -70,49 +70,31 @@ TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QWidget(parent)
 void TeamRadarDlg::save()
 {
 	// save settings
+	QColor color = ui.labelColor->getColor();
 	setting->setServerAddress(ui.leServerAddress->text());
 	setting->setServerPort(ui.sbPort->value());
 	setting->setUserName(getUserName());
-	setting->setColor("DefaultDeveloperColor", ui.labelColor->getColor());
+	connection->setUserName(getUserName());
+	setting->setColor("DefaultDeveloperColor", color);
 
 	QString photoPath = setting->getPhotoFilePath(getUserName());
 	if(ui.labelImage->pixmap() != 0)
 		ui.labelImage->pixmap()->save(photoPath);  // save photo file
 
 	// save my photo and color info in the db
-	DeveloperInfo userInfo = model->getUserInfo(getUserName());
+	QString userName = getUserName();
+	DeveloperInfo userInfo = model->getUserInfo(userName);
 	userInfo.image = photoPath;
-	userInfo.color = ui.labelColor->getColor();
+	userInfo.color = color;
 	PeerModel::updateUser(userInfo);
 
 	// send settings to the server
 	registerPhoto();
-	Sender::getInstance()->sendColorRegistration(ui.labelColor->getColor());
-}
+	Sender::getInstance()->sendColorRegistration(color);
 
-// search the environmental variables for user name
-QString TeamRadarDlg::guessUserName() const
-{
-	QStringList envVariables;
-	envVariables << "USERNAME.*" << "USER.*" << "USERDOMAIN.*"
-				 << "HOSTNAME.*" << "DOMAINNAME.*";
-	QString result;
-	QStringList environment = QProcess::systemEnvironment();
-	foreach(QString string, envVariables)
-	{
-		int index = environment.indexOf(QRegExp(string));
-		if(index != -1)
-		{
-			QStringList stringList = environment.at(index).split('=');
-			if(stringList.size() == 2)
-			{
-				result = stringList.at(1).toUtf8();
-				break;
-			}
-		}
-	}
-
-	return result.isEmpty() ? "Unknown" : result;
+	// update local view
+	PlayerWidget::getInstance()->setDeveloperImage(userName, QImage(photoPath));
+	PlayerWidget::getInstance()->setDeveloperColor(userName, color);
 }
 
 void TeamRadarDlg::registerPhoto()
