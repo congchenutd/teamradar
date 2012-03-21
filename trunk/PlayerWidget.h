@@ -26,7 +26,6 @@ public:
 protected:
 	void closeEvent (QCloseEvent*);
 	void resizeEvent(QResizeEvent*);
-	void showEvent  (QShowEvent*);
 
 public slots:
 	void play();

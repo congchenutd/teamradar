@@ -315,11 +315,12 @@ void TeamRadarNode::setEffectsEnabled(bool enable)
 void TeamRadarNode::detectConflict()
 {
 	QList<HumanNode*> humans = getHumans();
-	foreach(HumanNode* human, humans)
-	{
-		if(human->getName() != Setting::getInstance()->getUserName())  // other developer
-			setConflicted(isDirty());
-	//	human->showConflict(humans.size() > 1);
+	if(humans.size() > 1)         // multiple developers working on this node
+		setConflicted(true);
+	else {
+		foreach(HumanNode* human, humans)
+			if(human->getName() != Setting::getInstance()->getUserName())  // other developer
+				setConflicted(isDirty());   // someone else is working on a dirty local node
 	}
 }
 
@@ -468,16 +469,16 @@ QMenu & FileNode::getContextMenu() const
 void FileNode::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
 	TeamRadarNode::paint(painter, option, widget);
-	if(dirty)
-	{
-		painter->setBrush(Qt::NoBrush);
-		painter->setPen(QPen(Qt::darkGray, 2));
-		painter->drawEllipse(boundingRect().adjusted(1, 1, -1, -1));
-	}
-	else if(conflicted)
+	if(conflicted)
 	{
 		painter->setBrush(Qt::NoBrush);
 		painter->setPen(QPen(Qt::red, 2));
+		painter->drawEllipse(boundingRect().adjusted(1, 1, -1, -1));
+	}
+	else if(dirty)
+	{
+		painter->setBrush(Qt::NoBrush);
+		painter->setPen(QPen(Qt::darkGray, 2));
 		painter->drawEllipse(boundingRect().adjusted(1, 1, -1, -1));
 	}
 }

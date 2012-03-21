@@ -178,7 +178,8 @@ void PlayerWidget::play(const TeamRadarEvent& event)
 	if(event.eventType == "SAVE")
 	{
 		ui.graphicsView->moveDeveloperTo(event.userName, event.parameters);
-		ui.graphicsView->setDirty(event.parameters, true);
+		if(event.userName == Setting::getInstance()->getUserName())   // modified by myself
+			ui.graphicsView->setDirty(event.parameters, true);
 	}
 	else if(event.eventType == "MODE")
 		ui.graphicsView->setDeveloperMode(event.userName, event.parameters);
@@ -309,16 +310,6 @@ PlayerWidget::~PlayerWidget()
 	ChatWindow::saveAllHistory();
 	ChatWindow::closeAllWindows();
 	instance = 0;
-}
-
-void PlayerWidget::showEvent(QShowEvent*)
-{
-	static bool firstTime = true;
-	if(firstTime)
-	{
-//		peerManager->refreshUserList();
-		firstTime = false;
-	}
 }
 
 PlayerWidget* PlayerWidget::getInstance()
