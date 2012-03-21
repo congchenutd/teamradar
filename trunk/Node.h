@@ -13,7 +13,7 @@ class LayeredEngine;
 class HumanNode;
 
 typedef QList<TeamRadarNode*> Nodes;
-typedef enum {LocalDirty, RemoteDirty, NotDirty} DirtyType;
+typedef enum {LocalDirty, RemoteDirty, Conflicted, NotDirty} DirtyType;
 
 // A node represent an item on the canvas
 // A node is connected to its parent with an edge, parent being the source of the edge

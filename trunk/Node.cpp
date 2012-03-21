@@ -450,14 +450,18 @@ FileNode::FileNode(TeamRadarNode* owner, const QString& name)
 
 void FileNode::setDirty(DirtyType d)
 {
-	dirty = d;
+	if(dirty == NotDirty || d == NotDirty)
+		dirty = d;
+	else if(dirty == LocalDirty  && d == RemoteDirty ||
+			dirty == RemoteDirty && d == LocalDirty)
+		dirty = Conflicted;
 	update();
 }
 
 void FileNode::setConflicted(bool c)
 {
-	conflicted = c;
-	update();
+//	conflicted = c;
+//	update();
 }
 
 QMenu & FileNode::getContextMenu() const
@@ -472,7 +476,7 @@ QMenu & FileNode::getContextMenu() const
 void FileNode::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
 	TeamRadarNode::paint(painter, option, widget);
-	if(conflicted)
+	if(getDirtyType() == Conflicted)
 	{
 		painter->setBrush(Qt::NoBrush);
 		painter->setPen(QPen(Qt::red, 2));
