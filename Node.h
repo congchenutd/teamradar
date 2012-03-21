@@ -68,6 +68,7 @@ public:
 	virtual void   hideLabel();
 	virtual void   setDirty     (bool) {}             // for filenode
 	virtual void   setConflicted(bool) {}             // for filenode
+	virtual bool   isDirty() const { return false; }
 
 	// use a separate function to delete, instead of using destructor
 	// because scene()->clear() destroys items in no order, may cause double kill
@@ -134,6 +135,7 @@ public:
 	enum { Type = UserType + 13 };
 	int type() const { return Type; }
 
+	virtual bool   isDirty() const { return dirty; }
 	virtual void   setDirty     (bool d);
 	virtual void   setConflicted(bool c);
 	virtual QMenu& getContextMenu() const;
