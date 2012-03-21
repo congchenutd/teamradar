@@ -478,10 +478,16 @@ void FileNode::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
 		painter->setPen(QPen(Qt::red, 2));
 		painter->drawEllipse(boundingRect().adjusted(1, 1, -1, -1));
 	}
-	else if(dirty)
+	else if(getDirtyType() == LocalDirty)
 	{
 		painter->setBrush(Qt::NoBrush);
-		painter->setPen(QPen(Qt::darkGray, 2));
+		painter->setPen(QPen(Qt::blue, 2));
+		painter->drawEllipse(boundingRect().adjusted(1, 1, -1, -1));
+	}
+	else if(getDirtyType() == RemoteDirty)
+	{
+		painter->setBrush(Qt::NoBrush);
+		painter->setPen(QPen(Qt::green, 2));
 		painter->drawEllipse(boundingRect().adjusted(1, 1, -1, -1));
 	}
 }
