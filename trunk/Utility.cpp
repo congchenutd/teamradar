@@ -57,3 +57,10 @@ QString getFirstSection(const QString& path)
 	int index = path.indexOf('/');
 	return index == -1 ? path : path.left(index);
 }
+
+QString toStandardPath(const QString& path)
+{
+	QString result = path;
+	result.replace('\\', '/');
+	return result;
+}

@@ -98,7 +98,9 @@ void PeerManager::onPhotoReply(const QString& fileName, const QByteArray& photoD
 	modelPeers->select();
 
 	// ask the node to use the new photo
+#ifdef OS_DESKTOP
 	PlayerWidget::getInstance()->setDeveloperImage(userName, QImage(filePath));
+#endif
 }
 
 void PeerManager::onColorReply(const QString& userName, const QByteArray& color)
@@ -109,7 +111,9 @@ void PeerManager::onColorReply(const QString& userName, const QByteArray& color)
 	modelPeers->select();
 
 	// update the color on the view
+#ifdef OS_DESKTOP
 	PlayerWidget::getInstance()->setDeveloperColor(userName, QColor(QString(color)));
+#endif
 }
 
 void PeerManager::onEvent(const TeamRadarEvent& event)

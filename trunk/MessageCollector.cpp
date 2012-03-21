@@ -71,7 +71,7 @@ void MessageCollector::onOpenProject(ProjectExplorer::Project* project)
 }
 
 // capture version control's submit event
-// FIXME: now it just captures the closing of the submission editor, 
+// FIXME: now it just captures the closing of the submission editor,
 // which does not guarantee that the submission is successfully committed
 // (the user may close the editor without committing)
 void MessageCollector::onEditorAboutToClose(Core::IEditor* editor)
@@ -80,8 +80,8 @@ void MessageCollector::onEditorAboutToClose(Core::IEditor* editor)
 	if(submitEditor == 0)
 		return;
 	QStringList files = submitEditor->checkedFiles();
-	foreach(QString fileName, files)
-		sendEvent("SCM_COMMIT", fileName);
+	foreach(QString filePath, files)
+		sendEvent("SCM_COMMIT", toStandardPath(filePath));
 }
 
 void MessageCollector::onBuild(bool success)

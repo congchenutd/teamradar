@@ -41,6 +41,8 @@ public:
 	int getSize()  const { return size;  }
 	int getDepth() const { return depth; }
 	TeamRadarNode* findChild(const QString& name) const;     // find direct child by name
+	TeamRadarNode* findDescendent(const QString& path, bool expandable = true);   // may not be direct child
+	Nodes getChildren() const;
 	void showLabel();
 	int getWidth() const { return 2 * getRadius(); }
 	void loosenEdgeToOwner();                       // "pick the apple"
@@ -48,10 +50,8 @@ public:
 	void removeEdgeToOwner();
 	Edge* findOwnerEdge() const;                    // find the edge connecting to the owner
 	void randomize();                               // randomize position
-	Nodes getChildren() const;
-	QFileInfo findMatchingPath(const QString& filePath);  // max matching path in FS starting from this node
 	void setEffectsEnabled(bool enable);
-	void detectConflict();                          // when an humannode enter/leave a node
+	void detectConflict();                          // called when an humannode enters/leaves a node
 	QList<HumanNode*> getHumans() const;
 	bool advance();                                 // update position, return true if moved
 
@@ -66,6 +66,8 @@ public:
 	virtual double getForce()   const;
 	virtual Nodes  getPushers() const;                 // for localized engine
 	virtual void   hideLabel();
+	virtual void   setDirty     (bool) {}             // for filenode
+	virtual void   setConflicted(bool) {}             // for filenode
 
 	// use a separate function to delete, instead of using destructor
 	// because scene()->clear() destroys items in no order, may cause double kill
@@ -132,7 +134,14 @@ public:
 	enum { Type = UserType + 13 };
 	int type() const { return Type; }
 
+	virtual void   setDirty     (bool d);
+	virtual void   setConflicted(bool c);
 	virtual QMenu& getContextMenu() const;
+	virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
+
+private:
+	bool dirty;
+	bool conflicted;
 };
 
 class LightTrail;
@@ -175,7 +184,6 @@ protected:
 	virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value);
 
 private:
-	TeamRadarNode* findOwner(TeamRadarNode* parent, const QString& path, bool expandable = true);   // find the node it works on
 	void leaveAfterimage();
 	void detachFromOwner();
 
