@@ -50,7 +50,7 @@ public:
 	void setDeveloperImage(const QString& name, const QImage& image);
 	void setDeveloperColor(const QString& name, const QColor& color);
 
-	void setDirty(const QString& filePath, bool dirty);
+	void setDirty     (const QString& filePath, DirtyType dirty);
 	void setConflicted(const QString& filePath, bool conflicted);
 
 protected:

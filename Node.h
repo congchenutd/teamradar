@@ -13,6 +13,7 @@ class LayeredEngine;
 class HumanNode;
 
 typedef QList<TeamRadarNode*> Nodes;
+typedef enum {LocalDirty, RemoteDirty, NotDirty} DirtyType;
 
 // A node represent an item on the canvas
 // A node is connected to its parent with an edge, parent being the source of the edge
@@ -66,9 +67,9 @@ public:
 	virtual double getForce()   const;
 	virtual Nodes  getPushers() const;                 // for localized engine
 	virtual void   hideLabel();
-	virtual void   setDirty     (bool) {}             // for filenode
+	virtual void   setDirty     (DirtyType) {}             // for filenode
 	virtual void   setConflicted(bool) {}             // for filenode
-	virtual bool   isDirty() const { return false; }
+	virtual DirtyType getDirtyType() const { return NotDirty; }
 
 	// use a separate function to delete, instead of using destructor
 	// because scene()->clear() destroys items in no order, may cause double kill
@@ -135,14 +136,14 @@ public:
 	enum { Type = UserType + 13 };
 	int type() const { return Type; }
 
-	virtual bool   isDirty() const { return dirty; }
-	virtual void   setDirty     (bool d);
+	virtual DirtyType getDirtyType() const { return dirty; }
+	virtual void   setDirty     (DirtyType d);
 	virtual void   setConflicted(bool c);
 	virtual QMenu& getContextMenu() const;
 	virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 
 private:
-	bool dirty;
+	DirtyType dirty;
 	bool conflicted;
 };
 

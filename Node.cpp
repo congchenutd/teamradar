@@ -318,9 +318,12 @@ void TeamRadarNode::detectConflict()
 	if(humans.size() > 1)         // multiple developers working on this node
 		setConflicted(true);
 	else {
-		foreach(HumanNode* human, humans)
+		foreach(HumanNode* human, humans) {
 			if(human->getName() != Setting::getInstance()->getUserName())  // other developer
-				setConflicted(isDirty());   // someone else is working on a dirty local node
+				setConflicted(getDirtyType() == LocalDirty);   // someone else is working on a dirty local node
+			else
+				setConflicted(getDirtyType() == RemoteDirty);  // I'm working on a dirty remote node
+		}
 	}
 }
 
@@ -441,11 +444,11 @@ FileNode::FileNode(TeamRadarNode* owner, const QString& name)
 : TeamRadarNode(owner, name)
 {
 	setColor(Setting::getInstance()->getExtensionColor(name));
-	dirty = false;
+	dirty = NotDirty;
 	conflicted = false;
 }
 
-void FileNode::setDirty(bool d)
+void FileNode::setDirty(DirtyType d)
 {
 	dirty = d;
 	update();
