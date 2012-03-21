@@ -52,7 +52,6 @@ public:
 	Edge* findOwnerEdge() const;                    // find the edge connecting to the owner
 	void randomize();                               // randomize position
 	void setEffectsEnabled(bool enable);
-	void detectConflict();                          // called when an humannode enters/leaves a node
 	QList<HumanNode*> getHumans() const;
 	bool advance();                                 // update position, return true if moved
 
@@ -67,8 +66,7 @@ public:
 	virtual double getForce()   const;
 	virtual Nodes  getPushers() const;                 // for localized engine
 	virtual void   hideLabel();
-	virtual void   setDirty     (DirtyType) {}             // for filenode
-	virtual void   setConflicted(bool) {}             // for filenode
+	virtual void   setDirty(DirtyType) {}             // for filenode
 	virtual DirtyType getDirtyType() const { return NotDirty; }
 
 	// use a separate function to delete, instead of using destructor
@@ -137,8 +135,7 @@ public:
 	int type() const { return Type; }
 
 	virtual DirtyType getDirtyType() const { return dirty; }
-	virtual void   setDirty     (DirtyType d);
-	virtual void   setConflicted(bool c);
+	virtual void   setDirty(DirtyType d);
 	virtual QMenu& getContextMenu() const;
 	virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 
