@@ -312,21 +312,6 @@ void TeamRadarNode::setEffectsEnabled(bool enable)
 	label->setEffectsEnabled(enable);
 }
 
-void TeamRadarNode::detectConflict()
-{
-	QList<HumanNode*> humans = getHumans();
-	if(humans.size() > 1)         // multiple developers working on this node
-		setConflicted(true);
-	else {
-		foreach(HumanNode* human, humans) {
-			if(human->getName() != Setting::getInstance()->getUserName())  // other developer
-				setConflicted(getDirtyType() == LocalDirty);   // someone else is working on a dirty local node
-			else
-				setConflicted(getDirtyType() == RemoteDirty);  // I'm working on a dirty remote node
-		}
-	}
-}
-
 QList<HumanNode*> TeamRadarNode::getHumans() const
 {
 	QList<HumanNode*> humans;
@@ -458,12 +443,6 @@ void FileNode::setDirty(DirtyType d)
 	update();
 }
 
-void FileNode::setConflicted(bool c)
-{
-//	conflicted = c;
-//	update();
-}
-
 QMenu & FileNode::getContextMenu() const
 {
 	static QMenu menu;
@@ -545,7 +524,6 @@ void HumanNode::updateOwner(bool expandable)
 	{
 		scene()->addItem(new HumanEdge(owner, this));
 		owner->loosenEdgeToOwner();
-		owner->detectConflict();
 		showLabel();
 		view->itemMoved();
 	}
@@ -640,7 +618,6 @@ void HumanNode::detachFromOwner()
 	{
 		getOwner()->fastenEdgeToOwner();
 		removeEdgeToOwner();
-		getOwner()->detectConflict();
 		hideLabel();
 		view->itemMoved();
 		owner = 0;

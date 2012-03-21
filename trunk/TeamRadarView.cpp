@@ -569,9 +569,3 @@ void TeamRadarView::setDirty(const QString& filePath, DirtyType dirty)
 	TeamRadarNode* node = rootNode->findDescendent(filePath);
 	node->setDirty(dirty);
 }
-
-void TeamRadarView::setConflicted(const QString& filePath, bool conflicted)
-{
-	TeamRadarNode* node = rootNode->findDescendent(filePath);
-	node->setConflicted(conflicted);
-}
