@@ -316,7 +316,11 @@ void TeamRadarNode::detectConflict()
 {
 	QList<HumanNode*> humans = getHumans();
 	foreach(HumanNode* human, humans)
-		human->showConflict(humans.size() > 1);
+	{
+		if(human->getName() != Setting::getInstance()->getUserName())  // other developer
+			setConflicted(isDirty());
+	//	human->showConflict(humans.size() > 1);
+	}
 }
 
 QList<HumanNode*> TeamRadarNode::getHumans() const
@@ -472,7 +476,9 @@ void FileNode::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
 	}
 	else if(conflicted)
 	{
-
+		painter->setBrush(Qt::NoBrush);
+		painter->setPen(QPen(Qt::red, 2));
+		painter->drawEllipse(boundingRect().adjusted(1, 1, -1, -1));
 	}
 }
 
