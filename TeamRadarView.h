@@ -50,6 +50,9 @@ public:
 	void setDeveloperImage(const QString& name, const QImage& image);
 	void setDeveloperColor(const QString& name, const QColor& color);
 
+	void setDirty(const QString& filePath, bool dirty);
+	void setConflicted(const QString& filePath, bool conflicted);
+
 protected:
 	void keyPressEvent(QKeyEvent*   event);
 	void wheelEvent   (QWheelEvent* event);
@@ -95,14 +98,14 @@ public:
 
 protected:
 	qreal scaleFactor;
-	TeamRadarNode* currentNode;        // the node menu actions work on
-	QPoint lastMousePos;      // for dragging
-	bool dragging;
-	Engine* engine;           // layout algorithm
-	bool picking;             // after "Work On" action is triggered
+	TeamRadarNode* rootNode;
+	TeamRadarNode* currentNode;   // the node menu actions work on
+	QPoint lastMousePos;          // for dragging
+	bool   dragging;
+	bool   picking;               // after "Work On" action is triggered
 	HumanNode* currentHuman;
 	Humans humans;
-	TeamRadarNode* rootNode;
+	Engine* engine;               // layout algorithm
 };
 
 

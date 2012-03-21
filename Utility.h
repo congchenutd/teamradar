@@ -11,5 +11,6 @@ bool isFilteredDir (const QString& dirName);
 bool isFilteredFile(const QString& fileName);
 QString toRelativePath(const QString& absolutePath);
 QString getFirstSection(const QString& path);
+QString toStandardPath(const QString& path);  // \ -> /
 
 #endif // UTILITY_H

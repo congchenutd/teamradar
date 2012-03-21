@@ -563,3 +563,15 @@ void TeamRadarView::setDeveloperColor(const QString& name, const QColor& color) 
 	if(HumanNode* human = findDeveloper(name))
 		human->setColor(color);
 }
+
+void TeamRadarView::setDirty(const QString& filePath, bool dirty)
+{
+	TeamRadarNode* node = rootNode->findDescendent(filePath);
+	node->setDirty(dirty);
+}
+
+void TeamRadarView::setConflicted(const QString& filePath, bool conflicted)
+{
+	TeamRadarNode* node = rootNode->findDescendent(filePath);
+	node->setConflicted(conflicted);
+}

@@ -297,20 +297,6 @@ void TeamRadarNode::removeEdgeToOwner()
 	}
 }
 
-QFileInfo TeamRadarNode::findMatchingPath(const QString& filePath)
-{
-	QFileInfo result;
-	QFileInfoList files = QDir(getName()).entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
-	foreach(QFileInfo info, files)            // for all files/dirs in this dir
-	{
-		QString path = info.filePath();       // find the max matching one
-		if(filePath.contains(path, Qt::CaseInsensitive)
-		   && path.length() > result.filePath().length())
-			result = info;
-	}
-	return result;
-}
-
 void TeamRadarNode::setEffectsEnabled(bool enable)
 {
 	if(enable)
@@ -351,6 +337,31 @@ void TeamRadarNode::drawSelectionRect(QPainter* painter)
 		painter->setBrush(Qt::NoBrush);
 		painter->drawRect(boundingRect());
 	}
+}
+
+// starting from this, find the node with path
+// expand the node if expandable is true
+// return the last location if expandable is false
+TeamRadarNode* TeamRadarNode::findDescendent(const QString& path, bool expandable)
+{
+	QString firstSection = getFirstSection(path);
+	bool atLastSection = (firstSection == path);
+	TeamRadarNode* child = findChild(firstSection);
+	if(child == 0)    // expand a node, if not expanded
+	{
+		if(!expandable)
+			return this;
+
+		// only the last section in the path is a file
+		child = view->createNode(!atLastSection, firstSection, this);
+		child->randomize();
+	}
+
+	if(atLastSection)   // last section
+		return child;
+	QString rest = path;
+	rest.remove(firstSection + '/');
+	return child->findDescendent(rest, expandable);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -422,8 +433,23 @@ void DirNode::updateDepth()
 
 //////////////////////////////////////////////////////////////////////////
 FileNode::FileNode(TeamRadarNode* owner, const QString& name)
-: TeamRadarNode(owner, name) {
+: TeamRadarNode(owner, name)
+{
 	setColor(Setting::getInstance()->getExtensionColor(name));
+	dirty = false;
+	conflicted = false;
+}
+
+void FileNode::setDirty(bool d)
+{
+	dirty = d;
+	update();
+}
+
+void FileNode::setConflicted(bool c)
+{
+	conflicted = c;
+	update();
 }
 
 QMenu & FileNode::getContextMenu() const
@@ -433,6 +459,21 @@ QMenu & FileNode::getContextMenu() const
 	menu.addAction(view->actionPin);
 	view->actionPin->setChecked(isPinned());
 	return menu;
+}
+
+void FileNode::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+{
+	TeamRadarNode::paint(painter, option, widget);
+	if(dirty)
+	{
+		painter->setBrush(Qt::NoBrush);
+		painter->setPen(QPen(Qt::darkGray, 2));
+		painter->drawEllipse(boundingRect().adjusted(1, 1, -1, -1));
+	}
+	else if(conflicted)
+	{
+
+	}
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -479,7 +520,7 @@ QMenu& HumanNode::getContextMenu() const
 void HumanNode::updateOwner(bool expandable)
 {
 	detachFromOwner();                                       // leave the original owner
-	owner = findOwner(view->getRoot(), workOn, expandable);  // find a new owner
+	owner = view->getRoot()->findDescendent(workOn, expandable);  // find a new owner
 	if(owner != 0)                                           // connect to the new owner
 	{
 		scene()->addItem(new HumanEdge(owner, this));
@@ -488,30 +529,6 @@ void HumanNode::updateOwner(bool expandable)
 		showLabel();
 		view->itemMoved();
 	}
-}
-
-// starting from "start", find the node it works on
-// expand the node if expandable is true
-TeamRadarNode* HumanNode::findOwner(TeamRadarNode* parent, const QString& path, bool expandable)
-{
-	QString firstSection = getFirstSection(path);
-	bool atLastSection = (firstSection == path);
-	TeamRadarNode* child = parent->findChild(firstSection);
-	if(child == 0)    // not expanded
-	{
-		if(!expandable)
-			return parent;
-
-		// only the last section in the path is a file
-		child = view->createNode(!atLastSection, firstSection, parent);
-		child->randomize();
-	}
-
-	if(atLastSection)   // last section
-		return child;
-	QString rest = path;
-	rest.remove(firstSection + '/');
-	return findOwner(child, rest, expandable);
 }
 
 Nodes HumanNode::getPushers() const

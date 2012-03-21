@@ -176,9 +176,14 @@ void PlayerWidget::play(const TeamRadarEvent& event)
 		ui.graphicsView->addDeveloper(event.userName, peerManager->getImage(event.userName));
 
 	if(event.eventType == "SAVE")
+	{
 		ui.graphicsView->moveDeveloperTo(event.userName, event.parameters);
+		ui.graphicsView->setDirty(event.parameters, true);
+	}
 	else if(event.eventType == "MODE")
 		ui.graphicsView->setDeveloperMode(event.userName, event.parameters);
+	else if(event.eventType == "SCM_COMMIT")
+		ui.graphicsView->setDirty(event.parameters, false);
 }
 
 void PlayerWidget::reloadProject() {
