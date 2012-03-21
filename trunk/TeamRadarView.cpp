@@ -564,7 +564,7 @@ void TeamRadarView::setDeveloperColor(const QString& name, const QColor& color) 
 		human->setColor(color);
 }
 
-void TeamRadarView::setDirty(const QString& filePath, bool dirty)
+void TeamRadarView::setDirty(const QString& filePath, DirtyType dirty)
 {
 	TeamRadarNode* node = rootNode->findDescendent(filePath);
 	node->setDirty(dirty);
