@@ -10,7 +10,7 @@ namespace TeamRadar {
 
 class TeamRadarView;
 class ForceDirectedLayoutView;
-class Label;
+class NodeLabel;
 class LayeredEngine;
 class HumanNode;
 
@@ -105,7 +105,7 @@ protected:
 	bool    pinned;     // unmovable by force if pinned
 	int     size;       // size of the subtree
 	TeamRadarNode* owner;
-	Label*         label;
+	NodeLabel*         label;
 };
 
 class DirNode : public TeamRadarNode

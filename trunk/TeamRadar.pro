@@ -16,7 +16,6 @@ HEADERS += ChatWindow.h \
 		   Connection.h \
 		   Edge.h \
 		   Engine.h \
-		   Label.h \
 		   LightTrail.h \
 		   MessageCollector.h \
 		   ModeTag.h \
@@ -35,11 +34,12 @@ HEADERS += ChatWindow.h \
 		   Utility.h \
 		   ../ImageColorBoolModel/ImageColorBoolDelegate.h \
 		   ../ImageColorBoolModel/ImageColorBoolProxy.h \
-		   OptionsPage.h \
 		   ImageLabel.h \
 		   Analyzer.h \
 		   Defines.h \
-		   ColorLabel.h
+		   ColorLabel.h \
+    TeamRadarOptionsPage.h \
+    NodeLabel.h
 FORMS += ChatWindow.ui \
 		 PlayerWidget.ui \
 		 RequestEventsDlg.ui \
@@ -49,7 +49,6 @@ SOURCES += ChatWindow.cpp \
 		   Connection.cpp \
 		   Edge.cpp \
 		   Engine.cpp \
-		   Label.cpp \
 		   LightTrail.cpp \
 		   MessageCollector.cpp \
 		   ModeTag.cpp \
@@ -66,9 +65,10 @@ SOURCES += ChatWindow.cpp \
 		   Utility.cpp \
 		   ../ImageColorBoolModel/ImageColorBoolDelegate.cpp \
 		   ../ImageColorBoolModel/ImageColorBoolProxy.cpp \
-		   OptionsPage.cpp \
 		   ImageLabel.cpp \
 		   Analyzer.cpp \
-		   ColorLabel.cpp
+		   ColorLabel.cpp \
+    TeamRadarOptionsPage.cpp \
+    NodeLabel.cpp
 RESOURCES += Resources.qrc
 OTHER_FILES += TeamRadar.pluginspec

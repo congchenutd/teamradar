@@ -6,7 +6,7 @@
 #include "PlayerWidget.h"
 #include "Setting.h"
 #include "PeerManager.h"
-#include "OptionsPage.h"
+#include "TeamRadarOptionsPage.h"
 #include "Defines.h"
 
 #include <coreplugin/actionmanager/actionmanager.h>
@@ -18,14 +18,7 @@
 #include <coreplugin/modemanager.h>
 #include <coreplugin/editormanager/ieditor.h>
 #include <coreplugin/editormanager/editormanager.h>
-
-#include <QtCore/QDebug>
 #include <QtCore/QtPlugin>
-#include <QtGui/QAction>
-#include <QtGui/QMenu>
-#include <QtGui/QMessageBox>
-#include <QtGui/QPushButton>
-#include <QMainWindow>
 
 namespace TeamRadar {
 
@@ -46,8 +39,8 @@ bool TeamRadarPlugin::initialize(const QStringList& arguments, QString* error_me
 	connection->connectToHost(setting->getServerAddress(), setting->getServerPort());
 
 	addAutoReleasedObject(new TeamRadarNavigationWidgetFactory);
-	addAutoReleasedObject(new OptionsPage);
-	addAutoReleasedObject(new AboutOptionPage);
+	addAutoReleasedObject(new TeamRadarOptionsPage);
+	addAutoReleasedObject(new TeamRadarAboutPage);
 
 	return true;
 }

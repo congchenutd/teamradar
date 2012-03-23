@@ -1,4 +1,4 @@
-#include "Label.h"
+#include "NodeLabel.h"
 #include "Node.h"
 #include <QFileInfo>
 #include <QFontMetrics>
@@ -15,7 +15,7 @@
 
 namespace TeamRadar {
 
-Label::Label(TeamRadarNode *n) : node(n)
+NodeLabel::NodeLabel(TeamRadarNode *n) : node(n)
 {
 	font.setPointSize(Setting::getInstance()->getFontSize());
 	text = QFileInfo(node->getName()).fileName();
@@ -23,48 +23,48 @@ Label::Label(TeamRadarNode *n) : node(n)
 	setEffectsEnabled(Setting::getInstance()->value("UseEffects").toBool());
 }
 
-QRect Label::textRect() const
+QRect NodeLabel::textRect() const
 {
 	QRect rec = QFontMetrics(font).boundingRect(text);
 	// UGLY: extra space to avoid incomplete text, shouldn't needed
 	return QRect(-rec.width()/2-2*margin, -rec.height()-margin, rec.width()+margin*4, rec.height()+margin*3);
 }
 
-void Label::update()
+void NodeLabel::update()
 {
 	setZValue(TeamRadarNode::MaxLevel + node->getLevel() + 2);
 	setPos(node->mapToScene(0, -node->getRadius()));  // move to the top of the node
 	QGraphicsItem::update();
 }
 
-void Label::show()
+void NodeLabel::show()
 {
 	update();
 	QGraphicsItem::show();
 }
 
-void Label::addToScene(QGraphicsScene* scene) {
+void NodeLabel::addToScene(QGraphicsScene* scene) {
 	scene->addItem(this);
 }
 
-TeamRadarView* Label::graph = 0;
+TeamRadarView* NodeLabel::graph = 0;
 
-void Label::setGraph(TeamRadarView* g) {
+void NodeLabel::setGraph(TeamRadarView* g) {
 	graph = g;
 }
 
-QRectF Label::boundingRect() const {
+QRectF NodeLabel::boundingRect() const {
 	return textRect().adjusted(-margin, -margin, margin, margin);
 }
 
-QPainterPath Label::shape() const
+QPainterPath NodeLabel::shape() const
 {
 	QPainterPath path;
 	path.addRect(boundingRect());
 	return path;
 }
 
-void Label::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*)
+void NodeLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
 	update();                           // recalculate pos if scaled
 	setScale(1.0 / graph->getScale());  // keep the scale
@@ -75,7 +75,7 @@ void Label::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*)
 	painter->drawText(textRect(), text);
 }
 
-void Label::setEffectsEnabled(bool enable)
+void NodeLabel::setEffectsEnabled(bool enable)
 {
 	if(enable)
 	{

@@ -1,6 +1,6 @@
 #include "TeamRadarView.h"
 #include "Node.h"
-#include "Label.h"
+#include "NodeLabel.h"
 #include "Engine.h"
 #include "LightTrail.h"
 #include "TeamRadarEvent.h"
@@ -32,7 +32,7 @@ TeamRadarView::TeamRadarView(QWidget *parent)
 	setBackgroundBrush(QBrush(Setting::getInstance()->getColor("BackgroundColor")));
 	initActions();
 	TeamRadarNode::setGraph(this);
-	Label::setGraph(this);
+	NodeLabel::setGraph(this);
 	engine = new LayeredEngine(this);
 	setAfterImageDuration(Setting::getInstance()->value("AfterImageDuration").toInt());
 }
