@@ -29,7 +29,7 @@
 
 namespace TeamRadar {
 
-bool TeamRadarPlugin::initialize(const QStringList &arguments, QString *error_message)
+bool TeamRadarPlugin::initialize(const QStringList& arguments, QString* error_message)
 {
 	Q_UNUSED(arguments)
 	Q_UNUSED(error_message)

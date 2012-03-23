@@ -1,6 +1,7 @@
 TEMPLATE = lib
 TARGET = TeamRadar
 QT += sql network
+PROVIDER = CongChen
 #DEFINES += TEAMRADAR_LIBRARY QT_NO_CAST_FROM_ASCII
 
 include(TeamRadar_dependencies.pri)

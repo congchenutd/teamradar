@@ -267,6 +267,7 @@ void Receiver::parseGreeting(const QByteArray& buffer)
 
 void Receiver::parseEvent(const QByteArray& buffer)
 {
+	// userName#eventType#parameters#time
 	QList<QByteArray> sections = buffer.split(Connection::Delimiter1);
 	if(sections.size() == 4)
 		emit newEvent(TeamRadarEvent(sections[0], sections[1], sections[2], sections[3]));
