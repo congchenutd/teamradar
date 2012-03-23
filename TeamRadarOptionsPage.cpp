@@ -1,30 +1,30 @@
-#include "OptionsPage.h"
+#include "TeamRadarOptionsPage.h"
 #include "TeamRadarDlg.h"
 #include "Setting.h"
 #include <QLabel>
 
 namespace TeamRadar {
 
-OptionsPage::OptionsPage(QObject* parent) : IOptionsPage(parent), dlg(0)
+TeamRadarOptionsPage::TeamRadarOptionsPage(QObject* parent) : IOptionsPage(parent), dlg(0)
 {}
 
-QIcon OptionsPage::categoryIcon() const {
+QIcon TeamRadarOptionsPage::categoryIcon() const {
 	return QIcon(":/Images/Radar.png");
 }
 
-QWidget * OptionsPage::createPage(QWidget *parent) {
+QWidget * TeamRadarOptionsPage::createPage(QWidget *parent) {
 	dlg = new TeamRadarDlg(parent);
 	return dlg;
 }
 
-void OptionsPage::apply() {
+void TeamRadarOptionsPage::apply() {
 	dlg->save();
 }
 
 ///////////////////////////////////////////////////////////////////////
-AboutOptionPage::AboutOptionPage(QObject* parent) : OptionsPage(parent) {}
+TeamRadarAboutPage::TeamRadarAboutPage(QObject* parent) : TeamRadarOptionsPage(parent) {}
 
-QWidget *AboutOptionPage::createPage(QWidget* parent)
+QWidget *TeamRadarAboutPage::createPage(QWidget* parent)
 {
 	QWidget* widget = new QWidget(parent);
 	QLabel* label = new QLabel(tr(

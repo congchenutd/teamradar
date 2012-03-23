@@ -9,12 +9,12 @@ namespace TeamRadar {
 class TeamRadarNode;
 class TeamRadarView;
 
-class Label : public QGraphicsObject
+class NodeLabel : public QGraphicsObject
 {
 public:
 	static void setGraph(TeamRadarView* g);
-	Label(TeamRadarNode* n);
-	virtual ~Label() {}
+	NodeLabel(TeamRadarNode* n);
+	virtual ~NodeLabel() {}
 	enum { Type = UserType + 21 };
 	int type() const { return Type; }
 
@@ -39,7 +39,7 @@ protected:
 	QString text;
 };
 
-class FileLabel : public Label
+class FileLabel : public NodeLabel
 {
 public:
 	FileLabel(TeamRadarNode* n);

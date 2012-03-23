@@ -7,12 +7,12 @@ namespace TeamRadar {
 
 class TeamRadarDlg;
 
-class OptionsPage : public Core::IOptionsPage
+class TeamRadarOptionsPage : public Core::IOptionsPage
 {
 	Q_OBJECT
 
 public:
-	OptionsPage(QObject* parent = 0);
+	TeamRadarOptionsPage(QObject* parent = 0);
 
 	QString id()              const { return tr("Tab1"); }
 	QString displayName()     const { return tr("Team Radar"); }
@@ -27,10 +27,10 @@ private:
 	TeamRadarDlg* dlg;
 };
 
-class AboutOptionPage : public OptionsPage
+class TeamRadarAboutPage : public TeamRadarOptionsPage
 {
 public:
-	AboutOptionPage(QObject* parent = 0);
+	TeamRadarAboutPage(QObject* parent = 0);
 
 	QString  id() const { return tr("Tab2"); }
 	QString  displayName() const { return tr("About"); }

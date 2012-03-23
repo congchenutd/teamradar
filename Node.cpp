@@ -13,7 +13,7 @@
 #include "Edge.h"
 #include "Node.h"
 #include "TeamRadarView.h"
-#include "Label.h"
+#include "NodeLabel.h"
 #include "LightTrail.h"
 #include "Engine.h"
 #include "Setting.h"
@@ -26,9 +26,6 @@
 	#include "ChatWindow.h"
 #endif
 
-QT_BEGIN_NAMESPACE
-class QPropertyAnimation;
-QT_END_NAMESPACE
 namespace TeamRadar {
 
 TeamRadarView* TeamRadarNode::view = 0;
@@ -41,7 +38,7 @@ TeamRadarNode::TeamRadarNode(TeamRadarNode* owner, const QString& nm, int level)
 	depth  = 1;
 	pinned = false;
 	size   = 1;
-	label  = new Label(this);
+	label  = new NodeLabel(this);
 
 	setAcceptHoverEvents(true);
 	setZValue(MaxLevel - getLevel());
