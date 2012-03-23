@@ -3,6 +3,8 @@
 
 #include <QGraphicsObject>
 
+namespace TeamRadar {
+
 class TeamRadarNode;
 
 class ModeTag : public QGraphicsObject
@@ -78,6 +80,8 @@ public:
 	AlertModeTag(TeamRadarNode* n) : ModeTag(n) {}
 	virtual QString getName() const { return "Conflict"; }
 };
+
+} // namespace TeamRadar
 
 
 #endif // MODETAG_H

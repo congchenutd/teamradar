@@ -8,6 +8,8 @@
 #include <QSqlQueryModel>
 #include <QCheckBox>
 
+namespace TeamRadar {
+
 RecipientsDlg::RecipientsDlg(const QString& peerName, QWidget* parent) : QDialog(parent)
 {
 	// model
@@ -82,3 +84,5 @@ void RecipientsDlg::onSelectAll(bool select) {
 	for(int row=0; row<model.rowCount(); ++row)
 		model.setData(model.index(row, SELECTED), select);
 }
+
+} // namespace TeamRadar

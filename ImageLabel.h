@@ -3,6 +3,8 @@
 
 #include <QLabel>
 
+namespace TeamRadar {
+
 class ImageLabel : public QLabel
 {
 	Q_OBJECT
@@ -15,5 +17,7 @@ protected:
 signals:
 	void valueChanged();
 };
+
+} // namespace TeamRadar
 
 #endif // IMAGELABEL_H

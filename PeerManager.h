@@ -7,12 +7,14 @@
 #include <QColor>
 #include "PeerModel.h"
 
-// Handles the (login/out) status of both itself and peers, and configurations of peers
+namespace TeamRadar {
+
 struct TeamRadarEvent;
 class PeerModel;
 class TeamRadarView;
 class Sender;
 
+// Handles the (login/out) status of both itself and peers, and configurations of peers
 class PeerManager : public QObject
 {
 	Q_OBJECT
@@ -45,5 +47,7 @@ private:
 	Sender*        sender;
 };
 
+
+} // namespace TeamRadar
 
 #endif // PEER_MANAGER_H

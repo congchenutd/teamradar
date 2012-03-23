@@ -5,6 +5,8 @@
 #include "Node.h"
 #include "Setting.h"
 
+namespace TeamRadar {
+
 Edge::Edge(TeamRadarNode* sourceNode, TeamRadarNode* destNode, double f)
 {
 	setAcceptedMouseButtons(0);
@@ -77,3 +79,5 @@ HumanEdge::HumanEdge(TeamRadarNode *sourceNode, TeamRadarNode *destNode, double 
 // invisible
 void HumanEdge::paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*)
 {}
+
+} // namespace TeamRadar

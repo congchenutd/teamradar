@@ -1,10 +1,12 @@
 #include "Connection.h"
-#include "PeerManager.h"
+//#include "PeerManager.h"
 #include "Setting.h"
 #include <QHostAddress>
 #include <QFile>
 #include <QFileInfo>
 #include <QTimerEvent>
+
+namespace TeamRadar {
 
 Connection::Connection(QObject* parent) : QTcpSocket(parent)
 {
@@ -431,3 +433,5 @@ void Sender::sendLocationRequest(const QString& userName) {
 	if(connection->isReadyForUse())
 		connection->send("REQ_LOCATION", userName.toUtf8());
 }
+
+} // namespace TeamRadar

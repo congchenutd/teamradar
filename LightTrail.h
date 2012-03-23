@@ -5,6 +5,8 @@
 #include <QPolygon>
 #include <QLine>
 
+namespace TeamRadar {
+
 class HumanNode;
 
 // Two methods are combined to create a light trail
@@ -63,5 +65,7 @@ private:
 	QColor color;
 };
 
+
+} // namespace TeamRadar
 
 #endif // LIGHTTRAIL_H

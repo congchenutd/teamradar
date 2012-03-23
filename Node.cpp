@@ -26,6 +26,11 @@
 	#include "ChatWindow.h"
 #endif
 
+QT_BEGIN_NAMESPACE
+class QPropertyAnimation;
+QT_END_NAMESPACE
+namespace TeamRadar {
+
 TeamRadarView* TeamRadarNode::view = 0;
 
 TeamRadarNode::TeamRadarNode(TeamRadarNode* owner, const QString& nm, int level) : name(nm)
@@ -736,3 +741,5 @@ void AfterimageNode::onDead()
 //	painter->drawImage(boundingRect(), image);
 //}
 
+
+} // namespace TeamRadar

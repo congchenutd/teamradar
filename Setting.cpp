@@ -3,6 +3,8 @@
 #include <QColor>
 #include <QResource>
 
+namespace TeamRadar {
+
 Setting::Setting(const QString& fileName) : MySetting<Setting>(fileName)
 {
 	if(QFile(this->fileName).size() == 0)   // no setting
@@ -206,3 +208,5 @@ QString Setting::guessUserName() const
 
 	return result.isEmpty() ? "Unknown" : result;
 }
+
+} // namespace TeamRadar

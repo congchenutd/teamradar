@@ -5,10 +5,13 @@
 #include <QMap>
 #include "Node.h"
 
-class TeamRadarNode;
 class QAction;
 class QXmlStreamWriter;
 class QXmlStreamReader;
+
+namespace TeamRadar {
+
+class TeamRadarNode;
 class Engine;
 class HumanNode;
 struct TeamRadarEvent;
@@ -107,5 +110,7 @@ protected:
 	Engine* engine;               // layout algorithm
 };
 
+
+} // namespace TeamRadar
 
 #endif

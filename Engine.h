@@ -5,6 +5,8 @@
 #include <QTimer>
 #include <QTime>
 
+namespace TeamRadar {
+
 class TeamRadarView;
 class TeamRadarNode;
 
@@ -46,5 +48,7 @@ protected:
 	virtual void step();
 	virtual void push(TeamRadarNode* node, qreal& xvel, qreal& yvel);
 };
+
+} // namespace TeamRadar
 
 #endif // ENGINE_H

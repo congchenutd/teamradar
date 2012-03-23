@@ -115,7 +115,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="ColorLabel" name="labelColor">
+           <widget class="TeamRadar::ColorLabel" name="labelColor">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -144,7 +144,7 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="ImageLabel" name="labelImage">
+           <widget class="TeamRadar::ImageLabel" name="labelImage">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -224,14 +224,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ImageLabel</class>
-   <extends>QLabel</extends>
-   <header>ImageLabel.h</header>
-  </customwidget>
-  <customwidget>
-   <class>ColorLabel</class>
+   <class>TeamRadar::ColorLabel</class>
    <extends>QLabel</extends>
    <header>ColorLabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TeamRadar::ImageLabel</class>
+   <extends>QLabel</extends>
+   <header>ImageLabel.h</header>
   </customwidget>
  </customwidgets>
  <resources>

@@ -3,6 +3,8 @@
 #include "Setting.h"
 #include <QLabel>
 
+namespace TeamRadar {
+
 OptionsPage::OptionsPage(QObject* parent) : IOptionsPage(parent), dlg(0)
 {}
 
@@ -35,3 +37,5 @@ QWidget *AboutOptionPage::createPage(QWidget* parent)
 	layout->addWidget(label);
 	return widget;
 }
+
+} // namespace TeamRadar

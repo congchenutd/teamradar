@@ -4,6 +4,9 @@
 #include <QSqlTableModel>
 #include <QColor>
 
+namespace TeamRadar {
+
+
 struct DeveloperInfo
 {
 	DeveloperInfo(const QString& name);
@@ -36,5 +39,7 @@ signals:
 public:
 	enum {NAME, COLOR, IMAGE, ONLINE, RECEIVE};
 };
+
+} // namespace TeamRadar
 
 #endif

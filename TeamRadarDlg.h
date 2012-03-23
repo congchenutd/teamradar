@@ -5,13 +5,14 @@
 #include "ui_TeamRadarDlg.h"
 #include "MySetting.h"
 
-// Configuration dialog in the options page
+namespace TeamRadar {
 
 class Setting;
 class PeerManager;
 class PeerModel;
 class Connection;
 
+// Configuration dialog in the options page
 class TeamRadarDlg : public QWidget
 {
 	Q_OBJECT
@@ -42,5 +43,7 @@ private:
 	Connection*  connection;
 };
 
+
+} // namespace TeamRadar
 
 #endif // TEAMRADARWINDOW_H

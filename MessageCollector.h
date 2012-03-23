@@ -10,11 +10,12 @@
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectexplorer.h>
 
-// Captures signals from IDE, and notifies the player and the server
+namespace TeamRadar {
 
 struct TeamRadarEvent;
 class VCSBaseSubmitEditor;
 
+// Captures signals from IDE, and notifies the player and the server
 class MessageCollector : public QObject
 {
 	Q_OBJECT
@@ -49,5 +50,7 @@ private:
 	ProjectExplorer::ProjectExplorerPlugin* projectExplorer;
 //	Core::FileManager*   fileManager;
 };
+
+} // namespace TeamRadar
 
 #endif // MessageCollector_h__

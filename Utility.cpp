@@ -5,6 +5,8 @@
 #include <QFile>
 #include <QFileInfo>
 
+namespace TeamRadar {
+
 QColor complementColor(const QColor& color) {
 	return QColor(255 - color.red(), 255 - color.green(), 255 - color.blue());
 }
@@ -64,3 +66,5 @@ QString toStandardPath(const QString& path)
 	result.replace('\\', '/');
 	return result;
 }
+
+} // namespace TeamRadar

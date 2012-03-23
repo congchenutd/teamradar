@@ -3,6 +3,8 @@
 
 #include <coreplugin/dialogs/ioptionspage.h>
 
+namespace TeamRadar {
+
 class TeamRadarDlg;
 
 class OptionsPage : public Core::IOptionsPage
@@ -36,5 +38,7 @@ public:
 	void apply() {}
 };
 
+
+} // namespace TeamRadar
 
 #endif // OPTIONSPAGE_H

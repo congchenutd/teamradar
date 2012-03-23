@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QStandardItemModel>
 
+namespace TeamRadar {
+
 class RecipientsDlg : public QDialog
 {
 	Q_OBJECT
@@ -19,5 +21,7 @@ private:
 	QStandardItemModel model;
 	enum {NAME, IMAGE, ONLINE, SELECTED};
 };
+
+} // namespace TeamRadar
 
 #endif // RecipientsDlg_h__

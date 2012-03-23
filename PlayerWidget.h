@@ -7,6 +7,9 @@
 #include <QSet>
 
 class QStandardItemModel;
+
+namespace TeamRadar {
+
 class PeerManager;
 struct TeamRadarEvent;
 
@@ -68,5 +71,7 @@ private:
 	PeerManager* peerManager;
 };
 
+
+} // namespace TeamRadar
 
 #endif // PLAYERWIDGET_H
