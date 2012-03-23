@@ -21,7 +21,7 @@ class TeamRadarPlugin : public ExtensionSystem::IPlugin
 	Q_OBJECT
 
 public:
-	bool initialize(const QStringList &arguments, QString *error_message);
+    bool initialize(const QStringList& arguments, QString* error_message);
 	void extensionsInitialized() {}
 
 private:
