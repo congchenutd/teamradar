@@ -1,6 +1,8 @@
 #include "ColorLabel.h"
 #include <QColorDialog>
 
+namespace TeamRadar {
+
 ColorLabel::ColorLabel(QWidget* parent) : QLabel(parent) {}
 
 void ColorLabel::setColor(const QColor& clr)
@@ -18,3 +20,5 @@ void ColorLabel::setColor(const QColor& clr)
 void ColorLabel::mousePressEvent(QMouseEvent *) {
 	setColor(QColorDialog::getColor(color));
 }
+
+} // namespace TeamRadar

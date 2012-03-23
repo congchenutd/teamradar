@@ -6,6 +6,8 @@
 #include <QFileInfo>
 #include "Edge.h"
 
+namespace TeamRadar {
+
 class TeamRadarView;
 class ForceDirectedLayoutView;
 class Label;
@@ -221,5 +223,7 @@ private:
 	static int fadeOutDuration;
 };
 
+
+} // namespace TeamRadar
 
 #endif

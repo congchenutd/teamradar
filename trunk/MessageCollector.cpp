@@ -11,6 +11,8 @@
 #include <vcsbase/corelistener.h>
 #include <vcsbase/vcsbasesubmiteditor.h>
 
+namespace TeamRadar {
+
 MessageCollector::MessageCollector()
 {
 	currentEditor = 0;
@@ -105,3 +107,5 @@ void MessageCollector::sendRemoteEvent(const QString& event, const QString& para
 }
 
 MessageCollector* MessageCollector::instance = 0;
+
+} // namespace TeamRadar

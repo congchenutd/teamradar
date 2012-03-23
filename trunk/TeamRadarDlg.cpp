@@ -17,6 +17,8 @@
 #include <QMenu>
 #include <QMessageBox>
 
+namespace TeamRadar {
+
 TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QWidget(parent)
 {
 	peerManager = PeerManager::getInstance();
@@ -159,3 +161,5 @@ void TeamRadarDlg::onConnect()
 	setting->setServerPort(ui.sbPort->value());
 	connection->reconnect();
 }
+
+} // namespace TeamRadar

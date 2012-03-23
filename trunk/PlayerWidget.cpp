@@ -16,6 +16,8 @@
 #include "ChatWindow.h"
 #include "Analyzer.h"
 
+namespace TeamRadar {
+
 PlayerWidget::PlayerWidget(QWidget *parent) :
 	QWidget(parent)
 {
@@ -321,3 +323,5 @@ PlayerWidget* PlayerWidget::getInstance()
 }
 
 PlayerWidget* PlayerWidget::instance = 0;
+
+} // namespace TeamRadar

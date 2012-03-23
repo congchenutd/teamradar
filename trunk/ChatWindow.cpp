@@ -8,6 +8,8 @@
 #include <QScrollBar>
 #include "RecipientsDlg.h"
 
+namespace TeamRadar {
+
 ChatWindow::ChatWindow(const QString& name, QWidget *parent)
 	: QDialog(parent), peerName(name), peerReplied(true), meReplied(true)
 {
@@ -30,7 +32,7 @@ ChatWindow::ChatWindow(const QString& name, QWidget *parent)
 void ChatWindow::onInput()
 {
 	if(peerReplied)    // my first message
-		ui.teHistory->append("\r\nMe (" + 
+		ui.teHistory->append("\r\nMe (" +
 			QDateTime::currentDateTime().toString(Setting::dateTimeFormat) + "):");
 	ui.teHistory->append(ui.leInput->text());
 	recipients << peerName;  // add the peer to the recipients
@@ -47,9 +49,9 @@ void ChatWindow::addPeerConversation(const QString& line)
 {
 	if(line.isEmpty())
 		return;
-	
+
 	if(meReplied)   // peer's first message
-		ui.teHistory->append("\r\n" + peerName + " (" + 
+		ui.teHistory->append("\r\n" + peerName + " (" +
 			QDateTime::currentDateTime().toString(Setting::dateTimeFormat) + "): ");
 	ui.teHistory->append(line);
 //	ui.teHistory->verticalScrollBar()->setValue(
@@ -110,3 +112,5 @@ void ChatWindow::closeAllWindows() {
 }
 
 QMap<QString, ChatWindow*> ChatWindow::chatWindows;
+
+} // namespace TeamRadar

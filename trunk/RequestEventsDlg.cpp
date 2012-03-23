@@ -6,6 +6,8 @@
 #include "Defines.h"
 #include <QSqlTableModel>
 
+namespace TeamRadar {
+
 RequestEventsDlg::RequestEventsDlg(QWidget* parent) : QDialog(parent)
 {
 	ui.setupUi(this);
@@ -129,3 +131,5 @@ void RequestEventsDlg::accept()
 	Setting::getInstance()->setValue("PartitionFuzziness", ui.sliderFuzziness->value());
 	QDialog::accept();
 }
+
+} // namespace TeamRadar

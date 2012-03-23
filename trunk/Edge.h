@@ -3,6 +3,8 @@
 
 #include <QGraphicsObject>
 
+namespace TeamRadar {
+
 class TeamRadarNode;
 class Edge;
 
@@ -52,5 +54,7 @@ public:
 
 	virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*);  // invisible
 };
+
+} // namespace TeamRadar
 
 #endif

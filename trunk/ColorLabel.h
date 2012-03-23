@@ -4,6 +4,8 @@
 #include <QLabel>
 #include <QColor>
 
+namespace TeamRadar {
+
 class ColorLabel : public QLabel
 {
 	Q_OBJECT
@@ -21,5 +23,7 @@ signals:
 private:
 	QColor color;
 };
+
+} // namespace TeamRadar
 
 #endif // COLORLABEL_H

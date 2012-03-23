@@ -6,6 +6,8 @@
 #include <QGraphicsBlurEffect>
 #include <QGraphicsDropShadowEffect>
 
+namespace TeamRadar {
+
 int LightTrailSegment::fadeOutDuration = 2000;
 
 LightTrailSegment::LightTrailSegment(const QColor& c, const QPointF& start, const QPointF& end)
@@ -13,7 +15,7 @@ LightTrailSegment::LightTrailSegment(const QColor& c, const QPointF& start, cons
 {
 	//QGraphicsBlurEffect* blur = new QGraphicsBlurEffect(this);
 	//blur->setBlurRadius(5);
-        //setGraphicsEffect(blur);
+		//setGraphicsEffect(blur);
 
 	//QGraphicsDropShadowEffect* effect = new QGraphicsDropShadowEffect(this);
 	//effect->setBlurRadius(20);
@@ -104,3 +106,5 @@ void LightTrail::onDead()
 	human->lightTrailDied(this);  // let human forget you, otherwise it'll keep on calling you
 	delete this;
 }
+
+} // namespace TeamRadar

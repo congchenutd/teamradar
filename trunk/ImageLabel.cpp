@@ -1,6 +1,8 @@
 #include "ImageLabel.h"
 #include <QFileDialog>
 
+namespace TeamRadar {
+
 ImageLabel::ImageLabel(QWidget* parent) : QLabel(parent) {}
 
 void ImageLabel::mousePressEvent(QMouseEvent *)
@@ -13,3 +15,5 @@ void ImageLabel::mousePressEvent(QMouseEvent *)
 		emit valueChanged();
 	}
 }
+
+} // namespace TeamRadar

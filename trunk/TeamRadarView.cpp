@@ -11,6 +11,8 @@
 #include <QXmlStreamReader>
 #include <math.h>
 
+namespace TeamRadar {
+
 TeamRadarView::TeamRadarView(QWidget *parent)
 : QGraphicsView(parent)
 {
@@ -569,3 +571,5 @@ void TeamRadarView::setDirty(const QString& filePath, DirtyType dirty)
 	TeamRadarNode* node = rootNode->findDescendent(filePath);
 	node->setDirty(dirty);
 }
+
+} // namespace TeamRadar

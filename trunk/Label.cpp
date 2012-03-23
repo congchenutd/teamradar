@@ -4,7 +4,6 @@
 #include <QFontMetrics>
 #include <QApplication>
 #include <QPainter>
-#include <QPropertyAnimation>
 #include <QGraphicsScene>
 #include <QGraphicsDropShadowEffect>
 #include <QGraphicsBlurEffect>
@@ -13,6 +12,8 @@
 #include "TeamRadarView.h"
 #include "Setting.h"
 #include "Utility.h"
+
+namespace TeamRadar {
 
 Label::Label(TeamRadarNode *n) : node(n)
 {
@@ -87,3 +88,5 @@ void Label::setEffectsEnabled(bool enable)
 	else
 		setGraphicsEffect(0);
 }
+
+} // namespace TeamRadar

@@ -5,6 +5,8 @@
 #include <QStandardItemModel>
 #include "ui_RequestEventsDlg.h"
 
+namespace TeamRadar {
+
 class RequestEventsDlg : public QDialog
 {
 	Q_OBJECT
@@ -33,5 +35,7 @@ private:
 	enum {NAME, IMAGE, SELECTED};   // for users list
 };
 
+
+} // namespace TeamRadar
 
 #endif // RequestEventsDlg_h__

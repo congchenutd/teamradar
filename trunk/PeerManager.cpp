@@ -12,6 +12,8 @@
 	#include "MessageCollector.h"
 #endif
 
+namespace TeamRadar {
+
 PeerManager::PeerManager(QObject *parent)
 	: QObject(parent), view(0)
 {
@@ -140,3 +142,5 @@ void PeerManager::onEvent(const TeamRadarEvent& event)
 	}
 #endif
 }
+
+} // namespace TeamRadar

@@ -8,6 +8,8 @@
 #include <QTimerEvent>
 #include <QGraphicsScene>
 
+namespace TeamRadar {
+
 Engine* Engine::instance = 0;
 
 Engine::Engine(TeamRadarView* v)
@@ -119,3 +121,5 @@ void LayeredEngine::push(TeamRadarNode* node, qreal& xvel, qreal& yvel)
 		}
 	}
 }
+
+} // namespace TeamRadar

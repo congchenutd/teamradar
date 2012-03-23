@@ -2,7 +2,10 @@
 #define TEAMRADAREVENT_H
 
 #include <QString>
+#include <QDateTime>
 #include "Setting.h"
+
+namespace TeamRadar {
 
 struct TeamRadarEvent
 {
@@ -11,7 +14,7 @@ struct TeamRadarEvent
 				   const QString& para = QString(),
 				   const QString& t = QString())
 		: userName(name), eventType(event), parameters(para) {
-		time = t.isEmpty() ? QDateTime::currentDateTime() 
+		time = t.isEmpty() ? QDateTime::currentDateTime()
 						   : QDateTime::fromString(t, Setting::dateTimeFormat);
 	}
 
@@ -21,5 +24,7 @@ struct TeamRadarEvent
 	QDateTime time;
 };
 
+
+} // namespace TeamRadar
 
 #endif // TEAMRADAREVENT_H

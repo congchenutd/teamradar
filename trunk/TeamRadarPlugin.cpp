@@ -27,6 +27,8 @@
 #include <QtGui/QPushButton>
 #include <QMainWindow>
 
+namespace TeamRadar {
+
 bool TeamRadarPlugin::initialize(const QStringList &arguments, QString *error_message)
 {
 	Q_UNUSED(arguments)
@@ -50,8 +52,6 @@ bool TeamRadarPlugin::initialize(const QStringList &arguments, QString *error_me
 	return true;
 }
 
-Q_EXPORT_PLUGIN(TeamRadarPlugin)
-
 
 //////////////////////////////////////////////////////////////////////////
 // Factory
@@ -69,3 +69,7 @@ QString TeamRadarNavigationWidgetFactory::displayName() const {
 QString TeamRadarNavigationWidgetFactory::id() const {
 	return displayName();
 }
+
+} // namespace TeamRadar
+
+Q_EXPORT_PLUGIN(TeamRadar::TeamRadarPlugin)

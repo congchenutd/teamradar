@@ -3,7 +3,7 @@
 
 #include <extensionsystem/iplugin.h>
 #include <coreplugin/icore.h>
-#include <coreplugin/inavigationwidgetfactory.h> 
+#include <coreplugin/inavigationwidgetfactory.h>
 #include "TeamRadarDlg.h"
 #include "TeamRadarView.h"
 
@@ -13,13 +13,15 @@ namespace Core {
 	class IMode;
 }
 
+namespace TeamRadar {
+
 class TeamRadarNavigationWidgetFactory;
 class TeamRadarPlugin : public ExtensionSystem::IPlugin
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    bool initialize(const QStringList &arguments, QString *error_message);
+	bool initialize(const QStringList &arguments, QString *error_message);
 	void extensionsInitialized() {}
 
 private:
@@ -28,13 +30,15 @@ private:
 
 
 // the Team Radar Window at bottom-left corner
-class TeamRadarNavigationWidgetFactory : public Core::INavigationWidgetFactory 
-{ 
-public: 
-	Core::NavigationView createWidget(); 
+class TeamRadarNavigationWidgetFactory : public Core::INavigationWidgetFactory
+{
+public:
+	Core::NavigationView createWidget();
 	QString displayName() const;
 	QString id() const;
 	virtual int priority() const { return 600; }
-}; 
+};
+
+} // namespace TeamRadar
 
 #endif // TEAMRADARPLUGIN_H

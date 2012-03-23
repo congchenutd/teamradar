@@ -4,6 +4,8 @@
 #include <QPointF>
 #include <QString>
 
+namespace TeamRadar {
+
 QColor complementColor(const QColor& color);
 QPointF generateHeavenPos(int distance = 1000, double angle = 0.0);
 QString toAbsolutePath(const QString& relativePath);
@@ -12,5 +14,7 @@ bool isFilteredFile(const QString& fileName);
 QString toRelativePath(const QString& absolutePath);
 QString getFirstSection(const QString& path);
 QString toStandardPath(const QString& path);  // \ -> /
+
+} // namespace TeamRadar
 
 #endif // UTILITY_H

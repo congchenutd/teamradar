@@ -4,8 +4,9 @@
 #include <QGraphicsObject>
 #include <QFont>
 
+namespace TeamRadar {
+
 class TeamRadarNode;
-class QPropertyAnimation;
 class TeamRadarView;
 
 class Label : public QGraphicsObject
@@ -63,5 +64,7 @@ public:
 	int type() const { return Type; }
 };
 
+
+} // namespace TeamRadar
 
 #endif // LABEL_H

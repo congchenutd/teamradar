@@ -1,13 +1,9 @@
 TEMPLATE = lib
 TARGET = TeamRadar
-PROVIDER = CongChen
 QT += sql network
+#DEFINES += TEAMRADAR_LIBRARY QT_NO_CAST_FROM_ASCII
 
-include(EV.pri)
-include($$IDE_SOURCE_TREE/src/qtcreatorplugin.pri)
-include($$IDE_SOURCE_TREE/src/plugins/coreplugin/coreplugin.pri)
-include($$IDE_SOURCE_TREE/src/plugins/projectexplorer/projectexplorer.pri)
-include($$IDE_SOURCE_TREE/src/plugins/vcsbase/vcsbase.pri)
+include(TeamRadar_dependencies.pri)
 
 LIBS += -L$$IDE_LIBRARY_PATH \
 		-L$$IDE_PLUGIN_PATH/Nokia

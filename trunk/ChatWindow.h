@@ -6,6 +6,8 @@
 #include <QMap>
 #include "ui_ChatWindow.h"
 
+namespace TeamRadar {
+
 // A chat dialog
 class ChatWindow : public QDialog
 {
@@ -38,5 +40,7 @@ private:
 
 	static QMap<QString, ChatWindow*> chatWindows;
 };
+
+} // namespace TeamRadar
 
 #endif // CHATWINDOW_H

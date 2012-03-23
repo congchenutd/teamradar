@@ -3,6 +3,8 @@
 
 #include "MySetting.h"
 
+namespace TeamRadar {
+
 class Setting : public MySetting<Setting>
 {
 public:
@@ -35,11 +37,13 @@ public:
 	void setEngineSubtlety(int subtlety);
 
 private:
-    void loadDefaults();
+	void loadDefaults();
 	QString guessUserName() const;
 
 public:
 	static const QString dateTimeFormat;
 };
+
+} // namespace TeamRadar
 
 #endif // Setting_h__

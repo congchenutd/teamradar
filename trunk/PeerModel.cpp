@@ -5,6 +5,8 @@
 #include <QSqlQuery>
 #include "Setting.h"
 
+namespace TeamRadar {
+
 DeveloperInfo::DeveloperInfo(const QString& n) : name(n), online(false), receive(true)
 {
 	image = Setting::getInstance()->value("DefaultDeveloperImage").toString();
@@ -86,3 +88,5 @@ DeveloperInfo PeerModel::getUserInfo(const QString& name)
 bool PeerModel::isBlocked(const QString& name) {
 	return !getUserInfo(name).receive;
 }
+
+} // namespace TeamRadar

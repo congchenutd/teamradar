@@ -8,6 +8,8 @@
 #include <QMap>
 #include "TeamRadarEvent.h"
 
+namespace TeamRadar {
+
 // Parses the message header & body from Connection
 // Format of packet: header#size#body
 class Receiver : public QObject
@@ -154,5 +156,7 @@ private:
 	static Sender* instance;
 	Connection* connection;
 };
+
+} // namespace TeamRadar
 
 #endif // CONNECTION_H
