@@ -2,6 +2,7 @@
 #define Setting_h__
 
 #include "MySetting.h"
+#include "TagKeyword.h"
 
 namespace TeamRadar {
 
@@ -35,6 +36,11 @@ public:
 	void setShowLightTrail(bool show);
 	void setShowAfterImage(bool show);
 	void setEngineSubtlety(int subtlety);
+
+	// for tag
+	void setTags(const TagKeywords& tags);
+	TagKeywords getTags() const;
+	TagKeywords getDefaultTags() const;
 
 private:
 	void loadDefaults();

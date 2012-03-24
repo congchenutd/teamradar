@@ -8,6 +8,9 @@
 #include "PeerManager.h"
 #include "TeamRadarOptionsPage.h"
 #include "Defines.h"
+#include "TagOutputPane.h"
+#include "TaggingManager.h"
+#include "TagOptionsPage.h"
 
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
@@ -27,6 +30,18 @@ bool TeamRadarPlugin::initialize(const QStringList& arguments, QString* error_me
 	Q_UNUSED(arguments)
 	Q_UNUSED(error_message)
 
+	// for TodoTag
+	qRegisterMetaTypeStreamOperators<TagKeyword> ("TagKeyword");
+	qRegisterMetaTypeStreamOperators<TagKeywords>("TagKeywords");
+
+	TagOutputPane* outPane = new TagOutputPane(this);
+	new TaggingManager(outPane, this);
+
+	addAutoReleasedObject(outPane);
+	addAutoReleasedObject(new TagOptionsPage(this));
+	addAutoReleasedObject(new TagAboutPage(this));
+
+	// team radar
 	PeerModel::openDB("TeamRadar.db");
 	PeerModel::createTables();
 

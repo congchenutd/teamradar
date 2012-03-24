@@ -39,7 +39,7 @@ MessageCollector* MessageCollector::getInstance()
 
 void MessageCollector::onOpenFile(Core::IEditor* editor)
 {
-	connect(editor,         SIGNAL(changed()), this, SLOT(onChangeFile()));  // editted
+//	connect(editor,         SIGNAL(changed()), this, SLOT(onChangeFile()));  // editted
 	connect(editor->file(), SIGNAL(changed()), this, SLOT(onChangeFile()));  // saved
 }
 

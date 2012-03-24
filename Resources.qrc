@@ -31,5 +31,11 @@
         <file>Images/Radar.png</file>
         <file>CompileDate.txt</file>
         <file>Images/Analyze.png</file>
+        <file>Images/Bug.png</file>
+        <file>Images/Critical.png</file>
+        <file>Images/Information.png</file>
+        <file>Images/Tag.png</file>
+        <file>Images/Todo.png</file>
+        <file>Images/Warning.png</file>
     </qresource>
 </RCC>
