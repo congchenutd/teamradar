@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TagDlgClass</class>
+ <widget class="QDialog" name="TagDlgClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>215</width>
+    <height>267</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Tag</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Icon</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="QListWidget" name="listWidget">
+     <item>
+      <property name="text">
+       <string>Bug</string>
+      </property>
+      <property name="icon">
+       <iconset resource="Resource.qrc">
+        <normaloff>:/Images/Bug.png</normaloff>:/Images/Bug.png</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Critical</string>
+      </property>
+      <property name="icon">
+       <iconset resource="Resource.qrc">
+        <normaloff>:/Images/Critical.png</normaloff>:/Images/Critical.png</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Information</string>
+      </property>
+      <property name="icon">
+       <iconset resource="Resource.qrc">
+        <normaloff>:/Images/Information.png</normaloff>:/Images/Information.png</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Todo</string>
+      </property>
+      <property name="icon">
+       <iconset resource="Resource.qrc">
+        <normaloff>:/Images/Todo.png</normaloff>:/Images/Todo.png</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Warning</string>
+      </property>
+      <property name="icon">
+       <iconset resource="Resource.qrc">
+        <normaloff>:/Images/Warning.png</normaloff>:/Images/Warning.png</iconset>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Color</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="TeamRadar::ColorLabel" name="labelColor">
+     <property name="text">
+      <string>Click me to choose</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Keyword</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QLineEdit" name="leKeyword"/>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TeamRadar::ColorLabel</class>
+   <extends>QLabel</extends>
+   <header>ColorLabel.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="Resource.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>TagDlgClass</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>TagDlgClass</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

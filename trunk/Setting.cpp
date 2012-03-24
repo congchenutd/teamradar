@@ -74,6 +74,8 @@ void Setting::loadDefaults()
 	setExtensionColor("ico",  QColor(255, 102, 204));
 	setExtensionColor("icns", QColor(255, 102, 204));
 	setExtensionColor("jpg",  QColor(255, 102, 204));
+
+	setTags(getDefaultTags());
 }
 
 QColor Setting::getColor(const QString& section) const {
@@ -207,6 +209,27 @@ QString Setting::guessUserName() const
 	}
 
 	return result.isEmpty() ? "Unknown" : result;
+}
+
+void Setting::setTags(const TagKeywords& tags) {
+	setValue("TodoTag/TagKeywords", QVariant::fromValue(tags));
+}
+
+TagKeywords Setting::getTags() const {
+	return value("TodoTag/TagKeywords").value<TagKeywords>();
+}
+
+TagKeywords Setting::getDefaultTags() const
+{
+	TagKeywords result;
+	result << TagKeyword("NOTE",     QIcon(":/Images/Information"), QColor("#E2DFFF"));
+	result << TagKeyword("INFO",     QIcon(":/Images/Information"), QColor("#E2DFFF"));
+	result << TagKeyword("TODO",     QIcon(":/Images/Todo"),        QColor("#BFFFC8"));
+	result << TagKeyword("WARNING",  QIcon(":/Images/Warning"),     QColor("#FFFFAA"));
+	result << TagKeyword("FIXME",    QIcon(":/Images/Bug"),         QColor("#FFDFDF"));
+	result << TagKeyword("BUG",      QIcon(":/Images/Bug"),         QColor("#FFDFDF"));
+	result << TagKeyword("Critical", QIcon(":/Images/Critical"),    QColor("#FFBFBF"));
+	return result;
 }
 
 } // namespace TeamRadar
