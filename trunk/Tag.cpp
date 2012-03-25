@@ -34,5 +34,12 @@ QString Tag::toPacket() const
 	return sections.join(QString(Connection::Delimiter2));
 }
 
+bool Tag::operator== (const Tag& other)
+{
+	return  keyword.name == other.keyword.name &&
+			text         == other.text         &&
+			filePath     == other.filePath;
+}
+
 
 }  // namespace TeamRadar

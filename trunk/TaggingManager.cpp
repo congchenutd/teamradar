@@ -69,6 +69,7 @@ void TaggingManager::onProjectChanged(ProjectExplorer::Project* project)
 
 	currentProject = project;
 	outPane->clearContents();
+	tags.clear();
 
 	reading = true;
 	QFuture<void> result = QtConcurrent::run(&TaggingManager::readCurrentProject, this);
@@ -109,8 +110,12 @@ void TaggingManager::readFile(const QString& filePath)
 		Tag tag = findTag(line, filePath, lineNumber);
 		if(tag.isValid())
 		{
+			if(!tags.contains(tag))
+			{
+				communicator->sendTaggingEvent(tag);
+				tags << tag;
+			}
 			outPane->addTag(tag);
-			communicator->sendTaggingEvent(tag);
 			if(!reading)
 				outPane->sort();
 		}

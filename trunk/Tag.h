@@ -36,6 +36,7 @@ public:
 	QString toString() const;
 	QString toPacket() const;    // for network transmisson
 	bool    isValid() const { return keyword.isValid(); }
+	bool operator== (const Tag& other);
 
 	QString    userName;
 	TagKeyword keyword;
