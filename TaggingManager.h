@@ -7,6 +7,7 @@
 #include <coreplugin/editormanager/editormanager.h>
 #include <QObject>
 #include <QFuture>
+#include <QSet>
 
 class QListWidgetItem;
 
@@ -18,6 +19,9 @@ struct TaggingEvent;
 class TaggingManager : public QObject
 {
 	Q_OBJECT
+
+	typedef QList<Tag> Tags;
+
 public:
 	TaggingManager(TagOutputPane* output, QObject* parent = 0);
 
@@ -40,6 +44,7 @@ private:
 	TagOutputPane* outPane;
 	Communicator*  communicator;
 	TagKeywords    tagKeywords;
+	Tags           tags;
 	bool           reading;
 };
 
