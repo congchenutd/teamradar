@@ -27,8 +27,6 @@ typedef QMap<QString, TagKeyword> TagKeywords;
 QDataStream& operator<<(QDataStream& out, const TagKeyword& tag);
 QDataStream& operator>>(QDataStream& in,  TagKeyword& tag);
 
-Q_DECLARE_METATYPE(TagKeywords)
-Q_DECLARE_METATYPE(TagKeyword)
 
 //////////////////////////////////////////////////////////////////////
 class Tag
@@ -47,5 +45,8 @@ public:
 };
 
 }  // namespace TeamRadar
+
+Q_DECLARE_METATYPE(TeamRadar::TagKeywords)
+Q_DECLARE_METATYPE(TeamRadar::TagKeyword)
 
 #endif // TAG_H
