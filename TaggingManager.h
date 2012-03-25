@@ -1,7 +1,7 @@
 #ifndef TAGGINGMANAGER_H
 #define TAGGINGMANAGER_H
 
-#include "TagKeyword.h"
+#include "Tag.h"
 #include "Communicator.h"
 #include <projectexplorer/project.h>
 #include <coreplugin/editormanager/editormanager.h>
@@ -20,7 +20,7 @@ class TaggingManager : public QObject
 	Q_OBJECT
 public:
 	TaggingManager(TagOutputPane* output, QObject* parent = 0);
-	
+
 private slots:
 	void onGotoRow(QListWidgetItem*);
 	void onCurrentEditorChanged(Core::IEditor* editor);
@@ -30,9 +30,8 @@ private slots:
 
 private:
 	void readFile(const QString& filePath);
-	QRegExp generatePattern(const TagKeyword& tag);
-	TagKeyword findMatchingTag(const QString& line);
-	void formatLine(QString& line, const TagKeyword& tag);
+	QRegExp generatePattern(const TagKeyword& keyword);
+	Tag     findTag(const QString& line, const QString& filePath, int row);
 
 	static void readCurrentProject(QFutureInterface<void>& future, TaggingManager* instance);
 

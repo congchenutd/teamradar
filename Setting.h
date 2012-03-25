@@ -2,7 +2,7 @@
 #define Setting_h__
 
 #include "MySetting.h"
-#include "TagKeyword.h"
+#include "Tag.h"
 
 namespace TeamRadar {
 

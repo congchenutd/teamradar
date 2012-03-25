@@ -176,7 +176,6 @@ void Connection::onDisconnected()
 
 void Connection::send(const QByteArray& header, const QByteArray& body)
 {
-//	QByteArray b = body.isEmpty() ? "P" : body;
 	QByteArray message(header);
 	if(!header.endsWith(Delimiter1))
 		message.append(Delimiter1);

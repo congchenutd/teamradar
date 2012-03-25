@@ -12,15 +12,15 @@ TagOutputPane::~TagOutputPane() {
 	delete todoList;
 }
 
-void TagOutputPane::addItem(const QString& text, const QString& filePath, int row, const TagKeyword& tag)
+void TagOutputPane::addTag(const Tag& tag)
 {
 	QListWidgetItem* item = new QListWidgetItem;
-	item->setIcon(tag.icon);
-	item->setBackgroundColor(tag.bgColor);
-	item->setData(FilePathRole,   filePath);   // hide meta data here
-	item->setData(LineNumberRole, row);
-	item->setToolTip(filePath + ":" + QString::number(row));
-	item->setText(text + " (" + QFileInfo(filePath).fileName() + ":" + QString::number(row) + ") ");
+	item->setIcon(tag.keyword.icon);
+	item->setBackgroundColor(tag.keyword.bgColor);
+	item->setData(FilePathRole,   tag.filePath);   // hide meta data here
+	item->setData(LineNumberRole, tag.lineNumber);
+	item->setToolTip(tag.filePath + ":" + QString::number(tag.lineNumber));
+	item->setText(tag.toString());
 	todoList->addItem(item);
 }
 

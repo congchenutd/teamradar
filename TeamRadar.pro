@@ -43,10 +43,10 @@ HEADERS += ChatWindow.h \
     TagOutputPane.h \
     TagOptionsPage.h \
     TagOptionsDlg.h \
-    TagKeyword.h \
     TaggingManager.h \
     TagDlg.h \
-    Communicator.h
+    Communicator.h \
+    Tag.h
 FORMS += ChatWindow.ui \
 		 PlayerWidget.ui \
 		 RequestEventsDlg.ui \
@@ -82,9 +82,9 @@ SOURCES += ChatWindow.cpp \
     TagOutputPane.cpp \
     TagOptionsPage.cpp \
     TagOptionsDlg.cpp \
-    TagKeyword.cpp \
     TaggingManager.cpp \
     TagDlg.cpp \
-    Communicator.cpp
+    Communicator.cpp \
+    Tag.cpp
 RESOURCES += Resources.qrc
 OTHER_FILES += TeamRadar.pluginspec

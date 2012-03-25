@@ -1,5 +1,6 @@
 #include "TaggingManager.h"
 #include "TagOutputPane.h"
+#include "Utility.h"
 #include <coreplugin/icore.h>
 #include <coreplugin/progressmanager/progressmanager.h>
 #include <coreplugin/editormanager/ieditor.h>
@@ -25,11 +26,13 @@ TaggingManager::TaggingManager(TagOutputPane* output, QObject* parent) : QObject
 	connect(ProjectExplorer::ProjectExplorerPlugin::instance(),
 			SIGNAL(currentProjectChanged(ProjectExplorer::Project*)),
 			this, SLOT(onProjectChanged(ProjectExplorer::Project*)));
+	connect(communicator, SIGNAL(remoteTagging(TaggingEvent)),
+			this, SLOT(onRemoteTaggingEvent(TaggingEvent)));
 }
 
 void TaggingManager::onGotoRow(QListWidgetItem* item)
 {
-	QString filePath = item->data(TagOutputPane::FilePathRole).toString();
+	QString filePath = toAbsolutePath(item->data(TagOutputPane::FilePathRole).toString());
 	if(QFileInfo(filePath).exists())
 	{
 		Core::IEditor* editor = Core::EditorManager::instance()->openEditor(filePath);
@@ -52,7 +55,7 @@ void TaggingManager::onFileChanged()
 {
 	if(Core::IFile* file = dynamic_cast<Core::IFile*>(sender()))
 	{
-		outPane->clearContents(file->fileName());
+		outPane->clearContents(toRelativePath(file->fileName()));
 		readFile(file->fileName());
 	}
 }
@@ -71,30 +74,8 @@ void TaggingManager::onProjectChanged(ProjectExplorer::Project* project)
 	Core::ICore::instance()->progressManager()->addTask(result, tr("TodoScan"), "Todo.Plugin.Scanning");
 }
 
-void TaggingManager::onRemoteTaggingEvent(const TaggingEvent& event)
-{
-}
-
-// scan a file
-void TaggingManager::readFile(const QString& filePath)
-{
-	QFile file(filePath);
-	if(!file.open(QFile::ReadOnly | QFile::Text))
-		return;
-
-	for(int lineNumber = 1; !file.atEnd(); ++lineNumber)
-	{
-		QString line = file.readLine();
-		TagKeyword tagKeyword = findMatchingTag(line);
-		if(tagKeyword.isValid())
-		{
-			formatLine(line, tagKeyword);
-			outPane->addItem(line, filePath, lineNumber, tagKeyword);
-			communicator->sendTaggingEvent(line, filePath, lineNumber);
-			if(!reading)
-				outPane->sort();
-		}
-	}
+void TaggingManager::onRemoteTaggingEvent(const TaggingEvent& event) {
+	outPane->addTag(event.toTag());
 }
 
 // scan a project
@@ -114,25 +95,51 @@ void TaggingManager::readCurrentProject(QFutureInterface<void>& future, TaggingM
 	future.reportFinished();
 }
 
-QRegExp TaggingManager::generatePattern(const TagKeyword& tag) {
-	return QRegExp("//\\s*" + tag.name + "(:|\\s)", Qt::CaseInsensitive);
+// scan a file
+void TaggingManager::readFile(const QString& filePath)
+{
+	QFile file(filePath);
+	if(!file.open(QFile::ReadOnly | QFile::Text))
+		return;
+
+	for(int lineNumber = 1; !file.atEnd(); ++lineNumber)
+	{
+		QString line = file.readLine();
+		Tag tag = findTag(line, filePath, lineNumber);
+		if(tag.isValid())
+		{
+			outPane->addTag(tag);
+			communicator->sendTaggingEvent(tag);
+			if(!reading)
+				outPane->sort();
+		}
+	}
 }
 
-TagKeyword TaggingManager::findMatchingTag(const QString& line)
+Tag TaggingManager::findTag(const QString& line, const QString& filePath, int row)
 {
-	foreach(const TagKeyword& tagKeyword, tagKeywords)
-		if(line.contains(generatePattern(tagKeyword)))
-			return tagKeyword;
-	return TagKeyword();
+	Tag tag;
+	foreach(const TagKeyword& keyword, tagKeywords)
+		if(line.contains(generatePattern(keyword)))
+		{
+			QString text = line;
+			text.remove("\n");
+			text.remove("\r");
+			text.remove(generatePattern(keyword));
+			text = text.trimmed();
+			text = QTextCodec::codecForLocale()->toUnicode(text.toAscii());
+			tag.userName   = Setting::getInstance()->getUserName();
+			tag.keyword    = keyword;
+			tag.text       = text;
+			tag.filePath   = toRelativePath(filePath);
+			tag.lineNumber = row;
+			return tag;
+		}
+	return tag;
 }
 
-void TaggingManager::formatLine(QString& line, const TagKeyword& tag)
-{
-	line.replace("\n", "");
-	line.replace("\r", "");
-	line.replace(generatePattern(tag), tag.name + ": ");
-	line = line.trimmed();
-	line = QTextCodec::codecForLocale()->toUnicode(line.toAscii());
+QRegExp TaggingManager::generatePattern(const TagKeyword& keyword) {
+	return QRegExp("//\\s*" + keyword.name + "(:|\\s)", Qt::CaseInsensitive);
 }
 
 }

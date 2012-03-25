@@ -222,13 +222,13 @@ TagKeywords Setting::getTags() const {
 TagKeywords Setting::getDefaultTags() const
 {
 	TagKeywords result;
-	result << TagKeyword("NOTE",     QIcon(":/Images/Information"), QColor("#E2DFFF"));
-	result << TagKeyword("INFO",     QIcon(":/Images/Information"), QColor("#E2DFFF"));
-	result << TagKeyword("TODO",     QIcon(":/Images/Todo"),        QColor("#BFFFC8"));
-	result << TagKeyword("WARNING",  QIcon(":/Images/Warning"),     QColor("#FFFFAA"));
-	result << TagKeyword("FIXME",    QIcon(":/Images/Bug"),         QColor("#FFDFDF"));
-	result << TagKeyword("BUG",      QIcon(":/Images/Bug"),         QColor("#FFDFDF"));
-	result << TagKeyword("Critical", QIcon(":/Images/Critical"),    QColor("#FFBFBF"));
+	result.insert("NOTE",     TagKeyword("NOTE",     QIcon(":/Images/Information"), QColor("#E2DFFF")));
+	result.insert("INFO",     TagKeyword("INFO",     QIcon(":/Images/Information"), QColor("#E2DFFF")));
+	result.insert("TODO",     TagKeyword("TODO",     QIcon(":/Images/Todo"),        QColor("#BFFFC8")));
+	result.insert("WARNING",  TagKeyword("WARNING",  QIcon(":/Images/Warning"),     QColor("#FFFFAA")));
+	result.insert("FIXME",    TagKeyword("FIXME",    QIcon(":/Images/Bug"),         QColor("#FFDFDF")));
+	result.insert("BUG",      TagKeyword("BUG",      QIcon(":/Images/Bug"),         QColor("#FFDFDF")));
+	result.insert("Critical", TagKeyword("Critical", QIcon(":/Images/Critical"),    QColor("#FFBFBF")));
 	return result;
 }
 

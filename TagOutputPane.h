@@ -1,7 +1,7 @@
 #ifndef TODOOUTPUTPANE_H
 #define TODOOUTPUTPANE_H
 
-#include "TagKeyword.h"
+#include "Tag.h"
 #include <coreplugin/ioutputpane.h>
 #include <QListWidget>
 
@@ -30,7 +30,7 @@ public:
 	virtual void goToPrev();
 
 	void sort();
-	void addItem(const QString& text, const QString& filePath, int row, const TagKeyword& tag);
+	void addTag(const Tag& tag);
 	QListWidget* getTodoList() const { return todoList; }
 
 public:
