@@ -127,7 +127,7 @@ Tag TaggingManager::findTag(const QString& line, const QString& filePath, int ro
 			text.remove("\r");
 			text.remove(generatePattern(keyword));
 			text = text.trimmed();
-			text = QTextCodec::codecForLocale()->toUnicode(text.toAscii());
+			text = QTextCodec::codecForLocale()- >toUnicode(text.toAscii());
 			tag.userName   = Setting::getInstance()->getUserName();
 			tag.keyword    = keyword;
 			tag.text       = text;
