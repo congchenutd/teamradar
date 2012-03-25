@@ -4,8 +4,9 @@
 #include <QIcon>
 #include <QColor>
 #include <QString>
-#include <QList>
+#include <QMap>
 #include <QMetaType>
+#include <QFileInfo>
 
 namespace TeamRadar {
 
@@ -21,13 +22,29 @@ public:
 	QColor  bgColor;
 };
 
-typedef QList<TagKeyword> TagKeywords;
+typedef QMap<QString, TagKeyword> TagKeywords;
 
 QDataStream& operator<<(QDataStream& out, const TagKeyword& tag);
 QDataStream& operator>>(QDataStream& in,  TagKeyword& tag);
 
 Q_DECLARE_METATYPE(TagKeywords)
 Q_DECLARE_METATYPE(TagKeyword)
+
+//////////////////////////////////////////////////////////////////////
+class Tag
+{
+public:
+	Tag() {}
+	QString toString() const;
+	QString toPacket() const;    // for network transmisson
+	bool    isValid() const { return keyword.isValid(); }
+
+	QString    userName;
+	TagKeyword keyword;
+	QString    text;
+	QString    filePath;
+	int        lineNumber;
+};
 
 }  // namespace TeamRadar
 
