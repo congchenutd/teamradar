@@ -17,27 +17,17 @@ QPointF generateHeavenPos(int distance, double angle)
 	return QPointF(sin(theta) * distance, cos(theta) * distance);
 }
 
+// suppose the root path = c:/abc, relativePath = /d/e/f.h
+// return c:/abc/d/e/f.h
 QString toAbsolutePath(const QString& relativePath)
 {
 	QString rootPath = Setting::getInstance()->getRootPath();
 	if(relativePath == rootPath)
 		return relativePath;
 
-	if(QFileInfo(relativePath).isAbsolute())
+	if(QFileInfo(relativePath).isAbsolute())  // already absolute
 		return relativePath;
 	return rootPath + '/' + relativePath;
-}
-
-bool isFilteredDir(const QString& dirName)
-{
-	static QStringList filteredDirs = Setting::getInstance()->value("FilteredDirs").toString().split(';');
-	return filteredDirs.contains(dirName, Qt::CaseInsensitive);
-}
-
-bool isFilteredFile(const QString& fileName)
-{
-	static QStringList filteredFiles = Setting::getInstance()->value("FilteredFiles").toString().split(';');
-	return filteredFiles.contains(QFileInfo(fileName).suffix(), Qt::CaseInsensitive);
 }
 
 // suppose the root path = c:/abc, absolutePath = c:/abc/d/e/f.h
@@ -51,6 +41,18 @@ QString toRelativePath(const QString& absolutePath)
 	QString rootPath = Setting::getInstance()->getRootPath();
 	result.remove(rootPath);
 	return result.right(result.length() - 1);   // remove the first '/'
+}
+
+bool isFilteredDir(const QString& dirName)
+{
+	static QStringList filteredDirs = Setting::getInstance()->value("FilteredDirs").toString().split(';');
+	return filteredDirs.contains(dirName, Qt::CaseInsensitive);
+}
+
+bool isFilteredFile(const QString& fileName)
+{
+	static QStringList filteredFiles = Setting::getInstance()->value("FilteredFiles").toString().split(';');
+	return filteredFiles.contains(QFileInfo(fileName).suffix(), Qt::CaseInsensitive);
 }
 
 // if path = a/b/c.h, return a

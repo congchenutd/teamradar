@@ -36,9 +36,10 @@ TagKeywords TagOptionsDlg::getTags()
 {
 	TagKeywords result;
 	for(int i = 0; i < ui.listWidgetTags->count(); ++i)
-		result.append(TagKeyword(ui.listWidgetTags->item(i)->text(),
-						  ui.listWidgetTags->item(i)->icon(),
-						  ui.listWidgetTags->item(i)->backgroundColor()));
+		result.insert(ui.listWidgetTags->item(i)->text(),
+					  TagKeyword(ui.listWidgetTags->item(i)->text(),
+								 ui.listWidgetTags->item(i)->icon(),
+								 ui.listWidgetTags->item(i)->backgroundColor()));
 	return result;
 }
 

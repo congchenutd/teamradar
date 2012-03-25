@@ -2,7 +2,7 @@
 #define SETTINGDLG_H
 
 #include <QWidget>
-#include "TagKeyword.h"
+#include "Tag.h"
 #include "ui_TagOptionsDlg.h"
 
 namespace TeamRadar {
