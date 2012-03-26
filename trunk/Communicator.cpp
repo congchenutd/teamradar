@@ -30,7 +30,7 @@ TaggingEvent TaggingEvent::fromTeamRadarEvent(const TeamRadarEvent& trEvent)
 
 	// parameters = tagName;text;filename;linenumber
 	QStringList sections = trEvent.parameters.split(Connection::Delimiter2);
-	if(sections.size() <= 4)
+	if(sections.size() < 4)
 		return taggingEvent;
 
 	taggingEvent.userName   = trEvent.userName;
@@ -47,6 +47,7 @@ Tag TaggingEvent::toTag() const
 	TagKeywords keywords = Setting::getInstance()->getTags();
 	if(keywords.contains(tagName))
 	{
+		tag.userName   = userName;
 		tag.keyword    = keywords[tagName];
 		tag.text       = tagText;
 		tag.filePath   = filePath;

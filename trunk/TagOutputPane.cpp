@@ -4,8 +4,12 @@
 
 namespace TeamRadar {
 
-TagOutputPane::TagOutputPane(QObject* parent) : IOutputPane(parent) {
+TagOutputPane::TagOutputPane(QObject* parent) : IOutputPane(parent)
+{
 	todoList = new QListWidget;
+//	QFont font = qApp->font();
+//	font.setPointSize(12);
+//	todoList->setFont(font);
 }
 
 TagOutputPane::~TagOutputPane() {
