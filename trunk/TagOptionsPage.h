@@ -15,9 +15,9 @@ public:
 	TagOptionsPage(QObject* parent = 0) : IOptionsPage(parent) {}
 
 	virtual QString id()              const { return "TodoSettingTab1_Setting"; }
-	virtual QString category()        const { return "TODO"; }
-	virtual QString displayName()     const { return "TODO"; }
-	virtual QString displayCategory() const { return "TODO"; }
+	virtual QString displayName()     const { return "Tags"; }
+	virtual QString category()        const { return "Unagi"; }
+	virtual QString displayCategory() const { return "Unagi"; }
 	virtual QIcon   categoryIcon()    const { return QIcon(":/Images/Tag"); }
 	virtual QWidget* createPage(QWidget *parent);
 	virtual void apply();
