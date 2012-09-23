@@ -14,6 +14,7 @@ bool isFilteredDir (const QString& dirName);
 bool isFilteredFile(const QString& fileName);
 QString getFirstSection(const QString& path);
 QString toStandardPath(const QString& path);  // \ -> /
+void updateWindowTitleAddition();  // add username to windowtitle
 
 } // namespace TeamRadar
 

@@ -53,6 +53,8 @@ void MessageCollector::onCurrentFileChanged(Core::IEditor* editor)
 	// skip vcs editors, because they will save and close some tmp files
 	if(qobject_cast<VCSBase::VCSBaseSubmitEditor*>(editor) == 0)
 		currentEditor = editor;
+
+    updateWindowTitleAddition();
 }
 
 void MessageCollector::onChangeMode(Core::IMode* mode, Core::IMode* oldMode)

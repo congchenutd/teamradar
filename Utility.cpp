@@ -4,6 +4,8 @@
 #include <math.h>
 #include <QFile>
 #include <QFileInfo>
+#include <coreplugin/icore.h>
+#include <coreplugin/editormanager/editormanager.h>
 
 namespace TeamRadar {
 
@@ -67,6 +69,16 @@ QString toStandardPath(const QString& path)
 	QString result = path;
 	result.replace('\\', '/');
 	return result;
+}
+
+void updateWindowTitleAddition()
+{
+    Core::EditorManager* editorManager = Core::ICore::instance()->editorManager();
+    QString titleAddition = editorManager->windowTitleAddition();
+    QRegExp rx(" - *", Qt::CaseInsensitive, QRegExp::Wildcard);
+    titleAddition.remove(rx);
+    titleAddition.append(" - " + Setting::getInstance()->getUserName());
+    editorManager->setWindowTitleAddition(titleAddition);
 }
 
 } // namespace TeamRadar
