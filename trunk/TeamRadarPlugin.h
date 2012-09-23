@@ -4,8 +4,6 @@
 #include <extensionsystem/iplugin.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/inavigationwidgetfactory.h>
-#include "TeamRadarDlg.h"
-#include "TeamRadarView.h"
 
 namespace Core {
 	class EditorManager;
@@ -15,6 +13,7 @@ namespace Core {
 
 namespace TeamRadar {
 
+class Setting;
 class TeamRadarNavigationWidgetFactory;
 class TeamRadarPlugin : public ExtensionSystem::IPlugin
 {
@@ -34,8 +33,8 @@ class TeamRadarNavigationWidgetFactory : public Core::INavigationWidgetFactory
 {
 public:
 	Core::NavigationView createWidget();
-	QString displayName() const;
-	QString id() const;
+    QString displayName()  const { return tr("Team Radar"); }
+    QString id()           const { return displayName(); }
 	virtual int priority() const { return 600; }
 };
 

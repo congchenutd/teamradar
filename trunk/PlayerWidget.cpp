@@ -15,6 +15,7 @@
 #include "RequestEventsDlg.h"
 #include "ChatWindow.h"
 #include "Analyzer.h"
+#include "Utility.h"
 
 namespace TeamRadar {
 
@@ -190,8 +191,10 @@ void PlayerWidget::play(const TeamRadarEvent& event)
 		ui.graphicsView->setDirty(event.parameters, NotDirty);
 }
 
-void PlayerWidget::reloadProject() {
+void PlayerWidget::reloadProject()
+{
 	ui.graphicsView->loadDir(Setting::getInstance()->getRootPath());
+    updateWindowTitleAddition();
 }
 
 void PlayerWidget::setDeveloperImage(const QString& name, const QImage& image) {

@@ -1,26 +1,16 @@
 #include "TeamRadarPlugin.h"
-#include "TeamRadarDlg.h"
+#include "Defines.h"
 #include "MessageCollector.h"
-#include "TeamRadarView.h"
 #include "Connection.h"
 #include "PlayerWidget.h"
 #include "Setting.h"
 #include "PeerManager.h"
 #include "TeamRadarOptionsPage.h"
-#include "Defines.h"
 #include "TagOutputPane.h"
 #include "TaggingManager.h"
 #include "TagOptionsPage.h"
+#include "Utility.h"
 
-#include <coreplugin/actionmanager/actionmanager.h>
-#include <coreplugin/actionmanager/actioncontainer.h>
-#include <coreplugin/coreconstants.h>
-#include <coreplugin/icontext.h>
-#include <coreplugin/icore.h>
-#include <coreplugin/imode.h>
-#include <coreplugin/modemanager.h>
-#include <coreplugin/editormanager/ieditor.h>
-#include <coreplugin/editormanager/editormanager.h>
 #include <QtCore/QtPlugin>
 
 namespace TeamRadar {
@@ -68,14 +58,6 @@ Core::NavigationView TeamRadarNavigationWidgetFactory::createWidget()
 	Core::NavigationView view;
 	view.widget = PlayerWidget::getInstance();
 	return view;
-}
-
-QString TeamRadarNavigationWidgetFactory::displayName() const {
-	return "TeamRadar - " + Setting::getInstance()->getUserName();
-}
-
-QString TeamRadarNavigationWidgetFactory::id() const {
-	return displayName();
 }
 
 } // namespace TeamRadar
