@@ -4,8 +4,11 @@
 #include <math.h>
 #include <QFile>
 #include <QFileInfo>
-#include <coreplugin/icore.h>
-#include <coreplugin/editormanager/editormanager.h>
+
+#ifdef OS_DESKTOP
+    #include <coreplugin/icore.h>
+    #include <coreplugin/editormanager/editormanager.h>
+#endif
 
 namespace TeamRadar {
 
@@ -73,12 +76,14 @@ QString toStandardPath(const QString& path)
 
 void updateWindowTitleAddition()
 {
+#ifdef OS_DESKTOP
     Core::EditorManager* editorManager = Core::ICore::instance()->editorManager();
     QString titleAddition = editorManager->windowTitleAddition();
     QRegExp rx(" - *", Qt::CaseInsensitive, QRegExp::Wildcard);
     titleAddition.remove(rx);
     titleAddition.append(" - " + Setting::getInstance()->getUserName());
     editorManager->setWindowTitleAddition(titleAddition);
+#endif
 }
 
 } // namespace TeamRadar
