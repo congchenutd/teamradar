@@ -39,11 +39,11 @@ PlayerWidget::PlayerWidget(QWidget *parent) :
 	ui.setupUi(this);
 	QGraphicsScene *scene = new QGraphicsScene(this);
 	scene->setItemIndexMethod(QGraphicsScene::NoIndex);
-	scene->setSceneRect(-300, -300, 600, 600);
+    scene->setSceneRect(-300, -300, 600, 600);
 	ui.graphicsView->setScene(scene);
 	peerManager->setView(ui.graphicsView);
 
-	ui.tvPlaylist->setModel(modelPlaylist);
+    ui.tvPlaylist->setModel(modelPlaylist);
 	playIcon  = style()->standardIcon(QStyle::SP_MediaPlay);
 	pauseIcon = style()->standardIcon(QStyle::SP_MediaPause);
 	ui.btPlayPause->setIcon(playIcon);

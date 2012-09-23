@@ -644,7 +644,7 @@ void HumanNode::setNewPos(const QPointF &p)
 QVariant HumanNode::itemChange(GraphicsItemChange change, const QVariant& value)
 {
 	// resize the view when the human loses selection
-	if(change == ItemSelectedHasChanged && Engine::getEngine()->isRunning() && !value.toBool())
+    if(change == ItemSelectedHasChanged /*&& Engine::getEngine()->isRunning() */&& !value.toBool())
 		view->autoScale();
 	return TeamRadarNode::itemChange(change, value);
 }

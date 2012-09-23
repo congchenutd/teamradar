@@ -27,9 +27,9 @@ TeamRadarView::TeamRadarView(QWidget *parent)
 	setViewportUpdateMode(BoundingRectViewportUpdate);
 	setRenderHints(QPainter::Antialiasing);
 	setTransformationAnchor(AnchorUnderMouse);
-	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	setBackgroundBrush(QBrush(Setting::getInstance()->getColor("BackgroundColor")));
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy  (Qt::ScrollBarAlwaysOff);
+    setBackgroundBrush(QBrush(Setting::getInstance()->getColor("BackgroundColor")));
 	initActions();
 	TeamRadarNode::setGraph(this);
 	NodeLabel::setGraph(this);
@@ -74,7 +74,7 @@ void TeamRadarView::keyPressEvent(QKeyEvent *event)
 	switch(event->key())
 	{
 	case Qt::Key_Up:
-		moveCanvasBy(0, 20 / scaleFactor);
+        moveCanvasBy(0, 20 / scaleFactor);
 		break;
 	case Qt::Key_Down:
 		moveCanvasBy(0, -20 / scaleFactor);
@@ -103,18 +103,32 @@ void TeamRadarView::keyPressEvent(QKeyEvent *event)
 
 void TeamRadarView::wheelEvent(QWheelEvent *event)
 {
-	scaleBy(pow((double)2, event->delta() / 240.0));
+    scaleBy(pow((double)2, event->delta() / 300.0));
 	centerTree();
 }
 
 void TeamRadarView::scaleBy(qreal scaleFactor)
 {
 	qreal factor = transform().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width();
-	if(0.01 <= factor && factor <= 100)
+    if(0.2 <= factor && factor <= 4)
 	{
 		scale(scaleFactor, scaleFactor);
 		this->scaleFactor *= scaleFactor;
 	}
+}
+
+void TeamRadarView::resetScale()
+{
+    QRectF unity = transform().mapRect(QRectF(0, 0, 1, 1));
+    if(unity.isEmpty())
+        return;
+    scaleBy(qMin(1/unity.width(), 1/unity.height()));
+}
+
+void TeamRadarView::scaleTo(qreal scaleFactor)
+{
+    resetScale();
+    scaleBy(scaleFactor);
 }
 
 void TeamRadarView::loadDir(const QString& dirPath)
@@ -123,7 +137,7 @@ void TeamRadarView::loadDir(const QString& dirPath)
 	if(!dirPath.isEmpty())
 	{
 		setRoot(createNode(true, dirPath, 0));  // create root first
-		centerTree();
+        centerTree(rootNode);
 	}
 }
 
@@ -252,15 +266,6 @@ TeamRadarNode* TeamRadarView::loadNodeFromXML(QXmlStreamReader& xml, TeamRadarNo
 	return node;
 }
 
-void TeamRadarView::moveCanvasBy(int x, int y) {
-	const QRectF rect = sceneRect();
-	scene()->setSceneRect(rect.x() - x, rect.y() - y, rect.width(), rect.height());
-}
-
-void TeamRadarView::moveCanvasBy(const QPointF& vec) {
-	moveCanvasBy(vec.x(), vec.y());
-}
-
 void TeamRadarView::setShowLabels(bool show)
 {
 	foreach(QGraphicsItem* item, items())
@@ -272,7 +277,7 @@ void TeamRadarView::mouseMoveEvent(QMouseEvent* event)
 {
 	if(dragging)      // move canvas
 	{
-		moveCanvasBy(event->pos() - lastMousePos);
+        moveCanvasBy(event->pos() - lastMousePos);
 		lastMousePos = event->pos();
 	}
 	QGraphicsView::mouseMoveEvent(event);
@@ -416,70 +421,58 @@ void TeamRadarView::removeDeveloper(const QString& name)
 // auto-scale and center the tree
 void TeamRadarView::autoScale()
 {
-	QRectF itemsRect = nodesBoundingRect();
-	if(!size().isValid() || !itemsRect.isValid())
-		return;
+    QRectF itemsRect = scene()->itemsBoundingRect();
+    if(!size().isValid() || !itemsRect.isValid())
+        return;
 
-	const int margin = 50;     // don't know why it's needed
-	qreal xRatio = (qreal)size().width()  / (itemsRect.width()  + margin);
-	qreal yRatio = (qreal)size().height() / (itemsRect.height() + margin);
-	scaleTo(qMin(xRatio, yRatio));
-	centerTree();
+    const int margin = 50;
+    qreal xRatio = (qreal)size().width()  / (itemsRect.width()  + margin);
+    qreal yRatio = (qreal)size().height() / (itemsRect.height() + margin);
+    scaleTo(qMin(xRatio, yRatio));
+
+    centerTree();
 }
 
-void TeamRadarView::centerTree(TeamRadarNode* node)
+void TeamRadarView::centerTree(TeamRadarNode* selectedNode)
 {
-	if(node != 0)
-		moveCanvasBy(sceneRect().center() - node->pos());
-	else	// find a selected node
-	{
-		TeamRadarNode* selectedNode = 0;
-		QList<QGraphicsItem*> items = scene()->selectedItems();
-		if(!items.isEmpty())
-			if(TeamRadarNode* node = castToTeamRadarNode(items.front()))
-				selectedNode = node;
+    if(selectedNode != 0)                    // center by the specified node
+    {
+        selectedNode->setSelected(true);     // otherwise may center by rect
+        moveCanvasBy(sceneRect().center()-selectedNode->pos());
+    }
+    else	// center by selected node, or the center of the rect
+    {
+        TeamRadarNode* selectedNode = 0;
+        QList<QGraphicsItem*> items = scene()->selectedItems();
+        if(!items.isEmpty())
+            if(TeamRadarNode* node = castToTeamRadarNode(items.front()))
+                selectedNode = node;
 
-		QPointF center = selectedNode == 0 ? nodesBoundingRect().center()
-			: selectedNode->pos();
-		moveCanvasBy(sceneRect().center() - center);
-	}
+        QPointF center = (selectedNode == 0) ? scene()->itemsBoundingRect().center()
+                                             : selectedNode->pos();
+        moveCanvasBy(sceneRect().center()-center);    // move the center of the rect to 0,0
+    }
+    centerOn(sceneRect().center());    // scroll the view to keep the scene centered
 }
 
-QRectF TeamRadarView::nodesBoundingRect() const
+void TeamRadarView::moveCanvasBy(qreal x, qreal y)
 {
-	QRectF boundingRect;
-	foreach(QGraphicsItem* item, items())
-		if(castToTeamRadarNode(item))
-			boundingRect |= item->sceneBoundingRect();
-	return boundingRect;
+    const QRectF rect = sceneRect();
+    scene()->setSceneRect(rect.x() - x / scaleFactor, rect.y() - y / scaleFactor,
+                          rect.width(), rect.height());
 }
 
-TeamRadarNode *TeamRadarView::castToTeamRadarNode(QGraphicsItem* item) const
+void TeamRadarView::moveCanvasBy(const QPointF& vec) {
+    moveCanvasBy(vec.x(), vec.y());
+}
+
+TeamRadarNode* TeamRadarView::castToTeamRadarNode(QGraphicsItem* item) const
 {
 	if(item == 0)
 		return 0;
 	int type = item->type();
-	return type == TeamRadarNode::Type || type == DirNode::Type || type == FileNode::Type || type == HumanNode::Type
+    return type == DirNode::Type || type == FileNode::Type || type == HumanNode::Type
 			? static_cast<TeamRadarNode*>(item) : 0;
-}
-
-// dirlabel needs to know the depth of the whole tree to set opacity
-int TeamRadarView::getDepth() const {
-	return isLoaded() ? getRoot()->getDepth() : 0;
-}
-
-void TeamRadarView::resetScale()
-{
-	QRectF unity = transform().mapRect(QRectF(0, 0, 1, 1));
-	if(unity.isEmpty())
-		return;
-	scaleBy(qMin(1/unity.width(), 1/unity.height()));
-}
-
-void TeamRadarView::scaleTo(qreal scaleFactor)
-{
-	resetScale();
-	scaleBy(scaleFactor);
 }
 
 void TeamRadarView::setDeveloperMode(const QString& developerName, const QString& mode)
