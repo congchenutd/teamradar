@@ -50,7 +50,7 @@ void Setting::loadDefaults()
 	// colors
 	setColor("EdgeColor",             QColor(Qt::black));
 	setColor("BackgroundColor",       QColor(Qt::white));   // scene color
-	setColor("RootColor",             QColor(Qt::black));
+    setColor("RootColor",             QColor(Qt::darkGray));
 	setColor("DefaultDirColor",       QColor(255, 205, 5));
 	setColor("DefaultFileColor",      QColor(Qt::darkGray));
 	setColor("DefaultDeveloperColor", QColor(Qt::gray));

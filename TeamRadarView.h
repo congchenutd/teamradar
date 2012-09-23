@@ -38,8 +38,7 @@ public:
 	void setRoot(TeamRadarNode* root) { rootNode = root; }
 	void setAfterImageDuration(int seconds);
 	void autoScale();                                         // auto scale
-	int  getDepth() const;                                    // depth of the tree
-	void centerTree(TeamRadarNode* node = 0);                 // center to node
+    void centerTree(TeamRadarNode* selectedNode = 0);         // center to node
 	const Humans& getHumans() const { return humans; }
 	void setEffectsEnabled(bool enable);
 	TeamRadarNode* createNode(bool isDir, const QString& name, TeamRadarNode* owner);     // factory
@@ -72,10 +71,9 @@ private:
 	void  createNodesFromFS(const QString& name, TeamRadarNode* owner, int maxLevel);  // recursive
 	void  saveNodeToXML(QXmlStreamWriter& xml, const TeamRadarNode* node);
 	TeamRadarNode* loadNodeFromXML(QXmlStreamReader& xml, TeamRadarNode* parent, bool isDir);
-	void moveCanvasBy(int x, int y);
+    void moveCanvasBy(qreal x, qreal y);
 	void moveCanvasBy(const QPointF& vec);
 	void initActions();                          // init menu actions for nodes
-	QRectF nodesBoundingRect() const;
 	TeamRadarNode* castToTeamRadarNode(QGraphicsItem* item) const;
 
 private slots:
