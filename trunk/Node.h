@@ -69,6 +69,7 @@ public:
 	virtual Nodes  getPushers() const;                 // for localized engine
 	virtual void   hideLabel();
 	virtual void   setDirty(DirtyType) {}             // for filenode
+    virtual void   setDirty(const QString&) {}
 	virtual DirtyType getDirtyType() const { return NotDirty; }
 
 	// use a separate function to delete, instead of using destructor
@@ -138,12 +139,14 @@ public:
 
 	virtual DirtyType getDirtyType() const { return dirty; }
 	virtual void   setDirty(DirtyType d);
+    virtual void   setDirty(const QString& developerName);
 	virtual QMenu& getContextMenu() const;
 	virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 
 private:
 	DirtyType dirty;
 	bool conflicted;
+    QString lastDeveloperName;    // last developer who changed the node
 };
 
 class LightTrail;

@@ -52,7 +52,7 @@ public:
 	void setDeveloperImage(const QString& name, const QImage& image);
 	void setDeveloperColor(const QString& name, const QColor& color);
 
-	void setDirty(const QString& filePath, DirtyType dirty);
+    void setDirty(const QString& filePath, const QString& developerName = QString());
 
 protected:
 	void keyPressEvent(QKeyEvent*   event);

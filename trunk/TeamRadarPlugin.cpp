@@ -45,7 +45,8 @@ bool TeamRadarPlugin::initialize(const QStringList& arguments, QString* error_me
 
 	addAutoReleasedObject(new TeamRadarNavigationWidgetFactory);
 	addAutoReleasedObject(new TeamRadarOptionsPage);
-	addAutoReleasedObject(new TeamRadarAboutPage);
+    addAutoReleasedObject(new ConnectionOptionPage);
+    addAutoReleasedObject(new AboutOptionPage);
 
 	return true;
 }

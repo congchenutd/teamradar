@@ -1,6 +1,7 @@
 #include "TeamRadarOptionsPage.h"
 #include "TeamRadarDlg.h"
 #include "Setting.h"
+#include "ConnectionOptionWidget.h"
 #include <QLabel>
 
 namespace TeamRadar {
@@ -21,10 +22,20 @@ void TeamRadarOptionsPage::apply() {
 	dlg->save();
 }
 
-///////////////////////////////////////////////////////////////////////
-TeamRadarAboutPage::TeamRadarAboutPage(QObject* parent) : TeamRadarOptionsPage(parent) {}
 
-QWidget *TeamRadarAboutPage::createPage(QWidget* parent)
+///////////////////////////////////////////////////////////////////////
+ConnectionOptionPage::ConnectionOptionPage(QObject* parent) : TeamRadarOptionsPage(parent) {}
+
+QWidget* ConnectionOptionPage::createPage(QWidget* parent)
+{
+    return new ConnectionOptionWidget(parent);
+}
+
+
+///////////////////////////////////////////////////////////////////////
+AboutOptionPage::AboutOptionPage(QObject* parent) : TeamRadarOptionsPage(parent) {}
+
+QWidget *AboutOptionPage::createPage(QWidget* parent)
 {
 	QWidget* widget = new QWidget(parent);
 	QLabel* label = new QLabel(tr(
@@ -35,7 +46,7 @@ QWidget *TeamRadarAboutPage::createPage(QWidget* parent)
 		.arg(Setting::getInstance()->getCompileDate()), widget);
 	QHBoxLayout* layout = new QHBoxLayout(widget);
 	layout->addWidget(label);
-	return widget;
+    return widget;
 }
 
 } // namespace TeamRadar

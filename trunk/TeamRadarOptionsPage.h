@@ -27,15 +27,25 @@ private:
 	TeamRadarDlg* dlg;
 };
 
-class TeamRadarAboutPage : public TeamRadarOptionsPage
+class ConnectionOptionPage : public TeamRadarOptionsPage
 {
 public:
-	TeamRadarAboutPage(QObject* parent = 0);
+    ConnectionOptionPage(QObject* parent = 0);
+    QString id() const { return tr("Tab2"); }
+    QString displayName() const { return tr("Connection"); }
+    QWidget* createPage(QWidget *parent);
+    void apply() {}
+};
 
-	QString  id() const { return tr("Tab2"); }
+class AboutOptionPage : public TeamRadarOptionsPage
+{
+public:
+    AboutOptionPage(QObject* parent = 0);
+
+    QString  id() const { return tr("Tab3"); }
 	QString  displayName() const { return tr("About"); }
 	QWidget* createPage(QWidget* parent);
-	void apply() {}
+    void apply() {}
 };
 
 
