@@ -448,16 +448,20 @@ void FileNode::setDirty(DirtyType d)
 
 void FileNode::setDirty(const QString& developerName)
 {
-    if(developerName.isEmpty())
-        setDirty(NotDirty);
-    else if(lastDeveloperName.isEmpty())
+	QString myName = Setting::getInstance()->getUserName();
+//    if(developerName.isEmpty())
+//        setDirty(NotDirty);
+//    else
+	if(lastDeveloperName.isEmpty())
     {
-        if(Setting::getInstance()->getUserName() == developerName)
+		if(developerName == myName)
             setDirty(LocalDirty);
         else
             setDirty(RemoteDirty);
     }
-    else if(lastDeveloperName != developerName)
+//	else if((lastDeveloperName == myName && developerName != myName) ||
+//			(lastDeveloperName != myName && developerName == myName))
+	else if(lastDeveloperName != developerName)
         setDirty(Conflicted);
     lastDeveloperName = developerName;
 }

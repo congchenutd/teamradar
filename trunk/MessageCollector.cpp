@@ -6,7 +6,6 @@
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectexplorer.h>
 #include <projectexplorer/buildmanager.h>
-#include <coreplugin/filemanager.h>
 #include <vcsbase/vcsplugin.h>
 #include <vcsbase/corelistener.h>
 #include <vcsbase/vcsbasesubmiteditor.h>
@@ -18,7 +17,6 @@ MessageCollector::MessageCollector()
 	currentEditor = 0;
 	editorManager = Core::ICore::instance()->editorManager();
 	modeManager   = Core::ICore::instance()->modeManager();
-//	fileManager   = Core::ICore::instance()->fileManager();
 	projectExplorer = ProjectExplorer::ProjectExplorerPlugin::instance();
 	ProjectExplorer::BuildManager* buildManager = projectExplorer->buildManager();
 
