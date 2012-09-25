@@ -36,7 +36,7 @@
           <item>
            <widget class="QLabel" name="label">
             <property name="text">
-             <string>Address</string>
+             <string>Addressasdfasdfasdf</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -162,6 +162,13 @@
             </property>
            </widget>
           </item>
+          <item row="3" column="0" colspan="2">
+           <widget class="QCheckBox" name="cbVisualEffects">
+            <property name="text">
+             <string>Enable visual effects</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
@@ -191,7 +198,7 @@
      <item>
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>Connection status:</string>
+        <string>Connection statusasdfasdf:</string>
        </property>
       </widget>
      </item>
