@@ -437,12 +437,29 @@ FileNode::FileNode(TeamRadarNode* owner, const QString& name)
 
 void FileNode::setDirty(DirtyType d)
 {
-	if(dirty == NotDirty || d == NotDirty)
-		dirty = d;
-	else if(dirty == LocalDirty  && d == RemoteDirty ||
-			dirty == RemoteDirty && d == LocalDirty)
-		dirty = Conflicted;
-	update();
+//	if(dirty == NotDirty || d == NotDirty)
+//		dirty = d;
+//	else if(dirty == LocalDirty  && d == RemoteDirty ||
+//			dirty == RemoteDirty && d == LocalDirty)
+//		dirty = Conflicted;
+    dirty = d;
+    update();
+}
+
+void FileNode::setDirty(const QString& developerName)
+{
+    if(developerName.isEmpty())
+        setDirty(NotDirty);
+    else if(lastDeveloperName.isEmpty())
+    {
+        if(Setting::getInstance()->getUserName() == developerName)
+            setDirty(LocalDirty);
+        else
+            setDirty(RemoteDirty);
+    }
+    else if(lastDeveloperName != developerName)
+        setDirty(Conflicted);
+    lastDeveloperName = developerName;
 }
 
 QMenu & FileNode::getContextMenu() const

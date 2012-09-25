@@ -50,24 +50,25 @@ void Setting::loadDefaults()
 	// colors
 	setColor("EdgeColor",             QColor(Qt::black));
 	setColor("BackgroundColor",       QColor(Qt::white));   // scene color
-    setColor("RootColor",             QColor(Qt::darkGray));
+    setColor("RootColor",             QColor(Qt::darkYellow));
 	setColor("DefaultDirColor",       QColor(255, 205, 5));
 	setColor("DefaultFileColor",      QColor(Qt::darkGray));
 	setColor("DefaultDeveloperColor", QColor(Qt::gray));
 
 	// extension colors
-	setExtensionColor("h",    QColor(40, 166, 198));
-	setExtensionColor("hpp",  QColor(40, 166, 198));
+    setExtensionColor("h",    QColor(Qt::green));
+    setExtensionColor("hpp",  QColor(Qt::green));
 
-	setExtensionColor("c",    QColor(255, 60, 0));
-	setExtensionColor("cpp",  QColor(255, 60, 0));
+    setExtensionColor("c",    QColor(Qt::darkGreen));
+    setExtensionColor("cpp",  QColor(Qt::darkGreen));
 
 	setExtensionColor("txt",  QColor(155, 187, 89));
 	setExtensionColor("htm",  QColor(155, 187, 89));
 	setExtensionColor("html", QColor(155, 187, 89));
 
+    setExtensionColor("pro", QColor(40, 166, 198));
+
 	setExtensionColor("ui",  QColor(128, 100, 162));
-	setExtensionColor("pro", QColor(128, 100, 162));
 	setExtensionColor("qrc", QColor(128, 100, 162));
 
 	setExtensionColor("png",  QColor(255, 102, 204));

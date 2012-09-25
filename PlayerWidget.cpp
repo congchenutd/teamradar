@@ -183,12 +183,12 @@ void PlayerWidget::play(const TeamRadarEvent& event)
 		ui.graphicsView->moveDeveloperTo(event.userName, event.parameters);
 		DirtyType dirtyType = (event.userName == Setting::getInstance()->getUserName()) ? LocalDirty
 																						: RemoteDirty;
-		ui.graphicsView->setDirty(event.parameters, dirtyType);
+        ui.graphicsView->setDirty(event.parameters, event.userName);
 	}
 	else if(event.eventType == "MODE")
 		ui.graphicsView->setDeveloperMode(event.userName, event.parameters);
 	else if(event.eventType == "SCM_COMMIT")
-		ui.graphicsView->setDirty(event.parameters, NotDirty);
+        ui.graphicsView->setDirty(event.parameters);
 }
 
 void PlayerWidget::reloadProject()

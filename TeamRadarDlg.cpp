@@ -25,7 +25,7 @@ TeamRadarDlg::TeamRadarDlg(QWidget *parent) : QWidget(parent)
 	ui.setupUi(this);
 
 	// load settings
-	setting = MySetting<Setting>::getInstance();
+    setting = Setting::getInstance();
 	ui.leServerAddress->setText (setting->getServerAddress());
 	ui.sbPort         ->setValue(setting->getServerPort());
 	ui.leUserName     ->setText (setting->getUserName());
