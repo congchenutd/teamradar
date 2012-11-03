@@ -5,6 +5,8 @@
 
 namespace TeamRadar {
 
+// defines platforms
+// ensure this file in included the first (in main.cpp)
 #ifdef Q_WS_SIMULATOR
 	#define OS_MOBILE
 #elif defined(Q_OS_WIN) || defined(Q_OS_MAC) || defined(Q_OS_LINUX)

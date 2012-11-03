@@ -36,10 +36,11 @@ public:
 
 public:
 	static Receiver* getInstance();
-
-	Receiver();
 	DataType guessDataType(const QByteArray& header);
 	void processData(Receiver::DataType dataType, const QByteArray& buffer);
+
+private:
+    Receiver();
 
 signals:
 	void newEvent   (const TeamRadarEvent& event);
@@ -72,7 +73,7 @@ private:
 
 
 // A TCP socket connected to the server
-// A singleton: there is one connection from the client to the server
+// A singleton: there is one connection from each client to the server
 class Connection : public QTcpSocket
 {
 	Q_OBJECT
@@ -80,7 +81,6 @@ class Connection : public QTcpSocket
 public:
 	static Connection* getInstance(QObject* parent = 0);
 
-	Connection(QObject* parent = 0);
 	QString getUserName()   const { return userName; }
 	bool    isReadyForUse() const { return state() == ConnectedState && ready;    }
 	void setUserName(const QString& name);
@@ -102,6 +102,7 @@ private slots:
 	void onDisconnected();
 
 private:
+    Connection(QObject* parent = 0);
 	bool readHeader();
 	int  readDataIntoBuffer(int maxSize = MaxBufferSize);
 	int  getDataLength();
@@ -135,7 +136,6 @@ class Sender : public QObject
 {
 public:
 	static Sender* getInstance();
-	Sender();
 	void sendEvent(const QString& event, const QString& parameters);
 	void sendTeamMemberRequest();
 	void sendPhotoRegistration(const QByteArray& format, const QByteArray& photoData);
@@ -151,6 +151,9 @@ public:
 	void sendProjectsRequest();
 	void sendJoinProject(const QString& projectName);
 	void sendLocationRequest(const QString& userName);
+
+private:
+    Sender();
 
 private:
 	static Sender* instance;
