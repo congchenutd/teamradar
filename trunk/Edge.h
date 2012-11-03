@@ -10,10 +10,11 @@ class Edge;
 
 typedef QList<Edge*> Edges;
 
+// directed edge connecting a parent node (source) and a child node (dest)
 class Edge : public QGraphicsObject
 {
 public:
-	Edge(TeamRadarNode *sourceNode, TeamRadarNode *destNode, double force = 1.0);
+    Edge(TeamRadarNode* sourceNode, TeamRadarNode* destNode, double force = 1.0);
 	virtual ~Edge() {}
 	enum { Type = UserType + 31 };
 	int type() const { return Type; }

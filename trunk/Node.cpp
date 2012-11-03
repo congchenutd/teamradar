@@ -112,12 +112,6 @@ void TeamRadarNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QW
 	painter->setBrush(gradient);
 	painter->setPen(QPen(color.darker()));
 	painter->drawEllipse(boundingRect());
-
-	// for debugging
-	//QFont font;
-	//font.setPointSize(6);
-	//painter->setFont(font);
-	//painter->drawText(-getRadius(), getRadius()/2, tr("%1").arg(getSize()));
 }
 
 QVariant TeamRadarNode::itemChange(GraphicsItemChange change, const QVariant& value)
@@ -263,7 +257,6 @@ Nodes TeamRadarNode::getPushers() const
 
 void TeamRadarNode::randomize()
 {
-//	setPos(100, 100);
 	setPos(x() + qrand()%100 - 50, y() + qrand()%100 - 50);
 	setPinned(false);
 }
